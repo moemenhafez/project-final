@@ -1,5 +1,7 @@
 import Button from '@/components/ui/Button'
 
+import Input from '@/components/ui/Input'
+
 function LoginPage() {
   return (
     <div
@@ -33,6 +35,16 @@ function LoginPage() {
         >
           Login Page
         </h1>
+
+        <Input
+          type="email"
+          placeholder="Enter your email"
+        />
+
+        <Input
+          type="password"
+          placeholder="Enter your password"
+        />
 
         <Button title="Login" />
       </div>
