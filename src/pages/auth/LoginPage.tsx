@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import Notification from '@/components/feedback/Notification'
+
 import Button from '@/components/ui/Button'
 
 import Input from '@/components/ui/Input'
@@ -12,6 +14,9 @@ function LoginPage() {
   const [error, setError] = useState('')
 
   const [loading, setLoading] =
+    useState(false)
+
+  const [showNotification, setShowNotification] =
     useState(false)
 
   function handleLogin() {
@@ -32,6 +37,12 @@ function LoginPage() {
       })
 
       setLoading(false)
+
+      setShowNotification(true)
+
+      setTimeout(() => {
+        setShowNotification(false)
+      }, 3000)
     }, 2000)
   }
 
@@ -46,6 +57,11 @@ function LoginPage() {
         p-4
       "
     >
+      <Notification
+        message="Login successful"
+        show={showNotification}
+      />
+
       <div
         className="
           w-full
