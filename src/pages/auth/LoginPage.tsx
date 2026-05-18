@@ -9,6 +9,13 @@ function LoginPage() {
 
   const [password, setPassword] = useState('')
 
+  function handleLogin() {
+    console.log({
+      email,
+      password,
+    })
+  }
+
   return (
     <div
       className="
@@ -60,7 +67,10 @@ function LoginPage() {
           }
         />
 
-        <Button title="Login" />
+        <Button
+          title="Login"
+          onClick={handleLogin}
+        />
       </div>
     </div>
   )
