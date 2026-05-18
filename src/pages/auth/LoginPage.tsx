@@ -9,7 +9,17 @@ function LoginPage() {
 
   const [password, setPassword] = useState('')
 
+  const [error, setError] = useState('')
+
   function handleLogin() {
+    if (!email || !password) {
+      setError('Please fill all fields')
+
+      return
+    }
+
+    setError('')
+
     console.log({
       email,
       password,
@@ -48,6 +58,21 @@ function LoginPage() {
         >
           Login Page
         </h1>
+
+        {error && (
+          <div
+            className="
+              bg-red-100
+              text-red-600
+              px-4
+              py-3
+              rounded-xl
+              text-sm
+            "
+          >
+            {error}
+          </div>
+        )}
 
         <Input
           type="email"
