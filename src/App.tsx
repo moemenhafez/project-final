@@ -1,19 +1,7 @@
-import Button from "./components/ui/Button"
+import AppRoutes from './routes/AppRoutes'
 
 function App() {
-  return (
-    <div
-      className="
-        min-h-screen
-        flex
-        items-center
-        justify-center
-        bg-green-100
-      "
-    >
-      <Button title="Meshwarna" />
-    </div>
-  )
+  return <AppRoutes />
 }
 
 export default App
