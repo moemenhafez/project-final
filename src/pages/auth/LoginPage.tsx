@@ -11,6 +11,9 @@ function LoginPage() {
 
   const [error, setError] = useState('')
 
+  const [loading, setLoading] =
+    useState(false)
+
   function handleLogin() {
     if (!email || !password) {
       setError('Please fill all fields')
@@ -20,10 +23,16 @@ function LoginPage() {
 
     setError('')
 
-    console.log({
-      email,
-      password,
-    })
+    setLoading(true)
+
+    setTimeout(() => {
+      console.log({
+        email,
+        password,
+      })
+
+      setLoading(false)
+    }, 2000)
   }
 
   return (
@@ -95,6 +104,7 @@ function LoginPage() {
         <Button
           title="Login"
           onClick={handleLogin}
+          loading={loading}
         />
       </div>
     </div>
