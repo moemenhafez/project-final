@@ -77,9 +77,10 @@ function TripsTable() {
   modules={modules}
 >
   <AgGridReact
-    rowData={rowData}
-    columnDefs={columnDefs}
-  />
+  theme="legacy"
+  rowData={rowData}
+  columnDefs={columnDefs}
+/>
 </AgGridProvider>
     </div>
   )
