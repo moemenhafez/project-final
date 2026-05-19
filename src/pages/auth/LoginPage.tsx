@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+
+
 import Notification from '@/components/feedback/Notification'
 
 import Button from '@/components/ui/Button'
@@ -7,6 +9,8 @@ import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
 
 import AuthLayout from '@/layouts/AuthLayout'
+
+import { loginUser } from '@/api/auth'
 
 function LoginPage() {
   const [email, setEmail] = useState('')
@@ -21,32 +25,36 @@ function LoginPage() {
   const [showNotification, setShowNotification] =
     useState(false)
 
-  function handleLogin() {
-    if (!email || !password) {
-      setError('Please fill all fields')
+  async function handleLogin() {
+  if (!email || !password) {
+    setError('Please fill all fields')
 
-      return
-    }
+    return
+  }
 
+  try {
     setError('')
 
     setLoading(true)
 
+    const response = await loginUser({
+      username: email,
+      password,
+    })
+
+    console.log(response)
+
+    setShowNotification(true)
+
     setTimeout(() => {
-      console.log({
-        email,
-        password,
-      })
-
-      setLoading(false)
-
-      setShowNotification(true)
-
-      setTimeout(() => {
-        setShowNotification(false)
-      }, 3000)
-    }, 2000)
+      setShowNotification(false)
+    }, 3000)
+  } catch {
+    setError('Invalid credentials')
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <>
