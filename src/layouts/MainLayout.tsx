@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Navbar from '@/components/layout/Navbar'
-
+import Sidebar from '@/components/layout/Sidebar'
 interface MainLayoutProps {
   children: ReactNode
 }
@@ -20,42 +20,7 @@ function MainLayout({
           flex
         "
       >
-        <aside
-          className="
-            hidden
-            md:flex
-            w-64
-            min-h-screen
-            bg-emerald-700
-            text-white
-            p-6
-            flex-col
-          "
-        >
-          <h2
-            className="
-              text-2xl
-              font-bold
-            "
-          >
-            Tourism App
-          </h2>
-
-          <nav
-            className="
-              mt-10
-              space-y-4
-            "
-          >
-            <p>Dashboard</p>
-
-            <p>Trips</p>
-
-            <p>Bookings</p>
-
-            <p>Profile</p>
-          </nav>
-        </aside>
+        <Sidebar />
 
         <main
           className="
