@@ -1,9 +1,12 @@
 import { useMemo } from 'react'
 
 import {
+  AgGridProvider,
   AgGridReact,
 } from 'ag-grid-react'
-
+import {
+  AllCommunityModule,
+} from 'ag-grid-community'
 import type {
   ColDef,
 } from 'ag-grid-community'
@@ -13,6 +16,9 @@ import 'ag-grid-community/styles/ag-grid.css'
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
 function TripsTable() {
+    const modules = [
+  AllCommunityModule,
+]
   const rowData = [
     {
       destination: 'Paris',
@@ -67,10 +73,14 @@ function TripsTable() {
         width: '100%',
       }}
     >
-      <AgGridReact
-        rowData={rowData}
-        columnDefs={columnDefs}
-      />
+      <AgGridProvider
+  modules={modules}
+>
+  <AgGridReact
+    rowData={rowData}
+    columnDefs={columnDefs}
+  />
+</AgGridProvider>
     </div>
   )
 }
