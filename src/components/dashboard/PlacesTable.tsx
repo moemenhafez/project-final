@@ -15,11 +15,17 @@ import 'ag-grid-community/styles/ag-grid.css'
 
 import 'ag-grid-community/styles/ag-theme-alpine.css'
 
-function TripsTable() {
+interface PlacesTableProps {
+  places: typeof placesData
+}
+
+function PlacesTable({
+  places,
+}: PlacesTableProps) {
     const modules = [
   AllCommunityModule,
 ]
- const rowData = placesData
+const rowData = places
   
 
   const columnDefs = useMemo<
@@ -66,4 +72,4 @@ function TripsTable() {
   )
 }
 
-export default TripsTable
+export default PlacesTable
