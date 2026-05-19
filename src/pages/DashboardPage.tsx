@@ -1,93 +1,107 @@
-import { useAuth } from '@/hooks/useAuth'
+import MainLayout from '@/layouts/MainLayout'
 
 function DashboardPage() {
-  const { logout } = useAuth()
-
-  function handleLogout() {
-    logout()
-  }
-
   return (
-    <div
-      className="
-        min-h-screen
-        bg-emerald-100
-        p-8
-      "
-    >
+    <MainLayout>
       <div
         className="
-          max-w-5xl
-          mx-auto
-          bg-white
-          rounded-2xl
-          shadow-xl
-          p-8
-          space-y-6
+          grid
+          grid-cols-1
+          md:grid-cols-3
+          gap-6
         "
       >
         <div
           className="
-            flex
-            items-center
-            justify-between
-          "
-        >
-          <h1
-            className="
-              text-3xl
-              font-bold
-              text-emerald-700
-            "
-          >
-            Dashboard
-          </h1>
-
-          <button
-            onClick={handleLogout}
-            className="
-              bg-red-600
-              text-white
-              px-5
-              py-2
-              rounded-xl
-              hover:bg-red-700
-              transition
-            "
-          >
-            Logout
-          </button>
-        </div>
-
-        <div
-          className="
-            bg-emerald-50
-            rounded-xl
+            bg-white
+            rounded-2xl
+            shadow-md
             p-6
           "
         >
           <h2
             className="
-              text-2xl
+              text-lg
               font-semibold
-              text-emerald-700
+              text-gray-600
             "
           >
-            Welcome to the Tourism Dashboard
+            Total Trips
           </h2>
 
           <p
             className="
-              text-gray-600
-              mt-2
+              text-4xl
+              font-bold
+              text-emerald-700
+              mt-4
             "
           >
-            Authentication system is now
-            working successfully.
+            128
+          </p>
+        </div>
+
+        <div
+          className="
+            bg-white
+            rounded-2xl
+            shadow-md
+            p-6
+          "
+        >
+          <h2
+            className="
+              text-lg
+              font-semibold
+              text-gray-600
+            "
+          >
+            Active Bookings
+          </h2>
+
+          <p
+            className="
+              text-4xl
+              font-bold
+              text-emerald-700
+              mt-4
+            "
+          >
+            342
+          </p>
+        </div>
+
+        <div
+          className="
+            bg-white
+            rounded-2xl
+            shadow-md
+            p-6
+          "
+        >
+          <h2
+            className="
+              text-lg
+              font-semibold
+              text-gray-600
+            "
+          >
+            Registered Users
+          </h2>
+
+          <p
+            className="
+              text-4xl
+              font-bold
+              text-emerald-700
+              mt-4
+            "
+          >
+            1,245
           </p>
         </div>
       </div>
-    </div>
+    </MainLayout>
   )
 }
 
