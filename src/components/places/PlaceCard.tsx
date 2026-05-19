@@ -23,109 +23,128 @@ function PlaceCard({
   return (
     <div
       className="
+        group
         bg-white
-        rounded-3xl
+        rounded-[32px]
         overflow-hidden
-        shadow-md
-        hover:shadow-xl
-        transition
-        duration-300
+        shadow-sm
+        hover:shadow-2xl
+        transition-all
+        duration-500
+        hover:-translate-y-2
       "
     >
-      <img
-        src={image}
-        alt={name}
-        className="
-          w-full
-          h-56
-          object-cover
-        "
-      />
+      <div className="relative">
+        <img
+          src={image}
+          alt={name}
+          className="
+            w-full
+            h-72
+            object-cover
+          "
+        />
 
-      <div className="p-5">
         <div
           className="
-            flex
-            items-center
-            justify-between
+            absolute
+            inset-0
+            bg-gradient-to-t
+            from-black/70
+            via-black/10
+            to-transparent
+          "
+        />
+
+        <div
+          className="
+            absolute
+            top-4
+            left-4
+            bg-white/90
+            backdrop-blur-md
+            px-4
+            py-2
+            rounded-full
+            text-sm
+            font-semibold
+            text-gray-800
+          "
+        >
+          {category}
+        </div>
+
+        <div
+          className="
+            absolute
+            bottom-5
+            left-5
+            text-white
           "
         >
           <h2
             className="
-              text-2xl
+              text-3xl
               font-bold
-              text-gray-800
             "
           >
             {name}
           </h2>
 
-          <span
+          <p
             className="
-              bg-emerald-100
-              text-emerald-700
-              px-3
-              py-1
-              rounded-full
+              text-white/80
+              mt-1
+            "
+          >
+            {city}
+          </p>
+        </div>
+      </div>
+
+      <div
+        className="
+          p-5
+          flex
+          items-center
+          justify-between
+        "
+      >
+        <div>
+          <p
+            className="
+              text-yellow-500
+              font-semibold
+              text-lg
+            "
+          >
+            ⭐ {rating}
+          </p>
+
+          <p
+            className="
+              text-gray-500
               text-sm
-              font-medium
+              mt-1
             "
           >
-            {category}
-          </span>
+            {timeAway} away
+          </p>
         </div>
 
-        <p
+        <button
           className="
-            text-gray-500
-            mt-2
+            bg-gray-900
+            text-white
+            px-5
+            py-2.5
+            rounded-2xl
+            hover:bg-black
+            transition
           "
         >
-          {city}
-        </p>
-
-        <div
-          className="
-            flex
-            items-center
-            justify-between
-            mt-5
-          "
-        >
-          <div>
-            <p
-              className="
-                text-yellow-500
-                font-semibold
-              "
-            >
-              ⭐ {rating}
-            </p>
-
-            <p
-              className="
-                text-sm
-                text-gray-500
-              "
-            >
-              {timeAway} away
-            </p>
-          </div>
-
-          <button
-            className="
-              bg-emerald-700
-              text-white
-              px-5
-              py-2
-              rounded-xl
-              hover:bg-emerald-800
-              transition
-            "
-          >
-            View
-          </button>
-        </div>
+          Explore
+        </button>
       </div>
     </div>
   )
