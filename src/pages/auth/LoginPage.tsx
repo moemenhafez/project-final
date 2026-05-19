@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
+import { useNavigate } from 'react-router-dom'
 
+import { useAuth } from '@/hooks/useAuth'
 
 import Notification from '@/components/feedback/Notification'
 
@@ -13,6 +15,9 @@ import AuthLayout from '@/layouts/AuthLayout'
 import { loginUser } from '@/api/auth'
 
 function LoginPage() {
+  const navigate = useNavigate()
+
+const { login } = useAuth()
   const [email, setEmail] = useState('')
 
   const [password, setPassword] = useState('')
@@ -42,7 +47,9 @@ function LoginPage() {
       password,
     })
 
-    console.log(response)
+   login(response.accessToken)
+
+navigate('/dashboard')
 
     setShowNotification(true)
 
