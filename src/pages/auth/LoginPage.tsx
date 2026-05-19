@@ -6,6 +6,8 @@ import Button from '@/components/ui/Button'
 
 import Input from '@/components/ui/Input'
 
+import AuthLayout from '@/layouts/AuthLayout'
+
 function LoginPage() {
   const [email, setEmail] = useState('')
 
@@ -47,43 +49,13 @@ function LoginPage() {
   }
 
   return (
-    <div
-      className="
-        min-h-screen
-        flex
-        items-center
-        justify-center
-        bg-emerald-100
-        p-4
-      "
-    >
+    <>
       <Notification
         message="Login successful"
         show={showNotification}
       />
 
-      <div
-        className="
-          w-full
-          max-w-md
-          bg-white
-          p-8
-          rounded-2xl
-          shadow-xl
-          space-y-6
-        "
-      >
-        <h1
-          className="
-            text-3xl
-            font-bold
-            text-center
-            text-emerald-700
-          "
-        >
-          Login Page
-        </h1>
-
+      <AuthLayout title="Login">
         {error && (
           <div
             className="
@@ -122,8 +94,8 @@ function LoginPage() {
           onClick={handleLogin}
           loading={loading}
         />
-      </div>
-    </div>
+      </AuthLayout>
+    </>
   )
 }
 
