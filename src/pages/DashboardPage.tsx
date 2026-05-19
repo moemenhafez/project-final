@@ -6,26 +6,42 @@ import { dashboardStats } from '@/data/dashboardStats'
 
 import { placesData } from '@/data/placesData'
 
+
 import StatCard from '@/components/dashboard/StatCard'
 
 import CategoryFilter from '@/components/dashboard/CategoryFilter'
 
 import PlacesTable from '@/components/dashboard/PlacesTable'
+import SearchBar from '@/components/dashboard/SearchBar'
 
 function DashboardPage() {
+    const [searchValue, setSearchValue] =
+  useState('')
   const [
     selectedCategory,
     setSelectedCategory,
   ] = useState('All')
 
   const filteredPlaces =
-    selectedCategory === 'All'
-      ? placesData
-      : placesData.filter(
-          (place) =>
-            place.category ===
-            selectedCategory
+  placesData.filter((place) => {
+    const matchesCategory =
+      selectedCategory === 'All'
+        ? true
+        : place.category ===
+          selectedCategory
+
+    const matchesSearch =
+      place.name
+        .toLowerCase()
+        .includes(
+          searchValue.toLowerCase()
         )
+
+    return (
+      matchesCategory &&
+      matchesSearch
+    )
+  })
 
   return (
     <MainLayout>
@@ -36,6 +52,11 @@ function DashboardPage() {
         onSelectCategory={
           setSelectedCategory
         }
+      />
+
+      <SearchBar
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
       />
 
       <div
