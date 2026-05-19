@@ -16,51 +16,109 @@ function Navbar() {
   return (
     <header
       className="
-        bg-white
-        shadow-md
-        rounded-2xl
+        bg-white/80
+        backdrop-blur-md
+        border
+        border-gray-100
+        rounded-3xl
         px-6
         py-4
         flex
         items-center
         justify-between
+        shadow-sm
       "
     >
       <div>
         <h1
           className="
-            text-2xl
+            text-3xl
             font-bold
-            text-emerald-700
+            text-gray-800
           "
         >
-          Tourism Dashboard
+          Discover Lebanon
         </h1>
 
         <p
           className="
             text-gray-500
             text-sm
+            mt-1
           "
         >
-          Manage your tourism platform
+          Explore restaurants, cafés
+          and unforgettable places
         </p>
       </div>
 
-      <button
-        onClick={handleLogout}
+      <div
         className="
-          bg-red-600
-          text-white
-          px-5
-          py-2
-          rounded-xl
-          hover:bg-red-700
-          transition
+          flex
+          items-center
+          gap-4
         "
       >
-        Logout
-      </button>
+        <div
+          className="
+            hidden
+            sm:flex
+            items-center
+            gap-3
+          "
+        >
+          <div
+            className="
+              w-11
+              h-11
+              rounded-full
+              bg-emerald-100
+              flex
+              items-center
+              justify-center
+              text-emerald-700
+              font-bold
+            "
+          >
+            M
+          </div>
+
+          <div>
+            <p
+              className="
+                font-semibold
+                text-gray-700
+              "
+            >
+              Maya
+            </p>
+
+            <p
+              className="
+                text-sm
+                text-gray-400
+              "
+            >
+              Explorer
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={handleLogout}
+          className="
+            bg-gray-900
+            text-white
+            px-5
+            py-2.5
+            rounded-2xl
+            hover:bg-black
+            transition
+          "
+        >
+          Logout
+        </button>
+      </div>
     </header>
   )
 }

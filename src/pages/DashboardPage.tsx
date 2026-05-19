@@ -2,12 +2,12 @@ import { useState } from 'react'
 
 import MainLayout from '@/layouts/MainLayout'
 
-import { dashboardStats } from '@/data/dashboardStats'
+
 
 import { placesData } from '@/data/placesData'
 
 
-import StatCard from '@/components/dashboard/StatCard'
+
 
 import CategoryFilter from '@/components/dashboard/CategoryFilter'
 
@@ -59,22 +59,7 @@ function DashboardPage() {
         onSearchChange={setSearchValue}
       />
 
-      <div
-        className="
-          grid
-          grid-cols-1
-          md:grid-cols-3
-          gap-6
-        "
-      >
-        {dashboardStats.map((stat) => (
-          <StatCard
-            key={stat.title}
-            title={stat.title}
-            value={stat.value}
-          />
-        ))}
-      </div>
+     
 <PlacesGrid
   places={filteredPlaces}
 />
