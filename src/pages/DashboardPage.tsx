@@ -1,7 +1,7 @@
 import MainLayout from '@/layouts/MainLayout'
 import { dashboardStats } from '@/data/dashboardStats'
 import StatCard from '@/components/dashboard/StatCard'
-import TripsTable from '@/components/dashboard/TripsTable'
+import TripsTable from '@/components/dashboard/PlacesTable'
 function DashboardPage() {
   return (
     <MainLayout>

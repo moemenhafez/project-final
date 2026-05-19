@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-
+import { placesData } from '@/data/placesData'
 import {
   AgGridProvider,
   AgGridReact,
@@ -19,41 +19,21 @@ function TripsTable() {
     const modules = [
   AllCommunityModule,
 ]
-  const rowData = [
-    {
-      destination: 'Paris',
-      tourists: 120,
-      status: 'Active',
-    },
-    {
-      destination: 'Dubai',
-      tourists: 95,
-      status: 'Active',
-    },
-    {
-      destination: 'Istanbul',
-      tourists: 80,
-      status: 'Pending',
-    },
-    {
-      destination: 'Rome',
-      tourists: 60,
-      status: 'Completed',
-    },
-  ]
+ const rowData = placesData
+  
 
   const columnDefs = useMemo<
     ColDef[]
   >(
     () => [
       {
-        field: 'destination',
+        field: 'name',
       },
       {
-        field: 'tourists',
+        field: 'category',
       },
       {
-        field: 'status',
+        field: 'city',
       },
     ],
     []
