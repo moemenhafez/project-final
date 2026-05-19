@@ -1,6 +1,5 @@
 import {
   createContext,
-  useContext,
   useState,
   useEffect,
 } from 'react'
@@ -21,7 +20,7 @@ interface AuthContextType {
   logout: () => void
 }
 
-const AuthContext =
+export const AuthContext =
   createContext<AuthContextType | null>(
     null
   )
@@ -67,19 +66,6 @@ function AuthProvider({
       {children}
     </AuthContext.Provider>
   )
-}
-
-export function useAuth() {
-  const context =
-    useContext(AuthContext)
-
-  if (!context) {
-    throw new Error(
-      'useAuth must be used inside AuthProvider'
-    )
-  }
-
-  return context
 }
 
 export default AuthProvider
