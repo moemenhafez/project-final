@@ -1,5 +1,5 @@
 import MainLayout from '@/layouts/MainLayout'
-
+import TripsTable from '@/components/dashboard/TripsTable'
 function DashboardPage() {
   return (
     <MainLayout>
@@ -101,6 +101,7 @@ function DashboardPage() {
           </p>
         </div>
       </div>
+      <TripsTable />
     </MainLayout>
   )
 }
