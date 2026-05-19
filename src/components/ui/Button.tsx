@@ -1,5 +1,7 @@
 import Spinner from '@/components/ui/Spinner'
 
+import { colors } from '@/theme/colors'
+
 interface ButtonProps {
   title: string
 
@@ -17,18 +19,18 @@ function Button({
     <button
       onClick={onClick}
       disabled={loading}
-      className="
+      className={`
         w-full
-        bg-emerald-600
-        text-white
+        bg-${colors.primary}
+        text-${colors.white}
         px-6
         py-3
         rounded-xl
-        hover:bg-emerald-700
+        hover:bg-${colors.primaryHover}
         transition
-        disabled:bg-gray-400
+        disabled:bg-${colors.gray}
         disabled:cursor-not-allowed
-      "
+      `}
     >
       {loading ? (
         <Spinner />
