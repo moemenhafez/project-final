@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Navbar from '@/components/layout/Navbar'
 
 interface MainLayoutProps {
   children: ReactNode
@@ -62,7 +63,11 @@ function MainLayout({
             p-6
           "
         >
-          {children}
+          <div className="space-y-6">
+  <Navbar />
+
+  {children}
+</div>
         </main>
       </div>
     </div>
