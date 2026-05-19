@@ -3,6 +3,7 @@ import {
   Route,
   Routes,
 } from 'react-router-dom'
+import DashboardPage from '@/pages/DashboardPage'
 
 import HomePage from '@/pages/HomePage'
 
@@ -35,7 +36,7 @@ function AppRoutes() {
           path="/dashboard"
           element={
             <ProtectedRoute>
-              <h1>Dashboard Page</h1>
+              <DashboardPage />
             </ProtectedRoute>
           }
         />
