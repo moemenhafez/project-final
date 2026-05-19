@@ -4,11 +4,13 @@ import {
   Routes,
 } from 'react-router-dom'
 
-import LoginPage from '../pages/auth/LoginPage'
+import HomePage from '@/pages/HomePage'
 
-import RegisterPage from '../pages/auth/RegisterPage'
+import LoginPage from '@/pages/auth/LoginPage'
 
-import HomePage from '../pages/HomePage'
+import RegisterPage from '@/pages/auth/RegisterPage'
+
+import ProtectedRoute from '@/routes/ProtectedRoute'
 
 function AppRoutes() {
   return (
@@ -27,6 +29,15 @@ function AppRoutes() {
         <Route
           path="/register"
           element={<RegisterPage />}
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <h1>Dashboard Page</h1>
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </BrowserRouter>
