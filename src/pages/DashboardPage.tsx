@@ -11,7 +11,7 @@ import StatCard from '@/components/dashboard/StatCard'
 
 import CategoryFilter from '@/components/dashboard/CategoryFilter'
 
-import PlacesTable from '@/components/dashboard/PlacesTable'
+import PlacesGrid from '@/components/places/PlacesGrid'
 import SearchBar from '@/components/dashboard/SearchBar'
 
 function DashboardPage() {
@@ -75,10 +75,10 @@ function DashboardPage() {
           />
         ))}
       </div>
-
-      <PlacesTable
-        places={filteredPlaces}
-      />
+<PlacesGrid
+  places={filteredPlaces}
+/>
+      
     </MainLayout>
   )
 }
