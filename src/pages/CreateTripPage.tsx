@@ -19,6 +19,14 @@ function CreateTripPage() {
     setGatheringPoint,
   ] = useState('')
 
+  const [region, setRegion] =
+    useState('Tripoli')
+
+  const [
+    partnerType,
+    setPartnerType,
+  ] = useState('Friends')
+
   const [date, setDate] =
     useState('')
 
@@ -44,6 +52,10 @@ function CreateTripPage() {
 
         gatheringPoint,
 
+        region,
+
+        partnerType,
+
         date,
 
         price: Number(price),
@@ -65,6 +77,8 @@ function CreateTripPage() {
 
     setTitle('')
     setGatheringPoint('')
+    setRegion('Tripoli')
+    setPartnerType('Friends')
     setDate('')
     setPrice('')
     setSeats('')
@@ -144,6 +158,83 @@ function CreateTripPage() {
               outline-none
             "
           />
+
+          <div
+            className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              gap-6
+            "
+          >
+            <select
+              value={region}
+              onChange={(event) =>
+                setRegion(
+                  event.target.value
+                )
+              }
+              className="
+                w-full
+                p-4
+                rounded-2xl
+                bg-gray-100
+                outline-none
+              "
+            >
+              <option value="Tripoli">
+                Tripoli
+              </option>
+
+              <option value="Beirut">
+                Beirut
+              </option>
+
+              <option value="Batroun">
+                Batroun
+              </option>
+
+              <option value="Jbeil">
+                Jbeil
+              </option>
+
+              <option value="Tyre">
+                Tyre
+              </option>
+            </select>
+
+            <select
+              value={partnerType}
+              onChange={(event) =>
+                setPartnerType(
+                  event.target.value
+                )
+              }
+              className="
+                w-full
+                p-4
+                rounded-2xl
+                bg-gray-100
+                outline-none
+              "
+            >
+              <option value="Friends">
+                Friends
+              </option>
+
+              <option value="Couple">
+                Couple
+              </option>
+
+              <option value="Family Gathering">
+                Family Gathering
+              </option>
+
+              <option value="Business Meeting">
+                Business Meeting
+              </option>
+            </select>
+          </div>
 
           <input
             type="text"

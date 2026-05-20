@@ -95,6 +95,12 @@ function SavedPlansPage() {
                   gatheringPoint={
                     trip.gatheringPoint
                   }
+                  region={
+                    trip.region
+                  }
+                  partnerType={
+                    trip.partnerType
+                  }
                   date={trip.date}
                   price={trip.price}
                   seats={trip.seats}

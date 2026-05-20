@@ -5,6 +5,10 @@ export interface CommunityTrip {
 
   gatheringPoint: string
 
+  region: string
+
+  partnerType: string
+
   date: string
 
   price: number

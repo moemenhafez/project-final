@@ -11,6 +11,10 @@ interface CommunityTripCardProps {
 
   gatheringPoint: string
 
+  region: string
+
+  partnerType: string
+
   date: string
 
   price: number
@@ -26,6 +30,8 @@ function CommunityTripCard({
   title,
   organizer,
   gatheringPoint,
+  region,
+  partnerType,
   date,
   price,
   seats,
@@ -89,6 +95,49 @@ function CommunityTripCard({
             >
               Organized by {organizer}
             </p>
+
+            <div
+              className="
+                flex
+                gap-3
+                mt-4
+                flex-wrap
+              "
+            >
+              <div
+                className="
+                  bg-gray-100
+                  px-3
+                  py-1
+                  rounded-full
+                  text-sm
+                "
+              >
+                📍 {region}
+              </div>
+
+              <div
+                className="
+                  bg-pink-100
+                  text-pink-700
+                  px-3
+                  py-1
+                  rounded-full
+                  text-sm
+                "
+              >
+                {partnerType ===
+                'Couple'
+                  ? '❤️ Couple'
+                  : partnerType ===
+                      'Friends'
+                    ? '🎉 Friends'
+                    : partnerType ===
+                        'Family Gathering'
+                      ? '👨‍👩‍👧 Family Gathering'
+                      : '💼 Business Meeting'}
+              </div>
+            </div>
           </div>
 
           <div
@@ -224,6 +273,21 @@ function CommunityTripCard({
 
                 <span className="font-semibold">
                   {title}
+                </span>
+              </div>
+
+              <div
+                className="
+                  flex
+                  justify-between
+                "
+              >
+                <span className="text-gray-500">
+                  Experience Type
+                </span>
+
+                <span className="font-semibold">
+                  {partnerType}
                 </span>
               </div>
 

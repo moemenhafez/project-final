@@ -107,13 +107,15 @@ function CommunityTripsPage() {
                   gatheringPoint={
                     trip.gatheringPoint
                   }
+                  region={
+                    trip.region
+                  }
+                  partnerType={
+                    trip.partnerType
+                  }
                   date={trip.date}
-                  price={Number(
-                    trip.price
-                  )}
-                  seats={Number(
-                    trip.seats
-                  )}
+                  price={trip.price}
+                  seats={trip.seats}
                   stops={trip.stops}
                   onTripJoined={
                     refreshTrips
