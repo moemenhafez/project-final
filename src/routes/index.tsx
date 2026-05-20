@@ -23,6 +23,9 @@ import TravelTimePage from '@/pages/TravelTimePage'
 import AdminPlacesPage from '@/pages/AdminPlacesPage'
 
 import ProtectedRoute from './ProtectedRoute'
+import ProfilePage from '@/pages/ProfilePage'
+
+import SettingsPage from '@/pages/SettingsPage'
 
 const router = createBrowserRouter([
   {
@@ -115,6 +118,15 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+  path: '/profile',
+  element: <ProfilePage />,
+},
+
+{
+  path: '/settings',
+  element: <SettingsPage />,
+},
 ])
 
 export default router
