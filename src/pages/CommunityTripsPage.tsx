@@ -1,16 +1,30 @@
+import { useState } from 'react'
+
 import MainLayout from '@/layouts/MainLayout'
 
 import CommunityTripCard from '@/components/community/CommunityTripCard'
-import type {
-  CommunityTrip,
-} from '@/types/communityTrip'
+
 import {
   getStoredTrips,
 } from '@/utils/communityTripsStorage'
 
+import type {
+  CommunityTrip,
+} from '@/types/communityTrip'
+
 function CommunityTripsPage() {
-  const storedTrips =
+  const [
+    storedTrips,
+    setStoredTrips,
+  ] = useState(
     getStoredTrips()
+  )
+
+  function refreshTrips() {
+    setStoredTrips(
+      getStoredTrips()
+    )
+  }
 
   return (
     <MainLayout>
@@ -79,29 +93,34 @@ function CommunityTripsPage() {
               mt-10
             "
           >
-           {storedTrips.map(
-  (trip: CommunityTrip) => (
-    <CommunityTripCard
-      key={trip.title}
-      title={trip.title}
-      organizer={
-        trip.organizer ||
-        'Maya'
-      }
-      gatheringPoint={
-        trip.gatheringPoint
-      }
-      date={trip.date}
-      price={Number(
-        trip.price
-      )}
-      seats={Number(
-        trip.seats
-      )}
-      stops={trip.stops}
-    />
-  )
-)}
+            {storedTrips.map(
+              (
+                trip: CommunityTrip
+              ) => (
+                <CommunityTripCard
+                  key={trip.title}
+                  title={trip.title}
+                  organizer={
+                    trip.organizer ||
+                    'Maya'
+                  }
+                  gatheringPoint={
+                    trip.gatheringPoint
+                  }
+                  date={trip.date}
+                  price={Number(
+                    trip.price
+                  )}
+                  seats={Number(
+                    trip.seats
+                  )}
+                  stops={trip.stops}
+                  onTripJoined={
+                    refreshTrips
+                  }
+                />
+              )
+            )}
           </div>
         )}
       </div>

@@ -1,9 +1,15 @@
 import { useState } from 'react'
 
 import MainLayout from '@/layouts/MainLayout'
+
 import {
   saveTrip,
 } from '@/utils/communityTripsStorage'
+
+import type {
+  CommunityTrip,
+} from '@/types/communityTrip'
+
 function CreateTripPage() {
   const [title, setTitle] =
     useState('')
@@ -30,25 +36,28 @@ function CreateTripPage() {
   ) {
     event.preventDefault()
 
-    const newTrip = {
-      title,
+    const newTrip: CommunityTrip =
+      {
+        title,
 
-      gatheringPoint,
+        organizer: 'Maya',
 
-      date,
+        gatheringPoint,
 
-      price,
+        date,
 
-      seats,
+        price: Number(price),
 
-      stops: stops
-        .split(',')
-        .map((stop) =>
-          stop.trim()
-        ),
-    }
+        seats: Number(seats),
 
-  saveTrip(newTrip)
+        stops: stops
+          .split(',')
+          .map((stop) =>
+            stop.trim()
+          ),
+      }
+
+    saveTrip(newTrip)
 
     alert(
       'Trip created successfully!'

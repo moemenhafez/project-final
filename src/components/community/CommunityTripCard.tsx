@@ -1,3 +1,7 @@
+import {
+  joinTrip,
+} from '@/utils/communityTripsStorage'
+
 interface CommunityTripCardProps {
   title: string
 
@@ -12,6 +16,8 @@ interface CommunityTripCardProps {
   seats: number
 
   stops: string[]
+
+  onTripJoined: () => void
 }
 
 function CommunityTripCard({
@@ -22,6 +28,7 @@ function CommunityTripCard({
   price,
   seats,
   stops,
+  onTripJoined,
 }: CommunityTripCardProps) {
   return (
     <div
@@ -128,6 +135,19 @@ function CommunityTripCard({
       </div>
 
       <button
+        onClick={() => {
+          if (seats === 0) {
+            return
+          }
+
+          joinTrip(title)
+
+          onTripJoined()
+
+          alert(
+            'Trip joined successfully!'
+          )
+        }}
         className="
           w-full
           mt-8
@@ -139,7 +159,9 @@ function CommunityTripCard({
           transition
         "
       >
-        Join Trip
+        {seats === 0
+          ? 'Sold Out'
+          : 'Join Trip'}
       </button>
     </div>
   )

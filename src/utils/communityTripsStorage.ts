@@ -1,8 +1,12 @@
+import type {
+  CommunityTrip,
+} from '@/types/communityTrip'
 
 const STORAGE_KEY =
   'communityTrips'
 
-export function getStoredTrips() {
+export function getStoredTrips():
+  CommunityTrip[] {
   const storedTrips =
     localStorage.getItem(
       STORAGE_KEY
@@ -16,7 +20,7 @@ export function getStoredTrips() {
 }
 
 export function saveTrip(
-  trip: unknown
+  trip: CommunityTrip
 ) {
   const currentTrips =
     getStoredTrips()
@@ -25,6 +29,37 @@ export function saveTrip(
     ...currentTrips,
     trip,
   ]
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(updatedTrips)
+  )
+}
+
+export function joinTrip(
+  tripTitle: string
+) {
+  const currentTrips =
+    getStoredTrips()
+
+  const updatedTrips =
+    currentTrips.map(
+      (trip: CommunityTrip) => {
+        if (
+          trip.title ===
+            tripTitle &&
+          trip.seats > 0
+        ) {
+          return {
+            ...trip,
+            seats:
+              trip.seats - 1,
+          }
+        }
+
+        return trip
+      }
+    )
 
   localStorage.setItem(
     STORAGE_KEY,
