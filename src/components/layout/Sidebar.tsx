@@ -25,6 +25,16 @@ const navigationItems = [
       },
     ],
   },
+
+  {
+    title: 'BUSINESS',
+    items: [
+      {
+        label: 'Analytics',
+        path: '/analytics',
+      },
+    ],
+  },
 ]
 
 function Sidebar() {

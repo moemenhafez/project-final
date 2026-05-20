@@ -14,6 +14,8 @@ import CreateTripPage from '@/pages/CreateTripPage'
 
 import SavedPlansPage from '@/pages/SavedPlansPage'
 
+import AnalyticsPage from '@/pages/AnalyticsPage'
+
 import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
@@ -68,6 +70,15 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <SavedPlansPage />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: '/analytics',
+    element: (
+      <ProtectedRoute>
+        <AnalyticsPage />
       </ProtectedRoute>
     ),
   },
