@@ -27,6 +27,10 @@ import ProfilePage from '@/pages/ProfilePage'
 
 import SettingsPage from '@/pages/SettingsPage'
 
+import AdminLoginPage from '@/pages/AdminLoginPage'
+
+import AdminRoute from './AdminRoute'
+
 const router = createBrowserRouter([
   {
     path: '/login',
@@ -127,6 +131,19 @@ const router = createBrowserRouter([
   path: '/settings',
   element: <SettingsPage />,
 },
+{
+  path: '/analytics',
+
+  element: (
+    <AdminRoute>
+      <AnalyticsPage />
+    </AdminRoute>
+  ),
+},
+{
+  path: '/admin-login',
+  element: <AdminLoginPage />,
+}
 ])
 
 export default router

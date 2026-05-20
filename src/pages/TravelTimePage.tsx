@@ -1,65 +1,65 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import MainLayout from '@/layouts/MainLayout'
 
-const travelData: Record<
+const travelTimes: Record<
   string,
-  {
-    time: string
-    distance: string
-  }
+  Record<
+    string,
+    {
+      time: string
+      distance: string
+    }
+  >
 > = {
-  'Tripoli-Batroun': {
-    time: '35 mins',
-    distance: '32 km',
+  Beirut: {
+    Tripoli: {
+      time: '1h 30m',
+      distance: '85 km',
+    },
+
+    Batroun: {
+      time: '1h',
+      distance: '55 km',
+    },
   },
 
-  'Tripoli-Beirut': {
-    time: '1 hr 25 mins',
-    distance: '85 km',
-  },
+  Tripoli: {
+    Beirut: {
+      time: '1h 30m',
+      distance: '85 km',
+    },
 
-  'Beirut-Jbeil': {
-    time: '45 mins',
-    distance: '40 km',
-  },
-
-  'Batroun-Jbeil': {
-    time: '20 mins',
-    distance: '18 km',
-  },
-
-  'Beirut-Tyre': {
-    time: '1 hr 40 mins',
-    distance: '90 km',
+    Batroun: {
+      time: '40m',
+      distance: '30 km',
+    },
   },
 }
 
 function TravelTimePage() {
-  const [fromCity, setFromCity] =
+  const [from, setFrom] =
+    useState('Beirut')
+
+  const [to, setTo] =
     useState('Tripoli')
 
-  const [toCity, setToCity] =
-    useState('Batroun')
-
-  const routeKey =
-    `${fromCity}-${toCity}`
-
-  const routeInfo = useMemo(
-    () => {
-      return (
-        travelData[routeKey] || {
-          time: 'Unknown',
-          distance: 'Unknown',
-        }
-      )
-    },
-    [routeKey]
-  )
+  const result =
+    travelTimes[from]?.[to]
 
   return (
     <MainLayout>
-      <div className="space-y-6">
+      <div
+        className="
+          bg-white
+          rounded-3xl
+          p-10
+          shadow-sm
+          max-w-4xl
+          mx-auto
+          space-y-8
+        "
+      >
         <div>
           <h1
             className="
@@ -73,157 +73,147 @@ function TravelTimePage() {
 
           <p
             className="
-              text-lg
               text-gray-500
-              mt-2
+              mt-3
             "
           >
-            Estimate travel duration
-            between Lebanese cities.
+            Estimate travel durations
+            between Lebanese regions.
           </p>
         </div>
 
         <div
           className="
-            bg-white
-            rounded-3xl
-            p-8
-            shadow-sm
-            max-w-3xl
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            gap-6
           "
         >
-          <div
+          <select
+            value={from}
+            onChange={(event) =>
+              setFrom(
+                event.target.value
+              )
+            }
             className="
-              grid
-              grid-cols-1
-              md:grid-cols-2
-              gap-6
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
             "
           >
-            <select
-              value={fromCity}
-              onChange={(event) =>
-                setFromCity(
-                  event.target.value
-                )
-              }
-              className="
-                w-full
-                p-4
-                rounded-2xl
-                bg-gray-100
-                outline-none
-              "
-            >
-              <option>
-                Tripoli
-              </option>
+            <option>
+              Beirut
+            </option>
 
-              <option>
-                Beirut
-              </option>
+            <option>
+              Tripoli
+            </option>
 
-              <option>
-                Batroun
-              </option>
+            <option>
+              Batroun
+            </option>
+          </select>
 
-              <option>
-                Jbeil
-              </option>
+          <select
+            value={to}
+            onChange={(event) =>
+              setTo(
+                event.target.value
+              )
+            }
+            className="
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          >
+            <option>
+              Beirut
+            </option>
 
-              <option>
-                Tyre
-              </option>
-            </select>
+            <option>
+              Tripoli
+            </option>
 
-            <select
-              value={toCity}
-              onChange={(event) =>
-                setToCity(
-                  event.target.value
-                )
-              }
-              className="
-                w-full
-                p-4
-                rounded-2xl
-                bg-gray-100
-                outline-none
-              "
-            >
-              <option>
-                Tripoli
-              </option>
+            <option>
+              Batroun
+            </option>
+          </select>
+        </div>
 
-              <option>
-                Beirut
-              </option>
-
-              <option>
-                Batroun
-              </option>
-
-              <option>
-                Jbeil
-              </option>
-
-              <option>
-                Tyre
-              </option>
-            </select>
-          </div>
-
+        {result ? (
           <div
             className="
-              mt-10
-              bg-emerald-50
+              bg-emerald-100
               rounded-3xl
-              p-8
+              p-10
+              space-y-5
             "
           >
-            <h2
-              className="
-                text-2xl
-                font-bold
-                text-gray-800
-              "
-            >
-              Route Information
-            </h2>
-
-            <div className="mt-6 space-y-4">
-              <div
+            <div>
+              <h2
                 className="
-                  flex
-                  justify-between
+                  text-2xl
+                  font-bold
+                  text-emerald-800
                 "
               >
-                <span className="text-gray-500">
-                  Estimated Time
-                </span>
+                Estimated Drive Time
+              </h2>
 
-                <span className="font-semibold">
-                  {routeInfo.time}
-                </span>
+              <div
+                className="
+                  text-5xl
+                  font-bold
+                  mt-4
+                "
+              >
+                {result.time}
               </div>
+            </div>
+
+            <div>
+              <h2
+                className="
+                  text-2xl
+                  font-bold
+                  text-emerald-800
+                "
+              >
+                Distance
+              </h2>
 
               <div
                 className="
-                  flex
-                  justify-between
+                  text-4xl
+                  font-bold
+                  mt-4
                 "
               >
-                <span className="text-gray-500">
-                  Distance
-                </span>
-
-                <span className="font-semibold">
-                  {routeInfo.distance}
-                </span>
+                {
+                  result.distance
+                }
               </div>
             </div>
           </div>
-        </div>
+        ) : (
+          <div
+            className="
+              bg-yellow-100
+              rounded-3xl
+              p-10
+              text-yellow-800
+              font-semibold
+            "
+          >
+            No travel data available
+            for this route yet.
+          </div>
+        )}
       </div>
     </MainLayout>
   )
