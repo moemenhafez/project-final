@@ -20,15 +20,47 @@ function CommunityTripsPage() {
     getStoredTrips()
   )
 
+  const [
+    selectedRegion,
+    setSelectedRegion,
+  ] = useState('All')
+
+  const [
+    selectedPartnerType,
+    setSelectedPartnerType,
+  ] = useState('All')
+
   function refreshTrips() {
     setStoredTrips(
       getStoredTrips()
     )
   }
 
+  const filteredTrips =
+    storedTrips.filter(
+      (trip: CommunityTrip) => {
+        const matchesRegion =
+          selectedRegion ===
+            'All' ||
+          trip.region ===
+            selectedRegion
+
+        const matchesPartner =
+          selectedPartnerType ===
+            'All' ||
+          trip.partnerType ===
+            selectedPartnerType
+
+        return (
+          matchesRegion &&
+          matchesPartner
+        )
+      }
+    )
+
   return (
     <MainLayout>
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div>
           <h1
             className="
@@ -52,7 +84,99 @@ function CommunityTripsPage() {
           </p>
         </div>
 
-        {storedTrips.length === 0 ? (
+        <div
+          className="
+            bg-white
+            rounded-3xl
+            p-6
+            shadow-sm
+            flex
+            flex-col
+            md:flex-row
+            gap-4
+          "
+        >
+          <select
+            value={selectedRegion}
+            onChange={(event) =>
+              setSelectedRegion(
+                event.target.value
+              )
+            }
+            className="
+              flex-1
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          >
+            <option value="All">
+              All Regions
+            </option>
+
+            <option value="Tripoli">
+              Tripoli
+            </option>
+
+            <option value="Beirut">
+              Beirut
+            </option>
+
+            <option value="Batroun">
+              Batroun
+            </option>
+
+            <option value="Jbeil">
+              Jbeil
+            </option>
+
+            <option value="Tyre">
+              Tyre
+            </option>
+          </select>
+
+          <select
+            value={
+              selectedPartnerType
+            }
+            onChange={(event) =>
+              setSelectedPartnerType(
+                event.target.value
+              )
+            }
+            className="
+              flex-1
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          >
+            <option value="All">
+              All Experiences
+            </option>
+
+            <option value="Friends">
+              Friends
+            </option>
+
+            <option value="Couple">
+              Couple
+            </option>
+
+            <option value="Family Gathering">
+              Family Gathering
+            </option>
+
+            <option value="Business Meeting">
+              Business Meeting
+            </option>
+          </select>
+        </div>
+
+        {filteredTrips.length ===
+        0 ? (
           <div
             className="
               bg-white
@@ -60,7 +184,6 @@ function CommunityTripsPage() {
               p-10
               text-center
               shadow-sm
-              mt-10
             "
           >
             <h2
@@ -70,7 +193,7 @@ function CommunityTripsPage() {
                 text-gray-800
               "
             >
-              No Community Trips Yet
+              No Matching Trips
             </h2>
 
             <p
@@ -79,8 +202,9 @@ function CommunityTripsPage() {
                 mt-3
               "
             >
-              Be the first to create a
-              Lebanese experience.
+              Try changing your
+              filters to discover more
+              experiences.
             </p>
           </div>
         ) : (
@@ -90,10 +214,9 @@ function CommunityTripsPage() {
               grid-cols-1
               xl:grid-cols-2
               gap-8
-              mt-10
             "
           >
-            {storedTrips.map(
+            {filteredTrips.map(
               (
                 trip: CommunityTrip
               ) => (
