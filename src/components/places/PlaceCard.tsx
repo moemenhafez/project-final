@@ -49,16 +49,16 @@ function PlaceCard({
               absolute
               top-4
               left-4
-              bg-emerald-700
-              text-white
+              bg-yellow-400
+              text-black
               px-4
               py-2
               rounded-full
               text-sm
-              font-semibold
+              font-bold
             "
           >
-            Featured
+            ⭐ Sponsored
           </div>
         )}
       </div>

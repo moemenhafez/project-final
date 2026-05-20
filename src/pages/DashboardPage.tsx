@@ -13,34 +13,81 @@ import type {
 function DashboardPage() {
   const places = getPlaces()
 
+  const sortedPlaces = [
+    ...places,
+  ].sort((a, b) => {
+    if (
+      a.promoted &&
+      !b.promoted
+    ) {
+      return -1
+    }
+
+    if (
+      !a.promoted &&
+      b.promoted
+    ) {
+      return 1
+    }
+
+    return 0
+  })
+
   return (
     <MainLayout>
       <div className="space-y-6">
-        <div>
-          <h1
-            className="
-              text-4xl
-              font-bold
-              text-gray-800
-            "
-          >
-            Explore Lebanon
-          </h1>
+        <div
+          className="
+            flex
+            flex-col
+            md:flex-row
+            md:items-center
+            md:justify-between
+            gap-4
+          "
+        >
+          <div>
+            <h1
+              className="
+                text-4xl
+                font-bold
+                text-gray-800
+              "
+            >
+              Explore Lebanon
+            </h1>
 
-          <p
+            <p
+              className="
+                text-lg
+                text-gray-500
+                mt-2
+              "
+            >
+              Discover restaurants,
+              attractions and authentic
+              Lebanese experiences.
+            </p>
+          </div>
+
+          <div
             className="
-              text-lg
-              text-gray-500
-              mt-2
+              bg-emerald-100
+              text-emerald-700
+              px-5
+              py-3
+              rounded-2xl
+              font-semibold
+              text-sm
             "
           >
-            Discover restaurants,
-            attractions and authentic
-            Lebanese experiences.
-          </p>
+            Featured places appear
+            first
+          </div>
         </div>
 
-        {places.length === 0 ? (
+        {sortedPlaces.length ===
+        0 ? (
           <div
             className="
               bg-white
@@ -80,7 +127,7 @@ function DashboardPage() {
               gap-8
             "
           >
-            {places.map(
+            {sortedPlaces.map(
               (place: Place) => (
                 <PlaceCard
                   key={place.id}
