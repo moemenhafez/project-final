@@ -33,6 +33,10 @@ const navigationItems = [
         label: 'Analytics',
         path: '/analytics',
       },
+      {
+  label: 'Trip Budget',
+  path: '/trip-budget',
+},
     ],
   },
 ]

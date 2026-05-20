@@ -1,7 +1,7 @@
 import {
   createBrowserRouter,
 } from 'react-router-dom'
-
+import TripBudgetPage from '@/pages/TripBudgetPage'
 import LoginPage from '@/pages/auth/LoginPage'
 
 import RegisterPage from '@/pages/auth/RegisterPage'
@@ -64,6 +64,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+  path: '/trip-budget',
+  element: (
+    <ProtectedRoute>
+      <TripBudgetPage />
+    </ProtectedRoute>
+  ),
+},
 
   {
     path: '/saved-plans',
