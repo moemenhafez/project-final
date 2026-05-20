@@ -42,6 +42,38 @@ function AdminPlacesPage() {
   ) {
     event.preventDefault()
 
+    if (
+      !title.trim() ||
+      !image.trim() ||
+      !description.trim()
+    ) {
+      toast.error(
+        'Please fill all fields.'
+      )
+
+      return
+    }
+
+    if (
+      description.length < 20
+    ) {
+      toast.error(
+        'Description must be at least 20 characters.'
+      )
+
+      return
+    }
+
+    if (
+      !image.startsWith('http')
+    ) {
+      toast.error(
+        'Please enter a valid image URL.'
+      )
+
+      return
+    }
+
     const newPlace: Place = {
       id: Date.now(),
 
@@ -65,10 +97,15 @@ function AdminPlacesPage() {
     )
 
     setTitle('')
+
     setCategory('Restaurant')
+
     setRegion('Tripoli')
+
     setImage('')
+
     setDescription('')
+
     setPromoted(false)
   }
 
