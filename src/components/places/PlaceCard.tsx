@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { motion } from 'framer-motion'
+
 import PlaceDetailsModal from './PlaceDetailsModal'
 
 interface PlaceCardProps {
@@ -29,14 +31,28 @@ function PlaceCard({
 
   return (
     <>
-      <div
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: 30,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        whileHover={{
+          y: -10,
+          scale: 1.02,
+        }}
+        transition={{
+          duration: 0.3,
+        }}
         className="
           bg-white
           rounded-3xl
           overflow-hidden
           shadow-sm
           hover:shadow-2xl
-          hover:-translate-y-2
           transition
           duration-300
         "
@@ -147,13 +163,15 @@ function PlaceCard({
               py-3
               rounded-2xl
               hover:bg-black
+              hover:scale-[1.02]
+              active:scale-[0.98]
               transition
             "
           >
             View Experience
           </button>
         </div>
-      </div>
+      </motion.div>
 
       <PlaceDetailsModal
         isOpen={isOpen}

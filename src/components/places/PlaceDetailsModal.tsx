@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+
 interface PlaceDetailsModalProps {
   isOpen: boolean
 
@@ -43,7 +45,18 @@ function PlaceDetailsModal({
         p-6
       "
     >
-      <div
+      <motion.div
+        initial={{
+          opacity: 0,
+          scale: 0.9,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+        }}
+        transition={{
+          duration: 0.25,
+        }}
         className="
           bg-white
           w-full
@@ -349,6 +362,8 @@ function PlaceDetailsModal({
                 py-4
                 rounded-2xl
                 hover:bg-emerald-800
+                hover:scale-[1.02]
+                active:scale-[0.98]
                 transition
               "
             >
@@ -362,6 +377,8 @@ function PlaceDetailsModal({
                 py-4
                 rounded-2xl
                 hover:bg-gray-300
+                hover:scale-[1.02]
+                active:scale-[0.98]
                 transition
               "
             >
@@ -369,7 +386,7 @@ function PlaceDetailsModal({
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
