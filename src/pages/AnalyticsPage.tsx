@@ -1,64 +1,60 @@
 import MainLayout from '@/layouts/MainLayout'
 
 import {
-  getStoredTrips,
-  getJoinedTrips,
-} from '@/utils/communityTripsStorage'
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts'
+
+const visitsData = [
+  {
+    name: 'Tripoli',
+    visits: 420,
+  },
+
+  {
+    name: 'Beirut',
+    visits: 680,
+  },
+
+  {
+    name: 'Batroun',
+    visits: 310,
+  },
+
+  {
+    name: 'Jbeil',
+    visits: 250,
+  },
+]
+
+const sponsoredData = [
+  {
+    name: 'Sponsored',
+    value: 65,
+  },
+
+  {
+    name: 'Organic',
+    value: 35,
+  },
+]
+
+const COLORS = [
+  '#10b981',
+  '#d1d5db',
+]
 
 function AnalyticsPage() {
-  const storedTrips =
-    getStoredTrips()
-
-  const joinedTrips =
-    getJoinedTrips()
-
-  const totalTrips =
-    storedTrips.length
-
-  const totalBookings =
-    joinedTrips.length
-
-  const totalSeatsSold =
-    joinedTrips.length
-
-  const mostPopularTrip =
-    joinedTrips.length > 0
-      ? joinedTrips[0].title
-      : 'No trips yet'
-
-  const analyticsCards = [
-    {
-      title:
-        'Total Community Trips',
-
-      value: totalTrips,
-    },
-
-    {
-      title:
-        'Total Bookings',
-
-      value: totalBookings,
-    },
-
-    {
-      title:
-        'Seats Sold',
-
-      value: totalSeatsSold,
-    },
-
-    {
-      title:
-        'Most Popular Trip',
-
-      value: mostPopularTrip,
-    },
-  ]
-
   return (
     <MainLayout>
-      <div className="space-y-4">
+      <div className="space-y-8">
         <div>
           <h1
             className="
@@ -67,7 +63,7 @@ function AnalyticsPage() {
               text-gray-800
             "
           >
-            Business Analytics
+            Analytics Dashboard
           </h1>
 
           <p
@@ -77,8 +73,8 @@ function AnalyticsPage() {
               mt-2
             "
           >
-            Monitor platform activity
-            and trip performance.
+            Platform performance and
+            marketplace insights.
           </p>
         </div>
 
@@ -86,45 +82,205 @@ function AnalyticsPage() {
           className="
             grid
             grid-cols-1
-            md:grid-cols-2
-            xl:grid-cols-4
+            md:grid-cols-3
             gap-6
-            mt-10
           "
         >
-          {analyticsCards.map(
-            (card) => (
-              <div
-                key={card.title}
+          <div
+            className="
+              bg-white
+              p-6
+              rounded-3xl
+              shadow-sm
+            "
+          >
+            <p className="text-gray-500">
+              Total Visits
+            </p>
+
+            <h2
+              className="
+                text-4xl
+                font-bold
+                mt-3
+                text-gray-800
+              "
+            >
+              1,660
+            </h2>
+          </div>
+
+          <div
+            className="
+              bg-white
+              p-6
+              rounded-3xl
+              shadow-sm
+            "
+          >
+            <p className="text-gray-500">
+              Sponsored Clicks
+            </p>
+
+            <h2
+              className="
+                text-4xl
+                font-bold
+                mt-3
+                text-yellow-500
+              "
+            >
+              640
+            </h2>
+          </div>
+
+          <div
+            className="
+              bg-white
+              p-6
+              rounded-3xl
+              shadow-sm
+            "
+          >
+            <p className="text-gray-500">
+              Trip Bookings
+            </p>
+
+            <h2
+              className="
+                text-4xl
+                font-bold
+                mt-3
+                text-emerald-700
+              "
+            >
+              184
+            </h2>
+          </div>
+        </div>
+
+        <div
+          className="
+            grid
+            grid-cols-1
+            xl:grid-cols-2
+            gap-8
+          "
+        >
+          <div
+            className="
+              bg-white
+              p-8
+              rounded-3xl
+              shadow-sm
+            "
+          >
+            <div className="mb-6">
+              <h2
                 className="
-                  bg-white
-                  rounded-3xl
-                  p-6
-                  shadow-sm
+                  text-2xl
+                  font-bold
+                  text-gray-800
                 "
               >
-                <p
-                  className="
-                    text-gray-500
-                    text-sm
-                  "
-                >
-                  {card.title}
-                </p>
+                Regional Visits
+              </h2>
 
-                <h2
-                  className="
-                    text-3xl
-                    font-bold
-                    text-gray-800
-                    mt-4
-                  "
+              <p className="text-gray-500 mt-2">
+                Most explored Lebanese
+                regions.
+              </p>
+            </div>
+
+            <div className="h-80">
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+                <BarChart
+                  data={visitsData}
                 >
-                  {card.value}
-                </h2>
-              </div>
-            )
-          )}
+                  <XAxis dataKey="name" />
+
+                  <YAxis />
+
+                  <Tooltip />
+
+                  <Bar
+                    dataKey="visits"
+                    fill="#10b981"
+                    radius={[
+                      8,
+                      8,
+                      0,
+                      0,
+                    ]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div
+            className="
+              bg-white
+              p-8
+              rounded-3xl
+              shadow-sm
+            "
+          >
+            <div className="mb-6">
+              <h2
+                className="
+                  text-2xl
+                  font-bold
+                  text-gray-800
+                "
+              >
+                Sponsored Engagement
+              </h2>
+
+              <p className="text-gray-500 mt-2">
+                Sponsored vs organic
+                interactions.
+              </p>
+            </div>
+
+            <div className="h-80">
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+              >
+                <PieChart>
+                  <Pie
+                    data={
+                      sponsoredData
+                    }
+                    dataKey="value"
+                    outerRadius={120}
+                  >
+                    {sponsoredData.map(
+                      (
+                        _,
+                        index
+                      ) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={
+                            COLORS[
+                              index
+                            ]
+                          }
+                        />
+                      )
+                    )}
+                  </Pie>
+
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
       </div>
     </MainLayout>
