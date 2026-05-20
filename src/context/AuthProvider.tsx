@@ -26,11 +26,33 @@ function AuthProvider({
     ) === 'true'
   )
 
-  function login() {
+  const [role, setRole] =
+    useState<'user' | 'admin'>(
+      (
+        localStorage.getItem(
+          'role'
+        ) as
+          | 'user'
+          | 'admin'
+      ) || 'user'
+    )
+
+  function login(
+    newRole:
+      | 'user'
+      | 'admin'
+  ) {
     localStorage.setItem(
       'isAuthenticated',
       'true'
     )
+
+    localStorage.setItem(
+      'role',
+      newRole
+    )
+
+    setRole(newRole)
 
     setIsAuthenticated(true)
   }
@@ -40,13 +62,20 @@ function AuthProvider({
       'isAuthenticated'
     )
 
+    localStorage.removeItem(
+      'role'
+    )
+
     setIsAuthenticated(false)
+
+    setRole('user')
   }
 
   return (
     <AuthContext.Provider
       value={{
         isAuthenticated,
+        role,
         login,
         logout,
       }}

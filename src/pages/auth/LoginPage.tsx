@@ -1,116 +1,205 @@
 import { useState } from 'react'
 
-import { useNavigate } from 'react-router-dom'
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom'
 
-import { useAuth } from '@/hooks/useAuth'
-
-import Notification from '@/components/feedback/Notification'
-
-import Button from '@/components/ui/Button'
-
-import Input from '@/components/ui/Input'
-
-import AuthLayout from '@/layouts/AuthLayout'
-
-import { loginUser } from '@/api/auth'
+import {
+  useAuth,
+} from '@/hooks/useAuth'
 
 function LoginPage() {
+  const [username, setUsername] =
+    useState('')
+
+  const [password, setPassword] =
+    useState('')
+
+  const [isAdmin, setIsAdmin] =
+    useState(false)
+
   const navigate = useNavigate()
 
-const { login } = useAuth()
-  const [email, setEmail] = useState('')
+  const { login } = useAuth()
 
-  const [password, setPassword] = useState('')
+  function handleSubmit(
+    event: React.FormEvent
+  ) {
+    event.preventDefault()
 
-  const [error, setError] = useState('')
+    if (
+      isAdmin &&
+      username === 'admin' &&
+      password === 'admin123'
+    ) {
+      login('admin')
 
-  const [loading, setLoading] =
-    useState(false)
+      navigate('/dashboard')
 
-  const [showNotification, setShowNotification] =
-    useState(false)
+      return
+    }
 
-  async function handleLogin() {
-  if (!email || !password) {
-    setError('Please fill all fields')
+    if (
+      username === 'emilys' &&
+      password === 'emilyspass'
+    ) {
+      login('user')
 
-    return
+      navigate('/dashboard')
+
+      return
+    }
+
+    alert(
+      'Invalid credentials'
+    )
   }
-
-  try {
-    setError('')
-
-    setLoading(true)
-
-    const response = await loginUser({
-      username: email,
-      password,
-    })
-
-   login(response.accessToken)
-
-navigate('/dashboard')
-
-    setShowNotification(true)
-
-    setTimeout(() => {
-      setShowNotification(false)
-    }, 3000)
-  } catch {
-    setError('Invalid credentials')
-  } finally {
-    setLoading(false)
-  }
-}
 
   return (
-    <>
-      <Notification
-        message="Login successful"
-        show={showNotification}
-      />
+    <div
+      className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        bg-gray-100
+        p-6
+      "
+    >
+      <div
+        className="
+          bg-white
+          p-10
+          rounded-3xl
+          shadow-sm
+          w-full
+          max-w-md
+        "
+      >
+        <h1
+          className="
+            text-4xl
+            font-bold
+            text-center
+            text-gray-800
+          "
+        >
+          Welcome Back
+        </h1>
 
-      <AuthLayout title="Login">
-        {error && (
-          <div
+        <p
+          className="
+            text-gray-500
+            text-center
+            mt-3
+          "
+        >
+          Login to continue exploring
+          Lebanon.
+        </p>
+
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5 mt-8"
+        >
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(event) =>
+              setUsername(
+                event.target.value
+              )
+            }
             className="
-              bg-red-100
-              text-red-600
-              px-4
-              py-3
-              rounded-xl
-              text-sm
+              w-full
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) =>
+              setPassword(
+                event.target.value
+              )
+            }
+            className="
+              w-full
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          />
+
+          <label
+            className="
+              flex
+              items-center
+              gap-3
             "
           >
-            {error}
-          </div>
-        )}
+            <input
+              type="checkbox"
+              checked={isAdmin}
+              onChange={(event) =>
+                setIsAdmin(
+                  event.target.checked
+                )
+              }
+            />
 
-        <Input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(event) =>
-            setEmail(event.target.value)
-          }
-        />
+            <span>
+              Login as Admin
+            </span>
+          </label>
 
-        <Input
-          type="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(event) =>
-            setPassword(event.target.value)
-          }
-        />
+          <button
+            type="submit"
+            className="
+              w-full
+              bg-emerald-700
+              text-white
+              py-4
+              rounded-2xl
+              hover:bg-emerald-800
+              transition
+            "
+          >
+            Login
+          </button>
+        </form>
 
-        <Button
-          title="Login"
-          onClick={handleLogin}
-          loading={loading}
-        />
-      </AuthLayout>
-    </>
+        <div
+          className="
+            mt-6
+            text-center
+            text-sm
+            text-gray-500
+          "
+        >
+          Don&apos;t have an
+          account?
+          {' '}
+          <Link
+            to="/register"
+            className="
+              text-emerald-700
+              font-semibold
+            "
+          >
+            Register
+          </Link>
+        </div>
+      </div>
+    </div>
   )
 }
 

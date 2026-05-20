@@ -5,7 +5,11 @@ import {
 export interface AuthContextType {
   isAuthenticated: boolean
 
-  login: () => void
+  role: 'user' | 'admin'
+
+  login: (
+    role: 'user' | 'admin'
+  ) => void
 
   logout: () => void
 }
