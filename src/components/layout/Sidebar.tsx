@@ -6,6 +6,7 @@ import {
 const navigationItems = [
   {
     title: 'DISCOVER',
+    
     items: [
       {
         label: 'Explore',
@@ -23,8 +24,13 @@ const navigationItems = [
         label: 'Favorites',
         path: '/favorites',
       },
+       {
+  label: 'Community Trips',
+  path: '/community-trips',
+},
     ],
   },
+ 
   {
     title: 'MANAGEMENT',
     items: [
