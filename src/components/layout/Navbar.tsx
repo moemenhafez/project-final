@@ -90,7 +90,7 @@ function Navbar() {
                 text-gray-700
               "
             >
-              Maya
+              moemen
             </p>
 
             <p

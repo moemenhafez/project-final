@@ -3,78 +3,137 @@ import {
   useLocation,
 } from 'react-router-dom'
 
+const navigationItems = [
+  {
+    title: 'DISCOVER',
+    items: [
+      {
+        label: 'Explore',
+        path: '/dashboard',
+      },
+      {
+        label: 'Trip Organizer',
+        path: '/organizer',
+      },
+      {
+        label: 'Saved Plans',
+        path: '/saved-plans',
+      },
+      {
+        label: 'Favorites',
+        path: '/favorites',
+      },
+    ],
+  },
+  {
+    title: 'MANAGEMENT',
+    items: [
+      {
+        label: 'Add Place',
+        path: '/add-place',
+      },
+      {
+        label: 'Featured Places',
+        path: '/featured-places',
+      },
+      {
+        label: 'Local Ads',
+        path: '/local-ads',
+      },
+    ],
+  },
+]
+
 function Sidebar() {
   const location = useLocation()
-
-  const links = [
-    {
-      title: 'Dashboard',
-      path: '/dashboard',
-    },
-    {
-      title: 'Trips',
-      path: '/trips',
-    },
-    {
-      title: 'Bookings',
-      path: '/bookings',
-    },
-    {
-      title: 'Profile',
-      path: '/profile',
-    },
-  ]
 
   return (
     <aside
       className="
-        hidden
-        md:flex
-        w-64
+        w-72
         min-h-screen
-        bg-emerald-700
-        text-white
-        p-6
-        flex-col
+        bg-white
+        border-r
+        border-gray-100
+        px-5
+        py-8
+        hidden
+        md:block
       "
     >
-      <h2
-        className="
-          text-2xl
-          font-bold
-        "
-      >
-        Tourism App
-      </h2>
+      <div className="mb-10">
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-gray-800
+          "
+        >
+          LebGuide
+        </h1>
 
-      <nav
-        className="
-          mt-10
-          space-y-3
-        "
-      >
-        {links.map((link) => (
-          <Link
-            key={link.path}
-            to={link.path}
-            className={`
-              block
-              rounded-xl
-              px-4
-              py-3
-              transition
-              ${
-                location.pathname ===
-                link.path
-                  ? 'bg-white text-emerald-700'
-                  : 'hover:bg-emerald-600'
-              }
-            `}
-          >
-            {link.title}
-          </Link>
-        ))}
-      </nav>
+        <p
+          className="
+            text-sm
+            text-gray-500
+            mt-2
+          "
+        >
+          Explore Lebanon differently
+        </p>
+      </div>
+
+      <div className="space-y-10">
+        {navigationItems.map(
+          (section) => (
+            <div key={section.title}>
+              <h2
+                className="
+                  text-xs
+                  font-bold
+                  tracking-widest
+                  text-gray-400
+                  mb-4
+                "
+              >
+                {section.title}
+              </h2>
+
+              <div className="space-y-2">
+                {section.items.map(
+                  (item) => {
+                    const isActive =
+                      location.pathname ===
+                      item.path
+
+                    return (
+                      <Link
+                        key={item.label}
+                        to={item.path}
+                        className={`
+                          flex
+                          items-center
+                          px-4
+                          py-3
+                          rounded-2xl
+                          transition
+                          ${
+                            isActive
+                              ? 'bg-emerald-700 text-white'
+                              : 'text-gray-700 hover:bg-gray-100'
+                          }
+                        `}
+                      >
+                        {item.label}
+                      </Link>
+                    )
+                  }
+                )}
+              </div>
+            </div>
+          )
+        )}
+      </div>
     </aside>
   )
 }
