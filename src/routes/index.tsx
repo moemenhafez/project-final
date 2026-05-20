@@ -18,6 +18,8 @@ import AnalyticsPage from '@/pages/AnalyticsPage'
 
 import ProtectedRoute from './ProtectedRoute'
 
+import TravelTimePage from '@/pages/TravelTimePage'
+
 const router = createBrowserRouter([
   {
     path: '/login',
@@ -90,6 +92,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+  path: '/travel-time',
+  element: (
+    <ProtectedRoute>
+      <TravelTimePage />
+    </ProtectedRoute>
+  ),
+},
 ])
 
 export default router

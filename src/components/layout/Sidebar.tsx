@@ -36,6 +36,9 @@ const navigationItems = [
       {
   label: 'Trip Budget',
   path: '/trip-budget',
+},{
+  label: 'Travel Time',
+  path: '/travel-time',
 },
     ],
   },
