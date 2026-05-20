@@ -1,7 +1,9 @@
 import { useState } from 'react'
 
 import MainLayout from '@/layouts/MainLayout'
-
+import {
+  saveTrip,
+} from '@/utils/communityTripsStorage'
 function CreateTripPage() {
   const [title, setTitle] =
     useState('')
@@ -46,7 +48,7 @@ function CreateTripPage() {
         ),
     }
 
-    console.log(newTrip)
+  saveTrip(newTrip)
 
     alert(
       'Trip created successfully!'
