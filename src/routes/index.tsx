@@ -1,7 +1,7 @@
 import {
   createBrowserRouter,
 } from 'react-router-dom'
-
+import CreateTripPage from '@/pages/CreateTripPage'
 import LoginPage from '@/pages/auth/LoginPage'
 
 import RegisterPage from '@/pages/auth/RegisterPage'
@@ -17,6 +17,14 @@ const router = createBrowserRouter([
     path: '/login',
     element: <LoginPage />,
   },
+  {
+  path: '/create-trip',
+  element: (
+    <ProtectedRoute>
+      <CreateTripPage />
+    </ProtectedRoute>
+  ),
+},
 
   {
     path: '/register',

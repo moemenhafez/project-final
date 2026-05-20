@@ -28,6 +28,10 @@ const navigationItems = [
   label: 'Community Trips',
   path: '/community-trips',
 },
+{
+  label: 'Create Trip',
+  path: '/create-trip',
+},
     ],
   },
  
