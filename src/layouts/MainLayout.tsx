@@ -4,6 +4,8 @@ import type {
 
 import Sidebar from '@/components/layout/Sidebar'
 
+import Topbar from '@/components/layout/Topbar'
+
 interface MainLayoutProps {
   children: ReactNode
 }
@@ -26,6 +28,8 @@ function MainLayout({
           p-8
         "
       >
+        <Topbar />
+
         {children}
       </main>
     </div>
