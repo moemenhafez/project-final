@@ -5,6 +5,9 @@ import type {
 const STORAGE_KEY =
   'communityTrips'
 
+const JOINED_TRIPS_KEY =
+  'joinedTrips'
+
 export function getStoredTrips():
   CommunityTrip[] {
   const storedTrips =
@@ -42,6 +45,16 @@ export function joinTrip(
   const currentTrips =
     getStoredTrips()
 
+  const joinedTrips =
+    getJoinedTrips()
+
+  const selectedTrip =
+    currentTrips.find(
+      (trip) =>
+        trip.title ===
+        tripTitle
+    )
+
   const updatedTrips =
     currentTrips.map(
       (trip: CommunityTrip) => {
@@ -61,8 +74,32 @@ export function joinTrip(
       }
     )
 
+  if (selectedTrip) {
+    localStorage.setItem(
+      JOINED_TRIPS_KEY,
+      JSON.stringify([
+        ...joinedTrips,
+        selectedTrip,
+      ])
+    )
+  }
+
   localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify(updatedTrips)
   )
+}
+
+export function getJoinedTrips():
+  CommunityTrip[] {
+  const joinedTrips =
+    localStorage.getItem(
+      JOINED_TRIPS_KEY
+    )
+
+  if (!joinedTrips) {
+    return []
+  }
+
+  return JSON.parse(joinedTrips)
 }
