@@ -1,149 +1,144 @@
 interface PlaceCardProps {
-  name: string
+  title: string
 
   category: string
 
-  city: string
-
-  rating: number
-
-  timeAway: string
+  region: string
 
   image: string
+
+  description: string
+
+  promoted: boolean
 }
 
 function PlaceCard({
-  name,
+  title,
   category,
-  city,
-  rating,
-  timeAway,
+  region,
   image,
+  description,
+  promoted,
 }: PlaceCardProps) {
   return (
     <div
       className="
-        group
         bg-white
-        rounded-[32px]
+        rounded-3xl
         overflow-hidden
         shadow-sm
-        hover:shadow-2xl
-        transition-all
-        duration-500
-        hover:-translate-y-2
+        hover:shadow-xl
+        transition
+        duration-300
       "
     >
       <div className="relative">
         <img
           src={image}
-          alt={name}
+          alt={title}
           className="
             w-full
-            h-72
+            h-64
             object-cover
           "
         />
 
-        <div
-          className="
-            absolute
-            inset-0
-            bg-gradient-to-t
-            from-black/70
-            via-black/10
-            to-transparent
-          "
-        />
+        {promoted && (
+          <div
+            className="
+              absolute
+              top-4
+              left-4
+              bg-emerald-700
+              text-white
+              px-4
+              py-2
+              rounded-full
+              text-sm
+              font-semibold
+            "
+          >
+            Featured
+          </div>
+        )}
+      </div>
 
+      <div className="p-6">
         <div
           className="
-            absolute
-            top-4
-            left-4
-            bg-white/90
-            backdrop-blur-md
-            px-4
-            py-2
-            rounded-full
-            text-sm
-            font-semibold
-            text-gray-800
-          "
-        >
-          {category}
-        </div>
-
-        <div
-          className="
-            absolute
-            bottom-5
-            left-5
-            text-white
+            flex
+            items-center
+            justify-between
+            gap-4
           "
         >
           <h2
             className="
-              text-3xl
+              text-2xl
               font-bold
+              text-gray-800
             "
           >
-            {name}
+            {title}
           </h2>
 
-          <p
+          <div
             className="
-              text-white/80
-              mt-1
-            "
-          >
-            {city}
-          </p>
-        </div>
-      </div>
-
-      <div
-        className="
-          p-5
-          flex
-          items-center
-          justify-between
-        "
-      >
-        <div>
-          <p
-            className="
-              text-yellow-500
-              font-semibold
-              text-lg
-            "
-          >
-            ⭐ {rating}
-          </p>
-
-          <p
-            className="
-              text-gray-500
+              bg-gray-100
+              px-3
+              py-1
+              rounded-full
               text-sm
-              mt-1
             "
           >
-            {timeAway} away
-          </p>
+            {category}
+          </div>
         </div>
+
+        <div
+          className="
+            mt-4
+            flex
+            gap-3
+            flex-wrap
+          "
+        >
+          <div
+            className="
+              bg-gray-100
+              px-3
+              py-1
+              rounded-full
+              text-sm
+            "
+          >
+            📍 {region}
+          </div>
+        </div>
+
+        <p
+          className="
+            text-gray-500
+            mt-5
+            leading-relaxed
+          "
+        >
+          {description}
+        </p>
 
         <button
           className="
+            w-full
+            mt-8
             bg-gray-900
             text-white
-            px-5
-            py-2.5
+            py-3
             rounded-2xl
             hover:bg-black
             transition
           "
         >
-          Explore
+          View Experience
         </button>
       </div>
     </div>

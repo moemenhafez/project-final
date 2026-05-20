@@ -40,6 +40,10 @@ const navigationItems = [
   label: 'Travel Time',
   path: '/travel-time',
 },
+{
+  label: 'Admin Places',
+  path: '/admin-places',
+},
     ],
   },
 ]

@@ -6,6 +6,8 @@ import LoginPage from '@/pages/auth/LoginPage'
 
 import RegisterPage from '@/pages/auth/RegisterPage'
 
+import AdminPlacesPage from '@/pages/AdminPlacesPage'
+
 import DashboardPage from '@/pages/DashboardPage'
 
 import CommunityTripsPage from '@/pages/CommunityTripsPage'
@@ -92,6 +94,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+  path: '/admin-places',
+  element: (
+    <ProtectedRoute>
+      <AdminPlacesPage />
+    </ProtectedRoute>
+  ),
+},
   {
   path: '/travel-time',
   element: (
