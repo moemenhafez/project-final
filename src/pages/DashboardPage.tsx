@@ -531,26 +531,15 @@ function DashboardPage() {
                 place: Place
               ) => (
                 <PlaceCard
-                  key={place.id}
-                  title={
-                    place.title
-                  }
-                  category={
-                    place.category
-                  }
-                  region={
-                    place.region
-                  }
-                  image={
-                    place.image
-                  }
-                  description={
-                    place.description
-                  }
-                  promoted={
-                    place.promoted
-                  }
-                />
+  key={place.id}
+  id={place.id}
+  title={place.title}
+  category={place.category}
+  region={place.region}
+  image={place.image}
+  description={place.description}
+  promoted={place.promoted}
+/>
               )
             )}
           </div>

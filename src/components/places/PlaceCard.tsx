@@ -2,23 +2,28 @@ import { useState } from 'react'
 
 import { motion } from 'framer-motion'
 
+import toast from 'react-hot-toast'
+
 import PlaceDetailsModal from './PlaceDetailsModal'
 
-interface PlaceCardProps {
-  title: string
+import {
+  addFavoritePlace,
+  isFavoritePlace,
+  removeFavoritePlace,
+} from '@/utils/favoritesStorage'
 
-  category: string
+import {
+  savePlaceForLater,
+} from '@/utils/savedPlacesStorage'
 
-  region: string
+import type {
+  Place,
+} from '@/types/place'
 
-  image: string
-
-  description: string
-
-  promoted: boolean
-}
+type PlaceCardProps = Place
 
 function PlaceCard({
+  id,
   title,
   category,
   region,
@@ -28,6 +33,55 @@ function PlaceCard({
 }: PlaceCardProps) {
   const [isOpen, setIsOpen] =
     useState(false)
+
+  const [
+    isFavorite,
+    setIsFavorite,
+  ] = useState(
+    isFavoritePlace(id)
+  )
+
+  const currentPlace: Place = {
+    id,
+    title,
+    category,
+    region,
+    image,
+    description,
+    promoted,
+  }
+
+  function handleFavorite() {
+    if (isFavorite) {
+      removeFavoritePlace(id)
+
+      toast.success(
+        'Removed from favorites.'
+      )
+
+      setIsFavorite(false)
+
+      return
+    }
+
+    addFavoritePlace(currentPlace)
+
+    toast.success(
+      'Added to favorites.'
+    )
+
+    setIsFavorite(true)
+  }
+
+  function handleSavePlace() {
+    savePlaceForLater(
+      currentPlace
+    )
+
+    toast.success(
+      'Place saved for future plans.'
+    )
+  }
 
   return (
     <>
@@ -67,6 +121,29 @@ function PlaceCard({
               object-cover
             "
           />
+
+          <button
+            onClick={
+              handleFavorite
+            }
+            className="
+              absolute
+              top-4
+              right-4
+              w-12
+              h-12
+              rounded-full
+              bg-white
+              shadow-lg
+              text-2xl
+              hover:scale-110
+              transition
+            "
+          >
+            {isFavorite
+              ? '❤️'
+              : '🤍'}
+          </button>
 
           {promoted && (
             <div
@@ -151,25 +228,47 @@ function PlaceCard({
             {description}
           </p>
 
-          <button
-            onClick={() =>
-              setIsOpen(true)
-            }
+          <div
             className="
-              w-full
+              flex
+              gap-4
               mt-8
-              bg-gray-900
-              text-white
-              py-3
-              rounded-2xl
-              hover:bg-black
-              hover:scale-[1.02]
-              active:scale-[0.98]
-              transition
             "
           >
-            View Experience
-          </button>
+            <button
+              onClick={() =>
+                setIsOpen(true)
+              }
+              className="
+                flex-1
+                bg-gray-900
+                text-white
+                py-3
+                rounded-2xl
+                hover:bg-black
+                hover:scale-[1.02]
+                active:scale-[0.98]
+                transition
+              "
+            >
+              View Experience
+            </button>
+
+            <button
+              onClick={
+                handleSavePlace
+              }
+              className="
+                px-5
+                rounded-2xl
+                bg-gray-100
+                hover:bg-gray-200
+                transition
+              "
+            >
+              🔖
+            </button>
+          </div>
         </div>
       </motion.div>
 
