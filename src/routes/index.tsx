@@ -14,7 +14,7 @@ import CreateTripPage from '@/pages/CreateTripPage'
 
 import SavedPlansPage from '@/pages/SavedPlansPage'
 
-import ProtectedRoute from '@/routes/ProtectedRoute'
+import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
   {

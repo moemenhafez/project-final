@@ -6,49 +6,22 @@ import {
 const navigationItems = [
   {
     title: 'DISCOVER',
-    
     items: [
       {
         label: 'Explore',
         path: '/dashboard',
       },
       {
-        label: 'Trip Organizer',
-        path: '/organizer',
+        label: 'Community Trips',
+        path: '/community-trips',
+      },
+      {
+        label: 'Create Trip',
+        path: '/create-trip',
       },
       {
         label: 'Saved Plans',
         path: '/saved-plans',
-      },
-      {
-        label: 'Favorites',
-        path: '/favorites',
-      },
-       {
-  label: 'Community Trips',
-  path: '/community-trips',
-},
-{
-  label: 'Create Trip',
-  path: '/create-trip',
-},
-    ],
-  },
- 
-  {
-    title: 'MANAGEMENT',
-    items: [
-      {
-        label: 'Add Place',
-        path: '/add-place',
-      },
-      {
-        label: 'Featured Places',
-        path: '/featured-places',
-      },
-      {
-        label: 'Local Ads',
-        path: '/local-ads',
       },
     ],
   },
