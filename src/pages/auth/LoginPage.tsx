@@ -1,202 +1,174 @@
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import {
-  Link,
-  useNavigate,
-} from 'react-router-dom'
+  motion,
+} from 'framer-motion'
 
 import {
-  useAuth,
-} from '@/hooks/useAuth'
+  setRole,
+} from '@/utils/authStorage'
 
 function LoginPage() {
-  const [username, setUsername] =
-    useState('')
-
-  const [password, setPassword] =
-    useState('')
-
-  const [isAdmin, setIsAdmin] =
-    useState(false)
-
   const navigate = useNavigate()
 
-  const { login } = useAuth()
-
-  function handleSubmit(
-    event: React.FormEvent
+  function handleLogin(
+    role:
+      | 'traveler'
+      | 'business'
+      | 'organizer'
+      | 'admin'
   ) {
-    event.preventDefault()
+    setRole(role)
 
-    if (
-      isAdmin &&
-      username === 'admin' &&
-      password === 'admin123'
-    ) {
-      login('admin')
-
-      navigate('/dashboard')
-
-      return
-    }
-
-    if (
-      username === 'emilys' &&
-      password === 'emilyspass'
-    ) {
-      login('user')
-
-      navigate('/dashboard')
-
-      return
-    }
-
-    alert(
-      'Invalid credentials'
-    )
+    navigate('/dashboard')
   }
+
+  const roles = [
+    {
+      title: 'Traveler',
+      description:
+        'Explore and plan amazing trips across Lebanon.',
+      emoji: '🌍',
+      role: 'traveler',
+    },
+
+    {
+      title: 'Business',
+      description:
+        'Promote your restaurant, café or tourism business.',
+      emoji: '🏢',
+      role: 'business',
+    },
+
+    {
+      title: 'Organizer',
+      description:
+        'Create and manage community trips and events.',
+      emoji: '🧳',
+      role: 'organizer',
+    },
+
+    {
+      title: 'Admin',
+      description:
+        'Manage the tourism marketplace platform.',
+      emoji: '⚙️',
+      role: 'admin',
+    },
+  ]
 
   return (
     <div
       className="
         min-h-screen
+        bg-gray-100
         flex
         items-center
         justify-center
-        bg-gray-100
         p-6
       "
     >
-      <div
-        className="
-          bg-white
-          p-10
-          rounded-3xl
-          shadow-sm
-          w-full
-          max-w-md
-        "
-      >
-        <h1
-          className="
-            text-4xl
-            font-bold
-            text-center
-            text-gray-800
-          "
-        >
-          Welcome Back
-        </h1>
-
-        <p
-          className="
-            text-gray-500
-            text-center
-            mt-3
-          "
-        >
-          Login to continue exploring
-          Lebanon.
-        </p>
-
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-5 mt-8"
-        >
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(event) =>
-              setUsername(
-                event.target.value
-              )
-            }
+      <div className="max-w-7xl w-full">
+        <div className="text-center mb-14">
+          <h1
             className="
-              w-full
-              p-4
-              rounded-2xl
-              bg-gray-100
-              outline-none
-            "
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) =>
-              setPassword(
-                event.target.value
-              )
-            }
-            className="
-              w-full
-              p-4
-              rounded-2xl
-              bg-gray-100
-              outline-none
-            "
-          />
-
-          <label
-            className="
-              flex
-              items-center
-              gap-3
+              text-6xl
+              font-bold
+              text-gray-800
             "
           >
-            <input
-              type="checkbox"
-              checked={isAdmin}
-              onChange={(event) =>
-                setIsAdmin(
-                  event.target.checked
-                )
-              }
-            />
+            LebGuide
+          </h1>
 
-            <span>
-              Login as Admin
-            </span>
-          </label>
-
-          <button
-            type="submit"
+          <p
             className="
-              w-full
-              bg-emerald-700
-              text-white
-              py-4
-              rounded-2xl
-              hover:bg-emerald-800
-              transition
+              text-xl
+              text-gray-500
+              mt-5
             "
           >
-            Login
-          </button>
-        </form>
+            Lebanon’s Smart Tourism
+            Marketplace
+          </p>
+        </div>
 
         <div
           className="
-            mt-6
-            text-center
-            text-sm
-            text-gray-500
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            xl:grid-cols-4
+            gap-8
           "
         >
-          Don&apos;t have an
-          account?
-          {' '}
-          <Link
-            to="/register"
-            className="
-              text-emerald-700
-              font-semibold
-            "
-          >
-            Register
-          </Link>
+          {roles.map((item) => (
+            <motion.div
+              key={item.role}
+              whileHover={{
+                y: -10,
+                scale: 1.03,
+              }}
+              className="
+                bg-white
+                rounded-3xl
+                p-8
+                shadow-sm
+                hover:shadow-2xl
+                transition
+              "
+            >
+              <div className="text-6xl">
+                {item.emoji}
+              </div>
+
+              <h2
+                className="
+                  text-3xl
+                  font-bold
+                  mt-6
+                  text-gray-800
+                "
+              >
+                {item.title}
+              </h2>
+
+              <p
+                className="
+                  text-gray-500
+                  mt-4
+                  leading-relaxed
+                "
+              >
+                {
+                  item.description
+                }
+              </p>
+
+              <button
+                onClick={() =>
+                  handleLogin(
+                    item.role as
+                      | 'traveler'
+                      | 'business'
+                      | 'organizer'
+                      | 'admin'
+                  )
+                }
+                className="
+                  w-full
+                  mt-8
+                  bg-emerald-700
+                  text-white
+                  py-4
+                  rounded-2xl
+                  hover:bg-emerald-800
+                  transition
+                "
+              >
+                Continue
+              </button>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>

@@ -2,22 +2,29 @@ import { useState } from 'react'
 
 import {
   NavLink,
+  useNavigate,
 } from 'react-router-dom'
 
 import {
-  useAuth,
-} from '@/hooks/useAuth'
+  getRole,
+  logout,
+} from '@/utils/authStorage'
 
 function Sidebar() {
-  const {
-    role,
-    logout,
-  } = useAuth()
+  const navigate = useNavigate()
 
   const [collapsed, setCollapsed] =
     useState(false)
 
-  const userItems = [
+  const role = getRole()
+
+  function handleLogout() {
+    logout()
+
+    navigate('/login')
+  }
+
+  const travelerItems = [
     {
       label: 'Explore',
       path: '/dashboard',
@@ -25,16 +32,22 @@ function Sidebar() {
     },
 
     {
-      label: 'Community Trips',
-      path:
-        '/community-trips',
-      icon: '🧳',
+      label: 'Favorites',
+      path: '/favorites',
+      icon: '❤️',
     },
 
     {
-      label: 'Saved Plans',
-      path: '/saved-plans',
-      icon: '❤️',
+      label: 'Saved Places',
+      path: '/saved-places',
+      icon: '🔖',
+    },
+
+    {
+      label: 'Trips',
+      path:
+        '/community-trips',
+      icon: '🧳',
     },
 
     {
@@ -50,27 +63,79 @@ function Sidebar() {
     },
   ]
 
-  const adminItems = [
+  const businessItems = [
     {
-      label: 'Analytics',
-      path: '/analytics',
-      icon: '📊',
-    },
-
-    {
-      label: 'Admin Places',
+      label: 'My Business',
       path: '/admin-places',
       icon: '🏢',
     },
 
     {
+      label: 'Advertisements',
+      path:
+        '/sponsored-management',
+      icon: '⭐',
+    },
+
+    {
+      label: 'Analytics',
+      path: '/analytics',
+      icon: '📊',
+    },
+  ]
+
+  const organizerItems = [
+    {
+      label: 'Create Trip',
+      path: '/create-trip',
+      icon: '🧳',
+    },
+
+    {
+      label: 'Manage Trips',
+      path:
+        '/community-trips',
+      icon: '👥',
+    },
+  ]
+
+  const adminItems = [
+    {
       label:
-        'Sponsored Management',
+        'Platform Analytics',
+      path: '/analytics',
+      icon: '📊',
+    },
+
+    {
+      label: 'Approve Places',
+      path: '/admin-places',
+      icon: '✅',
+    },
+
+    {
+      label: 'Sponsors',
       path:
         '/sponsored-management',
       icon: '⭐',
     },
   ]
+
+  const roleMenus = {
+    traveler:
+      travelerItems,
+
+    business:
+      businessItems,
+
+    organizer:
+      organizerItems,
+
+    admin: adminItems,
+  }
+
+  const currentMenu =
+    roleMenus[role]
 
   return (
     <aside
@@ -115,7 +180,6 @@ function Sidebar() {
               text-3xl
               font-bold
               text-emerald-700
-              whitespace-nowrap
             "
           >
             {collapsed
@@ -128,16 +192,16 @@ function Sidebar() {
               className="
                 text-gray-500
                 mt-2
-                text-sm
+                capitalize
               "
             >
-              Discover Lebanon smarter.
+              {role} dashboard
             </p>
           )}
         </div>
 
         <div className="p-4 space-y-2">
-          {userItems.map(
+          {currentMenu.map(
             (item) => (
               <NavLink
                 key={item.path}
@@ -154,11 +218,10 @@ function Sidebar() {
                   rounded-2xl
                   transition
                   font-medium
-                  whitespace-nowrap
                   ${
                     isActive
                       ? 'bg-emerald-700 text-white'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      : 'hover:bg-gray-100'
                   }
                 `
                 }
@@ -175,68 +238,6 @@ function Sidebar() {
               </NavLink>
             )
           )}
-
-          {role === 'admin' && (
-            <>
-              <div
-                className={`
-                  text-xs
-                  text-gray-400
-                  px-4
-                  pt-6
-                  pb-2
-                  ${
-                    collapsed
-                      ? 'hidden'
-                      : 'block'
-                  }
-                `}
-              >
-                ADMIN
-              </div>
-
-              {adminItems.map(
-                (item) => (
-                  <NavLink
-                    key={item.path}
-                    to={item.path}
-                    className={({
-                      isActive,
-                    }) =>
-                      `
-                      flex
-                      items-center
-                      gap-4
-                      px-4
-                      py-4
-                      rounded-2xl
-                      transition
-                      font-medium
-                      whitespace-nowrap
-                      ${
-                        isActive
-                          ? 'bg-black text-white'
-                          : 'text-gray-700 hover:bg-gray-100'
-                      }
-                    `
-                    }
-                  >
-                    <span className="text-xl">
-                      {item.icon}
-                    </span>
-
-                    {!collapsed && (
-                      <span>
-                        {
-                          item.label
-                        }
-                      </span>
-                    )}
-                  </NavLink>
-                )
-              )}
-            </>
-          )}
         </div>
       </div>
 
@@ -250,29 +251,17 @@ function Sidebar() {
       >
         <NavLink
           to="/profile"
-          className={({
-            isActive,
-          }) =>
-            `
+          className="
             flex
             items-center
             gap-4
             px-4
             py-4
             rounded-2xl
-            transition
-            font-medium
-            ${
-              isActive
-                ? 'bg-gray-900 text-white'
-                : 'hover:bg-gray-100'
-            }
-          `
-          }
+            hover:bg-gray-100
+          "
         >
-          <span className="text-xl">
-            👤
-          </span>
+          <span>👤</span>
 
           {!collapsed && (
             <span>Profile</span>
@@ -281,29 +270,17 @@ function Sidebar() {
 
         <NavLink
           to="/settings"
-          className={({
-            isActive,
-          }) =>
-            `
+          className="
             flex
             items-center
             gap-4
             px-4
             py-4
             rounded-2xl
-            transition
-            font-medium
-            ${
-              isActive
-                ? 'bg-gray-900 text-white'
-                : 'hover:bg-gray-100'
-            }
-          `
-          }
+            hover:bg-gray-100
+          "
         >
-          <span className="text-xl">
-            ⚙️
-          </span>
+          <span>⚙️</span>
 
           {!collapsed && (
             <span>Settings</span>
@@ -311,7 +288,7 @@ function Sidebar() {
         </NavLink>
 
         <button
-          onClick={logout}
+          onClick={handleLogout}
           className="
             w-full
             flex
@@ -320,15 +297,11 @@ function Sidebar() {
             px-4
             py-4
             rounded-2xl
-            transition
-            font-medium
             hover:bg-red-100
             text-red-500
           "
         >
-          <span className="text-xl">
-            🚪
-          </span>
+          <span>🚪</span>
 
           {!collapsed && (
             <span>Logout</span>
