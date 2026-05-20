@@ -1,12 +1,10 @@
 import {
   createBrowserRouter,
 } from 'react-router-dom'
-import TripBudgetPage from '@/pages/TripBudgetPage'
+
 import LoginPage from '@/pages/auth/LoginPage'
 
 import RegisterPage from '@/pages/auth/RegisterPage'
-
-import AdminPlacesPage from '@/pages/AdminPlacesPage'
 
 import DashboardPage from '@/pages/DashboardPage'
 
@@ -18,9 +16,13 @@ import SavedPlansPage from '@/pages/SavedPlansPage'
 
 import AnalyticsPage from '@/pages/AnalyticsPage'
 
-import ProtectedRoute from './ProtectedRoute'
+import TripBudgetPage from '@/pages/TripBudgetPage'
 
 import TravelTimePage from '@/pages/TravelTimePage'
+
+import AdminPlacesPage from '@/pages/AdminPlacesPage'
+
+import ProtectedRoute from './ProtectedRoute'
 
 const router = createBrowserRouter([
   {
@@ -68,14 +70,6 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  {
-  path: '/trip-budget',
-  element: (
-    <ProtectedRoute>
-      <TripBudgetPage />
-    </ProtectedRoute>
-  ),
-},
 
   {
     path: '/saved-plans',
@@ -94,22 +88,33 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+
   {
-  path: '/admin-places',
-  element: (
-    <ProtectedRoute>
-      <AdminPlacesPage />
-    </ProtectedRoute>
-  ),
-},
+    path: '/trip-budget',
+    element: (
+      <ProtectedRoute>
+        <TripBudgetPage />
+      </ProtectedRoute>
+    ),
+  },
+
   {
-  path: '/travel-time',
-  element: (
-    <ProtectedRoute>
-      <TravelTimePage />
-    </ProtectedRoute>
-  ),
-},
+    path: '/travel-time',
+    element: (
+      <ProtectedRoute>
+        <TravelTimePage />
+      </ProtectedRoute>
+    ),
+  },
+
+  {
+    path: '/admin-places',
+    element: (
+      <ProtectedRoute>
+        <AdminPlacesPage />
+      </ProtectedRoute>
+    ),
+  },
 ])
 
 export default router

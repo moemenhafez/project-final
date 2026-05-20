@@ -1,17 +1,14 @@
 import {
- 
   useState,
 } from 'react'
 
-import type { ReactNode } from 'react'
+import type {
+  ReactNode,
+} from 'react'
 
 import {
-  getToken,
-  removeToken,
-  saveToken,
-} from '@/services/storageService'
-
-import { AuthContext } from '@/context/AuthContext'
+  AuthContext,
+} from './AuthContext'
 
 interface AuthProviderProps {
   children: ReactNode
@@ -20,27 +17,36 @@ interface AuthProviderProps {
 function AuthProvider({
   children,
 }: AuthProviderProps) {
- const [token, setToken] =
-  useState<string | null>(() =>
-    getToken()
+  const [
+    isAuthenticated,
+    setIsAuthenticated,
+  ] = useState(
+    localStorage.getItem(
+      'isAuthenticated'
+    ) === 'true'
   )
 
-  function login(token: string) {
-    saveToken(token)
+  function login() {
+    localStorage.setItem(
+      'isAuthenticated',
+      'true'
+    )
 
-    setToken(token)
+    setIsAuthenticated(true)
   }
 
   function logout() {
-    removeToken()
+    localStorage.removeItem(
+      'isAuthenticated'
+    )
 
-    setToken(null)
+    setIsAuthenticated(false)
   }
 
   return (
     <AuthContext.Provider
       value={{
-        token,
+        isAuthenticated,
         login,
         logout,
       }}
