@@ -291,11 +291,16 @@ function DashboardPage() {
               shadow-sm
             "
           >
+            <div className="text-6xl">
+              🔍
+            </div>
+
             <h2
               className="
                 text-2xl
                 font-bold
                 text-gray-800
+                mt-4
               "
             >
               No Matching Places

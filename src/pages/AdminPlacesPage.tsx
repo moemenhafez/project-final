@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import toast from 'react-hot-toast'
+
 import MainLayout from '@/layouts/MainLayout'
 
 import {
@@ -58,11 +60,13 @@ function AdminPlacesPage() {
 
     savePlace(newPlace)
 
-    alert(
+    toast.success(
       'Place added successfully!'
     )
 
     setTitle('')
+    setCategory('Restaurant')
+    setRegion('Tripoli')
     setImage('')
     setDescription('')
     setPromoted(false)
@@ -98,7 +102,7 @@ function AdminPlacesPage() {
             "
           >
             Add restaurants,
-            attractions and promoted
+            attractions and featured
             Lebanese experiences.
           </p>
         </div>
@@ -148,19 +152,19 @@ function AdminPlacesPage() {
                 outline-none
               "
             >
-              <option>
+              <option value="Restaurant">
                 Restaurant
               </option>
 
-              <option>
+              <option value="Café">
                 Café
               </option>
 
-              <option>
+              <option value="Attraction">
                 Attraction
               </option>
 
-              <option>
+              <option value="Nightlife">
                 Nightlife
               </option>
             </select>
@@ -180,19 +184,19 @@ function AdminPlacesPage() {
                 outline-none
               "
             >
-              <option>
+              <option value="Tripoli">
                 Tripoli
               </option>
 
-              <option>
+              <option value="Beirut">
                 Beirut
               </option>
 
-              <option>
+              <option value="Batroun">
                 Batroun
               </option>
 
-              <option>
+              <option value="Jbeil">
                 Jbeil
               </option>
             </select>

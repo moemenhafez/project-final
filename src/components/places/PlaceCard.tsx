@@ -27,7 +27,8 @@ function PlaceCard({
         rounded-3xl
         overflow-hidden
         shadow-sm
-        hover:shadow-xl
+        hover:shadow-2xl
+        hover:-translate-y-2
         transition
         duration-300
       "
