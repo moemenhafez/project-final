@@ -1,18 +1,42 @@
 import { useState } from 'react'
 
 import {
+  motion,
+} from 'framer-motion'
+
+import {
   useNavigate,
 } from 'react-router-dom'
 
 import toast from 'react-hot-toast'
 
-import {
-  motion,
-} from 'framer-motion'
+interface UserAccount {
+  id: number
+
+  name: string
+
+  email: string
+
+  password: string
+
+  role: 'user' | 'admin'
+}
 
 function LoginPage() {
   const navigate =
     useNavigate()
+
+  /* MODE */
+
+  const [
+    isRegister,
+    setIsRegister,
+  ] = useState(false)
+
+  /* FORM */
+
+  const [name, setName] =
+    useState('')
 
   const [email, setEmail] =
     useState('')
@@ -29,53 +53,235 @@ function LoginPage() {
     'user' | 'admin'
   >('user')
 
+  /* SECURITY */
+
+  const [
+    failedAttempts,
+    setFailedAttempts,
+  ] = useState(0)
+
+  const [
+    lockedUntil,
+    setLockedUntil,
+  ] = useState<number | null>(
+    null
+  )
+
+  /* USERS */
+
+  function getUsers(): UserAccount[] {
+    const data =
+      localStorage.getItem(
+        'users'
+      )
+
+    return data
+      ? JSON.parse(data)
+      : []
+  }
+
+  function saveUsers(
+    users: UserAccount[]
+  ) {
+    localStorage.setItem(
+      'users',
+      JSON.stringify(users)
+    )
+  }
+
+  /* REGISTER */
+
+  function handleRegister(
+    event: React.FormEvent
+  ) {
+    event.preventDefault()
+
+    if (
+      !name ||
+      !email ||
+      !password
+    ) {
+      toast.error(
+        'Please fill all fields.'
+      )
+
+      return
+    }
+
+    const users = getUsers()
+
+    const existingUser =
+      users.find(
+        (user) =>
+          user.email ===
+          email
+      )
+
+    if (existingUser) {
+      toast.error(
+        'Email already exists.'
+      )
+
+      return
+    }
+
+    const newUser: UserAccount =
+      {
+        id: Date.now(),
+
+        name,
+
+        email,
+
+        password,
+
+        role,
+      }
+
+    saveUsers([
+      ...users,
+      newUser,
+    ])
+
+    toast.success(
+      `${
+        role === 'admin'
+          ? 'Administrator'
+          : 'User'
+      } registered successfully.`
+    )
+
+    setIsRegister(false)
+
+    setName('')
+    setEmail('')
+    setPassword('')
+  }
+
+  /* LOGIN */
+
   function handleLogin(
     event: React.FormEvent
   ) {
     event.preventDefault()
 
-    /* ADMIN LOGIN */
+    /* CHECK LOCK */
 
-    if (role === 'admin') {
+    if (
+      lockedUntil &&
+      Date.now() <
+        lockedUntil
+    ) {
+      const remainingSeconds =
+        Math.ceil(
+          (lockedUntil -
+            Date.now()) /
+            1000
+        )
+
+      toast.error(
+        `Too many failed attempts. Try again in ${remainingSeconds} seconds.`
+      )
+
+      return
+    }
+
+    const users = getUsers()
+
+    const foundUser =
+      users.find(
+        (user) =>
+          user.email ===
+            email &&
+          user.password ===
+            password &&
+          user.role === role
+      )
+
+    /* WRONG LOGIN */
+
+    if (!foundUser) {
+      const attempts =
+        failedAttempts + 1
+
+      setFailedAttempts(
+        attempts
+      )
+
+      /* LOCK AFTER 5 */
+
       if (
-        email ===
-          'admin@tourism.com' &&
-        password ===
-          'admin123'
+        attempts >= 5
       ) {
-        localStorage.setItem(
-          'role',
-          'admin'
+        const lockTime =
+          Date.now() +
+          30000
+
+        setLockedUntil(
+          lockTime
         )
 
-        toast.success(
-          'Administrator login successful.'
-        )
+        setFailedAttempts(0)
 
-        navigate(
-          '/admin-places'
+        toast.error(
+          'Too many failed attempts. Login locked for 30 seconds.'
         )
 
         return
       }
 
       toast.error(
-        'Invalid administrator credentials.'
+        `Invalid credentials. ${
+          5 - attempts
+        } attempts remaining.`
       )
 
       return
     }
 
-    /* USER LOGIN */
+    /* RESET */
+
+    setFailedAttempts(0)
+
+    setLockedUntil(null)
+
+    /* SAVE USER */
+
+    localStorage.setItem(
+      'currentUser',
+      JSON.stringify(
+        foundUser
+      )
+    )
 
     localStorage.setItem(
       'role',
-      'user'
+      foundUser.role
     )
 
+    /* SUCCESS */
+
     toast.success(
-      'Login successful.'
+      `${
+        foundUser.role ===
+        'admin'
+          ? 'Administrator'
+          : 'User'
+      } login successful.`
     )
+
+    /* REDIRECT */
+
+    if (
+      foundUser.role ===
+      'admin'
+    ) {
+      navigate(
+        '/admin-places'
+      )
+
+      return
+    }
 
     navigate('/dashboard')
   }
@@ -110,7 +316,7 @@ function LoginPage() {
           bg-white
 
           w-full
-          max-w-[520px]
+          max-w-[560px]
 
           rounded-[36px]
 
@@ -135,7 +341,9 @@ function LoginPage() {
               mt-5
             "
           >
-            Welcome Back
+            {isRegister
+              ? 'Create Account'
+              : 'Welcome Back'}
           </h1>
 
           <p
@@ -145,8 +353,9 @@ function LoginPage() {
               mt-3
             "
           >
-            Login to continue your
-            tourism experience.
+            {isRegister
+              ? 'Create your tourism account.'
+              : 'Login to continue your tourism experience.'}
           </p>
         </div>
 
@@ -183,7 +392,7 @@ function LoginPage() {
               }
             `}
           >
-            User Login
+            User
           </button>
 
           <button
@@ -215,7 +424,9 @@ function LoginPage() {
 
         <form
           onSubmit={
-            handleLogin
+            isRegister
+              ? handleRegister
+              : handleLogin
           }
           className="
             mt-8
@@ -223,6 +434,45 @@ function LoginPage() {
             space-y-5
           "
         >
+          {/* NAME */}
+
+          {isRegister && (
+            <div>
+              <label
+                className="
+                  text-sm
+                  font-semibold
+                "
+              >
+                Full Name
+              </label>
+
+              <input
+                type="text"
+                value={name}
+                onChange={(e) =>
+                  setName(
+                    e.target.value
+                  )
+                }
+                placeholder="Enter your full name"
+                className="
+                  w-full
+
+                  bg-[#f5f7f4]
+
+                  mt-2
+
+                  p-4
+
+                  rounded-2xl
+
+                  outline-none
+                "
+              />
+            </div>
+          )}
+
           {/* EMAIL */}
 
           <div>
@@ -297,40 +547,6 @@ function LoginPage() {
             />
           </div>
 
-          {/* ADMIN INFO */}
-
-          {role === 'admin' && (
-            <div
-              className="
-                bg-[#f5f7f4]
-
-                rounded-2xl
-
-                p-4
-
-                text-sm
-
-                text-gray-600
-              "
-            >
-              <p>
-                Admin Email:
-              </p>
-
-              <p className="font-bold">
-                admin@tourism.com
-              </p>
-
-              <p className="mt-3">
-                Admin Password:
-              </p>
-
-              <p className="font-bold">
-                admin123
-              </p>
-            </div>
-          )}
-
           {/* BUTTON */}
 
           <button
@@ -355,11 +571,43 @@ function LoginPage() {
               }
             `}
           >
-            {role === 'admin'
+            {isRegister
+              ? role === 'admin'
+                ? 'Register As Administrator'
+                : 'Register'
+              : role === 'admin'
               ? 'Login As Administrator'
               : 'Login'}
           </button>
         </form>
+
+        {/* SWITCH */}
+
+        <button
+          type="button"
+          onClick={() =>
+            setIsRegister(
+              !isRegister
+            )
+          }
+          className="
+            w-full
+
+            mt-6
+
+            text-sm
+
+            text-gray-500
+
+            hover:text-black
+
+            transition
+          "
+        >
+          {isRegister
+            ? 'Already have an account? Login'
+            : "Don't have an account? Register"}
+        </button>
       </motion.div>
     </div>
   )
