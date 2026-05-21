@@ -1,6 +1,7 @@
 import {
   createBrowserRouter,
 } from 'react-router-dom'
+import SavedPlacesPage from '@/pages/SavedPlacesPage'
 
 import LoginPage from '@/pages/auth/LoginPage'
 
@@ -143,7 +144,11 @@ const router = createBrowserRouter([
 {
   path: '/admin-login',
   element: <AdminLoginPage />,
-}
+},
+{
+  path: '/saved-places',
+  element: <SavedPlacesPage />,
+},
 ])
 
 export default router
