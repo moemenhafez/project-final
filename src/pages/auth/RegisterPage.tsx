@@ -1,124 +1,235 @@
 import { useState } from 'react'
 
-import Notification from '@/components/feedback/Notification'
+import {
+  useNavigate,
+  Link,
+} from 'react-router-dom'
 
-import PasswordInput from '@/pages/auth/PasswordInput'
+import toast from 'react-hot-toast'
 
-import Button from '@/components/ui/Button'
+import {
+  registerUser,
+} from '@/utils/authStorage'
 
-import Input from '@/components/ui/Input'
-
-import AuthLayout from '@/layouts/AuthLayout'
+import type {
+  UserRole,
+} from '@/types/userRole'
 
 function RegisterPage() {
-  const [username, setUsername] =
+  const navigate = useNavigate()
+
+  const [name, setName] =
     useState('')
 
-  const [email, setEmail] = useState('')
+  const [email, setEmail] =
+    useState('')
 
   const [password, setPassword] =
     useState('')
 
-  const [error, setError] = useState('')
+  const [role, setRole] =
+    useState<UserRole>(
+      'traveler'
+    )
 
-  const [loading, setLoading] =
-    useState(false)
+  function handleRegister(
+    event: React.FormEvent
+  ) {
+    event.preventDefault()
 
-  const [showNotification, setShowNotification] =
-    useState(false)
+    registerUser({
+      id: Date.now(),
 
-  function handleRegister() {
-    if (
-      !username ||
-      !email ||
-      !password
-    ) {
-      setError('Please fill all fields')
+      name,
 
-      return
-    }
+      email,
 
-    setError('')
+      password,
 
-    setLoading(true)
+      role,
+    })
 
-    setTimeout(() => {
-      console.log({
-        username,
-        email,
-        password,
-      })
+    toast.success(
+      'Account created successfully.'
+    )
 
-      setLoading(false)
-
-      setShowNotification(true)
-
-      setTimeout(() => {
-        setShowNotification(false)
-      }, 3000)
-    }, 2000)
+    navigate('/login')
   }
 
   return (
-    <>
-      <Notification
-        message="Registration successful"
-        show={showNotification}
-      />
-
-      <AuthLayout title="Register">
-        {error && (
-          <div
+    <div
+      className="
+        min-h-screen
+        bg-gray-100
+        flex
+        items-center
+        justify-center
+        p-6
+      "
+    >
+      <div
+        className="
+          bg-white
+          rounded-3xl
+          p-10
+          shadow-xl
+          w-full
+          max-w-lg
+        "
+      >
+        <div className="mb-8">
+          <h1
             className="
-              bg-red-100
-              text-red-600
-              px-4
-              py-3
-              rounded-xl
-              text-sm
+              text-4xl
+              font-bold
+              text-gray-800
             "
           >
-            {error}
-          </div>
-        )}
+            Create Account
+          </h1>
 
-        <Input
-          type="text"
-          placeholder="Enter your username"
-          value={username}
-          onChange={(
-  event: React.ChangeEvent<HTMLInputElement>
-) =>
-  setUsername(event.target.value)
+          <p
+            className="
+              text-gray-500
+              mt-3
+            "
+          >
+            Join Lebanon’s tourism
+            marketplace platform.
+          </p>
+        </div>
+
+        <form
+          onSubmit={
+            handleRegister
           }
-        />
+          className="space-y-5"
+        >
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(event) =>
+              setName(
+                event.target.value
+              )
+            }
+            className="
+              w-full
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          />
 
-        <Input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(
-  event: React.ChangeEvent<HTMLInputElement>
-) =>
-  setEmail(event.target.value)}
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) =>
+              setEmail(
+                event.target.value
+              )
+            }
+            className="
+              w-full
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          />
 
-        <PasswordInput
-          value={password}
-          onChange={(
-  event: React.ChangeEvent<HTMLInputElement>
-) =>
-  setPassword(event.target.value)
-          }
-        />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) =>
+              setPassword(
+                event.target.value
+              )
+            }
+            className="
+              w-full
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          />
 
-        <Button
-          title="Register"
-          onClick={handleRegister}
-          loading={loading}
-        />
-      </AuthLayout>
-    </>
+          <select
+            value={role}
+            onChange={(event) =>
+              setRole(
+                event.target
+                  .value as UserRole
+              )
+            }
+            className="
+              w-full
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          >
+            <option value="traveler">
+              Traveler
+            </option>
+
+            <option value="business">
+              Business
+            </option>
+
+            <option value="organizer">
+              Organizer
+            </option>
+
+            <option value="admin">
+              Admin
+            </option>
+          </select>
+
+          <button
+            type="submit"
+            className="
+              w-full
+              bg-emerald-700
+              text-white
+              py-4
+              rounded-2xl
+              hover:bg-emerald-800
+              transition
+            "
+          >
+            Register
+          </button>
+        </form>
+
+        <p
+          className="
+            text-center
+            text-gray-500
+            mt-6
+          "
+        >
+          Already have an account?
+          {' '}
+
+          <Link
+            to="/login"
+            className="
+              text-emerald-700
+              font-semibold
+            "
+          >
+            Login
+          </Link>
+        </p>
+      </div>
+    </div>
   )
 }
 

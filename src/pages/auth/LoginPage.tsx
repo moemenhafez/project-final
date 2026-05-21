@@ -1,61 +1,49 @@
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 
 import {
-  motion,
-} from 'framer-motion'
+  useNavigate,
+  Link,
+} from 'react-router-dom'
+
+import toast from 'react-hot-toast'
 
 import {
-  setRole,
+  loginUser,
 } from '@/utils/authStorage'
 
 function LoginPage() {
   const navigate = useNavigate()
 
+  const [email, setEmail] =
+    useState('')
+
+  const [password, setPassword] =
+    useState('')
+
   function handleLogin(
-    role:
-      | 'traveler'
-      | 'business'
-      | 'organizer'
-      | 'admin'
+    event: React.FormEvent
   ) {
-    setRole(role)
+    event.preventDefault()
+
+    const user = loginUser(
+      email,
+      password
+    )
+
+    if (!user) {
+      toast.error(
+        'Invalid credentials.'
+      )
+
+      return
+    }
+
+    toast.success(
+      `Welcome back ${user.name}`
+    )
 
     navigate('/dashboard')
   }
-
-  const roles = [
-    {
-      title: 'Traveler',
-      description:
-        'Explore and plan amazing trips across Lebanon.',
-      emoji: '🌍',
-      role: 'traveler',
-    },
-
-    {
-      title: 'Business',
-      description:
-        'Promote your restaurant, café or tourism business.',
-      emoji: '🏢',
-      role: 'business',
-    },
-
-    {
-      title: 'Organizer',
-      description:
-        'Create and manage community trips and events.',
-      emoji: '🧳',
-      role: 'organizer',
-    },
-
-    {
-      title: 'Admin',
-      description:
-        'Manage the tourism marketplace platform.',
-      emoji: '⚙️',
-      role: 'admin',
-    },
-  ]
 
   return (
     <div
@@ -68,108 +56,114 @@ function LoginPage() {
         p-6
       "
     >
-      <div className="max-w-7xl w-full">
-        <div className="text-center mb-14">
+      <div
+        className="
+          bg-white
+          rounded-3xl
+          p-10
+          shadow-xl
+          w-full
+          max-w-lg
+        "
+      >
+        <div className="mb-8">
           <h1
             className="
-              text-6xl
+              text-4xl
               font-bold
               text-gray-800
             "
           >
-            LebGuide
+            Login
           </h1>
 
           <p
             className="
-              text-xl
               text-gray-500
-              mt-5
+              mt-3
             "
           >
-            Lebanon’s Smart Tourism
-            Marketplace
+            Continue exploring
+            Lebanon smarter.
           </p>
         </div>
 
-        <div
+        <form
+          onSubmit={handleLogin}
+          className="space-y-5"
+        >
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(event) =>
+              setEmail(
+                event.target.value
+              )
+            }
+            className="
+              w-full
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(event) =>
+              setPassword(
+                event.target.value
+              )
+            }
+            className="
+              w-full
+              p-4
+              rounded-2xl
+              bg-gray-100
+              outline-none
+            "
+          />
+
+          <button
+            type="submit"
+            className="
+              w-full
+              bg-emerald-700
+              text-white
+              py-4
+              rounded-2xl
+              hover:bg-emerald-800
+              transition
+            "
+          >
+            Login
+          </button>
+        </form>
+
+        <p
           className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            xl:grid-cols-4
-            gap-8
+            text-center
+            text-gray-500
+            mt-6
           "
         >
-          {roles.map((item) => (
-            <motion.div
-              key={item.role}
-              whileHover={{
-                y: -10,
-                scale: 1.03,
-              }}
-              className="
-                bg-white
-                rounded-3xl
-                p-8
-                shadow-sm
-                hover:shadow-2xl
-                transition
-              "
-            >
-              <div className="text-6xl">
-                {item.emoji}
-              </div>
+          Don’t have an account?
+          {' '}
 
-              <h2
-                className="
-                  text-3xl
-                  font-bold
-                  mt-6
-                  text-gray-800
-                "
-              >
-                {item.title}
-              </h2>
-
-              <p
-                className="
-                  text-gray-500
-                  mt-4
-                  leading-relaxed
-                "
-              >
-                {
-                  item.description
-                }
-              </p>
-
-              <button
-                onClick={() =>
-                  handleLogin(
-                    item.role as
-                      | 'traveler'
-                      | 'business'
-                      | 'organizer'
-                      | 'admin'
-                  )
-                }
-                className="
-                  w-full
-                  mt-8
-                  bg-emerald-700
-                  text-white
-                  py-4
-                  rounded-2xl
-                  hover:bg-emerald-800
-                  transition
-                "
-              >
-                Continue
-              </button>
-            </motion.div>
-          ))}
-        </div>
+          <Link
+            to="/register"
+            className="
+              text-emerald-700
+              font-semibold
+            "
+          >
+            Register
+          </Link>
+        </p>
       </div>
     </div>
   )

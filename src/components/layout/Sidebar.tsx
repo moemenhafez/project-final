@@ -6,8 +6,8 @@ import {
 } from 'react-router-dom'
 
 import {
-  getRole,
-  logout,
+  getCurrentRole,
+  logoutUser,
 } from '@/utils/authStorage'
 
 function Sidebar() {
@@ -16,10 +16,11 @@ function Sidebar() {
   const [collapsed, setCollapsed] =
     useState(false)
 
-  const role = getRole()
+  const role =
+    getCurrentRole()
 
   function handleLogout() {
-    logout()
+    logoutUser()
 
     navigate('/login')
   }
@@ -44,7 +45,7 @@ function Sidebar() {
     },
 
     {
-      label: 'Trips',
+      label: 'Community Trips',
       path:
         '/community-trips',
       icon: '🧳',
@@ -71,14 +72,14 @@ function Sidebar() {
     },
 
     {
-      label: 'Advertisements',
+      label: 'Advertise',
       path:
         '/sponsored-management',
       icon: '⭐',
     },
 
     {
-      label: 'Analytics',
+      label: 'Business Analytics',
       path: '/analytics',
       icon: '📊',
     },
@@ -88,7 +89,7 @@ function Sidebar() {
     {
       label: 'Create Trip',
       path: '/create-trip',
-      icon: '🧳',
+      icon: '➕',
     },
 
     {
@@ -96,6 +97,12 @@ function Sidebar() {
       path:
         '/community-trips',
       icon: '👥',
+    },
+
+    {
+      label: 'Trip Revenue',
+      path: '/analytics',
+      icon: '💵',
     },
   ]
 
@@ -118,6 +125,12 @@ function Sidebar() {
       path:
         '/sponsored-management',
       icon: '⭐',
+    },
+
+    {
+      label: 'Users',
+      path: '/profile',
+      icon: '👤',
     },
   ]
 
@@ -159,7 +172,7 @@ function Sidebar() {
         justify-between
         transition-all
         duration-300
-        shadow-sm
+        shadow-xl
         ${
           collapsed
             ? 'w-24'
@@ -175,32 +188,57 @@ function Sidebar() {
             border-gray-200
           "
         >
-          <h1
+          <div
             className="
-              text-3xl
-              font-bold
-              text-emerald-700
+              flex
+              items-center
+              gap-4
             "
           >
-            {collapsed
-              ? '🇱🇧'
-              : 'LebGuide'}
-          </h1>
-
-          {!collapsed && (
-            <p
+            <div
               className="
-                text-gray-500
-                mt-2
-                capitalize
+                w-14
+                h-14
+                rounded-2xl
+                bg-emerald-700
+                text-white
+                flex
+                items-center
+                justify-center
+                text-2xl
+                shadow-lg
               "
             >
-              {role} dashboard
-            </p>
-          )}
+              🇱🇧
+            </div>
+
+            {!collapsed && (
+              <div>
+                <h1
+                  className="
+                    text-3xl
+                    font-bold
+                    text-emerald-700
+                  "
+                >
+                  LebGuide
+                </h1>
+
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                    capitalize
+                  "
+                >
+                  {role} dashboard
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="p-4 space-y-2">
+        <div className="p-4 space-y-3">
           {currentMenu.map(
             (item) => (
               <NavLink
@@ -216,17 +254,18 @@ function Sidebar() {
                   px-4
                   py-4
                   rounded-2xl
-                  transition
+                  transition-all
+                  duration-300
                   font-medium
                   ${
                     isActive
-                      ? 'bg-emerald-700 text-white'
-                      : 'hover:bg-gray-100'
+                      ? 'bg-emerald-700 text-white shadow-lg'
+                      : 'text-gray-700 hover:bg-gray-100'
                   }
                 `
                 }
               >
-                <span className="text-xl">
+                <span className="text-2xl">
                   {item.icon}
                 </span>
 
@@ -246,22 +285,33 @@ function Sidebar() {
           p-4
           border-t
           border-gray-200
-          space-y-2
+          space-y-3
         "
       >
         <NavLink
           to="/profile"
-          className="
+          className={({
+            isActive,
+          }) =>
+            `
             flex
             items-center
             gap-4
             px-4
             py-4
             rounded-2xl
-            hover:bg-gray-100
-          "
+            transition
+            ${
+              isActive
+                ? 'bg-gray-900 text-white'
+                : 'hover:bg-gray-100'
+            }
+          `
+          }
         >
-          <span>👤</span>
+          <span className="text-2xl">
+            👤
+          </span>
 
           {!collapsed && (
             <span>Profile</span>
@@ -270,17 +320,28 @@ function Sidebar() {
 
         <NavLink
           to="/settings"
-          className="
+          className={({
+            isActive,
+          }) =>
+            `
             flex
             items-center
             gap-4
             px-4
             py-4
             rounded-2xl
-            hover:bg-gray-100
-          "
+            transition
+            ${
+              isActive
+                ? 'bg-gray-900 text-white'
+                : 'hover:bg-gray-100'
+            }
+          `
+          }
         >
-          <span>⚙️</span>
+          <span className="text-2xl">
+            ⚙️
+          </span>
 
           {!collapsed && (
             <span>Settings</span>
@@ -297,11 +358,14 @@ function Sidebar() {
             px-4
             py-4
             rounded-2xl
+            transition
             hover:bg-red-100
             text-red-500
           "
         >
-          <span>🚪</span>
+          <span className="text-2xl">
+            🚪
+          </span>
 
           {!collapsed && (
             <span>Logout</span>
