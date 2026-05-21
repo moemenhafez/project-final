@@ -79,154 +79,305 @@ function PlaceCard({
     )
 
     toast.success(
-      'Place saved for future plans.'
+      'Place added to planner.'
     )
   }
 
   return (
     <>
       <motion.div
-        initial={{
-          opacity: 0,
-          y: 30,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
         whileHover={{
-          y: -10,
-          scale: 1.02,
+          y: -8,
         }}
         transition={{
-          duration: 0.3,
+          duration: 0.25,
         }}
         className="
           bg-white
-          rounded-3xl
+          rounded-[36px]
           overflow-hidden
-          shadow-sm
-          hover:shadow-2xl
-          transition
-          duration-300
+          shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+          border
+          border-white
+          relative
         "
       >
+        {/* IMAGE */}
+
         <div className="relative">
           <img
             src={image}
             alt={title}
             className="
               w-full
-              h-64
+              h-[320px]
               object-cover
             "
           />
 
-          <button
-            onClick={
-              handleFavorite
-            }
+          {/* OVERLAY */}
+
+          <div
             className="
               absolute
-              top-4
-              right-4
-              w-12
-              h-12
-              rounded-full
-              bg-white
-              shadow-lg
-              text-2xl
-              hover:scale-110
-              transition
+              inset-0
+              bg-gradient-to-t
+              from-black/60
+              via-black/10
+              to-transparent
+            "
+          />
+
+          {/* TOP ACTIONS */}
+
+          <div
+            className="
+              absolute
+              top-5
+              left-5
+              right-5
+              flex
+              justify-between
+              items-start
             "
           >
-            {isFavorite
-              ? '❤️'
-              : '🤍'}
-          </button>
+            {promoted && (
+              <div
+                className="
+                  bg-yellow-400
+                  text-black
+                  px-4
+                  py-2
+                  rounded-2xl
+                  font-semibold
+                  text-sm
+                  shadow-lg
+                "
+              >
+                ⭐ Sponsored
+              </div>
+            )}
 
-          {promoted && (
-            <div
+            <button
+              onClick={
+                handleFavorite
+              }
               className="
-                absolute
-                top-4
-                left-4
-                bg-yellow-400
-                text-black
-                px-4
-                py-2
-                rounded-full
-                text-sm
-                font-bold
+                ml-auto
+                w-14
+                h-14
+                rounded-2xl
+                bg-white/90
+                backdrop-blur-xl
+                flex
+                items-center
+                justify-center
+                text-2xl
+                shadow-lg
+                hover:scale-110
+                transition
               "
             >
-              ⭐ Sponsored
+              {isFavorite
+                ? '❤️'
+                : '🤍'}
+            </button>
+          </div>
+
+          {/* LOCATION */}
+
+          <div
+            className="
+              absolute
+              bottom-6
+              left-6
+              right-6
+              flex
+              items-end
+              justify-between
+              gap-6
+            "
+          >
+            <div>
+              <div
+                className="
+                  inline-flex
+                  items-center
+                  gap-2
+                  bg-white/20
+                  backdrop-blur-xl
+                  text-white
+                  px-4
+                  py-2
+                  rounded-2xl
+                  text-sm
+                  mb-4
+                "
+              >
+                📍 {region}
+              </div>
+
+              <h2
+                className="
+                  text-4xl
+                  font-black
+                  text-white
+                  leading-tight
+                "
+              >
+                {title}
+              </h2>
             </div>
-          )}
+          </div>
         </div>
 
-        <div className="p-6">
+        {/* CONTENT */}
+
+        <div className="p-8">
+          {/* CATEGORY */}
+
           <div
             className="
               flex
               items-center
               justify-between
               gap-4
-            "
-          >
-            <h2
-              className="
-                text-2xl
-                font-bold
-                text-gray-800
-              "
-            >
-              {title}
-            </h2>
-
-            <div
-              className="
-                bg-gray-100
-                px-3
-                py-1
-                rounded-full
-                text-sm
-              "
-            >
-              {category}
-            </div>
-          </div>
-
-          <div
-            className="
-              mt-4
-              flex
-              gap-3
               flex-wrap
             "
           >
             <div
               className="
-                bg-gray-100
-                px-3
-                py-1
-                rounded-full
+                bg-[#f5f7f4]
+                px-5
+                py-3
+                rounded-2xl
                 text-sm
+                font-semibold
+                text-gray-700
               "
             >
-              📍 {region}
+              {category}
+            </div>
+
+            <div
+              className="
+                flex
+                items-center
+                gap-2
+                text-yellow-500
+                font-semibold
+              "
+            >
+              ⭐ 4.8
             </div>
           </div>
+
+          {/* DESCRIPTION */}
 
           <p
             className="
               text-gray-500
-              mt-5
               leading-relaxed
+              mt-6
+              text-lg
             "
           >
             {description}
           </p>
+
+          {/* STATS */}
+
+          <div
+            className="
+              grid
+              grid-cols-3
+              gap-4
+              mt-8
+            "
+          >
+            <div
+              className="
+                bg-[#f5f7f4]
+                rounded-3xl
+                p-4
+              "
+            >
+              <p
+                className="
+                  text-gray-400
+                  text-sm
+                "
+              >
+                Drive
+              </p>
+
+              <h3
+                className="
+                  text-xl
+                  font-bold
+                  mt-2
+                "
+              >
+                35m
+              </h3>
+            </div>
+
+            <div
+              className="
+                bg-[#f5f7f4]
+                rounded-3xl
+                p-4
+              "
+            >
+              <p
+                className="
+                  text-gray-400
+                  text-sm
+                "
+              >
+                Budget
+              </p>
+
+              <h3
+                className="
+                  text-xl
+                  font-bold
+                  mt-2
+                "
+              >
+                $25
+              </h3>
+            </div>
+
+            <div
+              className="
+                bg-[#f5f7f4]
+                rounded-3xl
+                p-4
+              "
+            >
+              <p
+                className="
+                  text-gray-400
+                  text-sm
+                "
+              >
+                Visit
+              </p>
+
+              <h3
+                className="
+                  text-xl
+                  font-bold
+                  mt-2
+                "
+              >
+                2h
+              </h3>
+            </div>
+          </div>
+
+          {/* ACTIONS */}
 
           <div
             className="
@@ -241,17 +392,17 @@ function PlaceCard({
               }
               className="
                 flex-1
-                bg-gray-900
+                bg-emerald-700
+                hover:bg-emerald-800
                 text-white
-                py-3
-                rounded-2xl
-                hover:bg-black
-                hover:scale-[1.02]
-                active:scale-[0.98]
+                py-5
+                rounded-3xl
                 transition
+                font-semibold
+                shadow-lg
               "
             >
-              View Experience
+              Explore Experience
             </button>
 
             <button
@@ -259,11 +410,12 @@ function PlaceCard({
                 handleSavePlace
               }
               className="
-                px-5
-                rounded-2xl
-                bg-gray-100
+                px-8
+                rounded-3xl
+                bg-[#f5f7f4]
                 hover:bg-gray-200
                 transition
+                text-2xl
               "
             >
               🔖
