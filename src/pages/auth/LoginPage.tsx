@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import {
+  useEffect,
+  useState,
+} from 'react'
 
 import {
   motion,
@@ -21,6 +24,12 @@ interface UserAccount {
 
   role: 'user' | 'admin'
 }
+
+const STORAGE_LOCK_KEY =
+  'auth_lock_until'
+
+const STORAGE_ATTEMPTS_KEY =
+  'auth_attempts'
 
 function LoginPage() {
   const navigate =
@@ -58,14 +67,65 @@ function LoginPage() {
   const [
     failedAttempts,
     setFailedAttempts,
-  ] = useState(0)
+  ] = useState<number>(() => {
+    return Number(
+      localStorage.getItem(
+        STORAGE_ATTEMPTS_KEY
+      ) || 0
+    )
+  })
 
   const [
     lockedUntil,
     setLockedUntil,
   ] = useState<number | null>(
-    null
+    () => {
+      const value =
+        localStorage.getItem(
+          STORAGE_LOCK_KEY
+        )
+
+      return value
+        ? Number(value)
+        : null
+    }
   )
+
+  const [
+    remainingTime,
+    setRemainingTime,
+  ] = useState(0)
+
+  /* TIMER */
+
+  useEffect(() => {
+    const interval =
+      setInterval(() => {
+        if (
+          lockedUntil &&
+          Date.now() <
+            lockedUntil
+        ) {
+          const seconds =
+            Math.ceil(
+              (lockedUntil -
+                Date.now()) /
+                1000
+            )
+
+          setRemainingTime(
+            seconds
+          )
+        } else {
+          setRemainingTime(0)
+        }
+      }, 1000)
+
+    return () =>
+      clearInterval(
+        interval
+      )
+  }, [lockedUntil])
 
   /* USERS */
 
@@ -208,23 +268,40 @@ function LoginPage() {
         attempts
       )
 
-      /* LOCK AFTER 5 */
+      localStorage.setItem(
+        STORAGE_ATTEMPTS_KEY,
+        String(attempts)
+      )
+
+      /* LOCK */
 
       if (
         attempts >= 5
       ) {
+        const lockDuration =
+          role === 'admin'
+            ? 120000
+            : 30000
+
         const lockTime =
           Date.now() +
-          30000
+          lockDuration
 
         setLockedUntil(
           lockTime
         )
 
+        localStorage.setItem(
+          STORAGE_LOCK_KEY,
+          String(lockTime)
+        )
+
         setFailedAttempts(0)
 
         toast.error(
-          'Too many failed attempts. Login locked for 30 seconds.'
+          role === 'admin'
+            ? 'Administrator login locked for 2 minutes.'
+            : 'Too many failed attempts. Login locked for 30 seconds.'
         )
 
         return
@@ -239,11 +316,19 @@ function LoginPage() {
       return
     }
 
-    /* RESET */
+    /* RESET SECURITY */
 
     setFailedAttempts(0)
 
     setLockedUntil(null)
+
+    localStorage.removeItem(
+      STORAGE_ATTEMPTS_KEY
+    )
+
+    localStorage.removeItem(
+      STORAGE_LOCK_KEY
+    )
 
     /* SAVE USER */
 
@@ -420,6 +505,42 @@ function LoginPage() {
           </button>
         </div>
 
+        {/* LOCK MESSAGE */}
+
+        {remainingTime >
+          0 && (
+          <div
+            className="
+              mt-5
+
+              bg-red-50
+
+              border
+              border-red-200
+
+              text-red-600
+
+              rounded-2xl
+
+              p-4
+
+              text-center
+
+              font-semibold
+            "
+          >
+            Login temporarily
+            locked.
+
+            <div className="mt-2 text-2xl font-black">
+              {
+                remainingTime
+              }
+              s
+            </div>
+          </div>
+        )}
+
         {/* FORM */}
 
         <form
@@ -551,6 +672,10 @@ function LoginPage() {
 
           <button
             type="submit"
+            disabled={
+              remainingTime >
+              0
+            }
             className={`
               w-full
 
@@ -565,7 +690,11 @@ function LoginPage() {
               transition
 
               ${
-                role === 'admin'
+                remainingTime >
+                0
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : role ===
+                    'admin'
                   ? 'bg-black hover:bg-gray-900'
                   : 'bg-emerald-700 hover:bg-emerald-800'
               }
