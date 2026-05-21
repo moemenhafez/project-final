@@ -6,11 +6,13 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
+import {
+  AnimatePresence,
+} from 'framer-motion'
+
 import { Toaster } from 'react-hot-toast'
 
-import router from '@/routes'
-
-import AuthProvider from '@/context/AuthProvider'
+import router from './routes'
 
 import './index.css'
 
@@ -20,14 +22,16 @@ ReactDOM.createRoot(
   ) as HTMLElement
 ).render(
   <React.StrictMode>
-    <AuthProvider>
-      <Toaster
-        position="top-right"
-      />
-
+    <AnimatePresence
+      mode="wait"
+    >
       <RouterProvider
         router={router}
       />
-    </AuthProvider>
+    </AnimatePresence>
+
+    <Toaster
+      position="top-right"
+    />
   </React.StrictMode>
 )
