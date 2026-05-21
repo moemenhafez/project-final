@@ -1,154 +1,131 @@
 import {
   createBrowserRouter,
 } from 'react-router-dom'
+
+import DashboardPage from '@/pages/DashboardPage'
+
+import FavoritesPage from '@/pages/FavoritesPage'
+
 import SavedPlacesPage from '@/pages/SavedPlacesPage'
+
+import TripPlannerPage from '@/pages/TripPlannerPage'
+
+import ProfilePage from '@/pages/ProfilePage'
+
+import SettingsPage from '@/pages/SettingsPage'
+
+import AnalyticsPage from '@/pages/AnalyticsPage'
+
+import AdminPlacesPage from '@/pages/AdminPlacesPage'
 
 import LoginPage from '@/pages/auth/LoginPage'
 
 import RegisterPage from '@/pages/auth/RegisterPage'
 
-import DashboardPage from '@/pages/DashboardPage'
-
-import CommunityTripsPage from '@/pages/CommunityTripsPage'
-
-import CreateTripPage from '@/pages/CreateTripPage'
-
-import SavedPlansPage from '@/pages/SavedPlansPage'
-
-import AnalyticsPage from '@/pages/AnalyticsPage'
-
-import TripBudgetPage from '@/pages/TripBudgetPage'
-
-import TravelTimePage from '@/pages/TravelTimePage'
-
-import AdminPlacesPage from '@/pages/AdminPlacesPage'
-
 import ProtectedRoute from './ProtectedRoute'
-import ProfilePage from '@/pages/ProfilePage'
 
-import SettingsPage from '@/pages/SettingsPage'
+const router =
+  createBrowserRouter([
+    {
+      path: '/',
 
-import AdminLoginPage from '@/pages/AdminLoginPage'
+      element: <LoginPage />,
+    },
 
-import AdminRoute from './AdminRoute'
+    {
+      path: '/login',
 
-const router = createBrowserRouter([
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
+      element: <LoginPage />,
+    },
 
-  {
-    path: '/register',
-    element: <RegisterPage />,
-  },
+    {
+      path: '/register',
 
-  {
-    path: '/',
-    element: (
-      <ProtectedRoute>
-        <DashboardPage />
-      </ProtectedRoute>
-    ),
-  },
+      element: <RegisterPage />,
+    },
 
-  {
-    path: '/dashboard',
-    element: (
-      <ProtectedRoute>
-        <DashboardPage />
-      </ProtectedRoute>
-    ),
-  },
+    {
+      path: '/dashboard',
 
-  {
-    path: '/community-trips',
-    element: (
-      <ProtectedRoute>
-        <CommunityTripsPage />
-      </ProtectedRoute>
-    ),
-  },
+      element: (
+        <ProtectedRoute>
+          <DashboardPage />
+        </ProtectedRoute>
+      ),
+    },
 
-  {
-    path: '/create-trip',
-    element: (
-      <ProtectedRoute>
-        <CreateTripPage />
-      </ProtectedRoute>
-    ),
-  },
+    {
+      path: '/favorites',
 
-  {
-    path: '/saved-plans',
-    element: (
-      <ProtectedRoute>
-        <SavedPlansPage />
-      </ProtectedRoute>
-    ),
-  },
+      element: (
+        <ProtectedRoute>
+          <FavoritesPage />
+        </ProtectedRoute>
+      ),
+    },
 
-  {
-    path: '/analytics',
-    element: (
-      <ProtectedRoute>
-        <AnalyticsPage />
-      </ProtectedRoute>
-    ),
-  },
+    {
+      path:
+        '/saved-places',
 
-  {
-    path: '/trip-budget',
-    element: (
-      <ProtectedRoute>
-        <TripBudgetPage />
-      </ProtectedRoute>
-    ),
-  },
+      element: (
+        <ProtectedRoute>
+          <SavedPlacesPage />
+        </ProtectedRoute>
+      ),
+    },
 
-  {
-    path: '/travel-time',
-    element: (
-      <ProtectedRoute>
-        <TravelTimePage />
-      </ProtectedRoute>
-    ),
-  },
+    {
+      path:
+        '/trip-planner',
 
-  {
-    path: '/admin-places',
-    element: (
-      <ProtectedRoute>
-        <AdminPlacesPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-  path: '/profile',
-  element: <ProfilePage />,
-},
+      element: (
+        <ProtectedRoute>
+          <TripPlannerPage />
+        </ProtectedRoute>
+      ),
+    },
 
-{
-  path: '/settings',
-  element: <SettingsPage />,
-},
-{
-  path: '/analytics',
+    {
+      path: '/profile',
 
-  element: (
-    <AdminRoute>
-      <AnalyticsPage />
-    </AdminRoute>
-  ),
-},
-{
-  path: '/admin-login',
-  element: <AdminLoginPage />,
-},
-{
-  path: '/saved-places',
-  element: <SavedPlacesPage />,
-},
-])
+      element: (
+        <ProtectedRoute>
+          <ProfilePage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path: '/settings',
+
+      element: (
+        <ProtectedRoute>
+          <SettingsPage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path: '/analytics',
+
+      element: (
+        <ProtectedRoute>
+          <AnalyticsPage />
+        </ProtectedRoute>
+      ),
+    },
+
+    {
+      path:
+        '/admin-places',
+
+      element: (
+        <ProtectedRoute>
+          <AdminPlacesPage />
+        </ProtectedRoute>
+      ),
+    },
+  ])
 
 export default router

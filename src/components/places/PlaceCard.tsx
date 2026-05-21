@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
-import { motion } from 'framer-motion'
+import {
+  motion,
+} from 'framer-motion'
 
 import toast from 'react-hot-toast'
 
@@ -30,6 +32,7 @@ function PlaceCard({
   image,
   description,
   promoted,
+  recommendedFor = [],
 }: PlaceCardProps) {
   const [isOpen, setIsOpen] =
     useState(false)
@@ -49,6 +52,7 @@ function PlaceCard({
     image,
     description,
     promoted,
+    recommendedFor,
   }
 
   function handleFavorite() {
@@ -87,19 +91,22 @@ function PlaceCard({
     <>
       <motion.div
         whileHover={{
-          y: -8,
+          y: -6,
         }}
         transition={{
           duration: 0.25,
         }}
         className="
           bg-white
-          rounded-[36px]
+          rounded-[28px]
+          md:rounded-[32px]
           overflow-hidden
-          shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+          shadow-[0_10px_35px_rgba(0,0,0,0.05)]
           border
           border-white
-          relative
+          h-full
+          flex
+          flex-col
         "
       >
         {/* IMAGE */}
@@ -110,7 +117,8 @@ function PlaceCard({
             alt={title}
             className="
               w-full
-              h-[320px]
+              h-[220px]
+              sm:h-[240px]
               object-cover
             "
           />
@@ -122,23 +130,28 @@ function PlaceCard({
               absolute
               inset-0
               bg-gradient-to-t
-              from-black/60
+              from-black/70
               via-black/10
               to-transparent
             "
           />
 
-          {/* TOP ACTIONS */}
+          {/* TOP */}
 
           <div
             className="
               absolute
-              top-5
-              left-5
-              right-5
+              top-3
+              left-3
+              right-3
+              sm:top-4
+              sm:left-4
+              sm:right-4
+
               flex
               justify-between
               items-start
+              gap-3
             "
           >
             {promoted && (
@@ -146,15 +159,16 @@ function PlaceCard({
                 className="
                   bg-yellow-400
                   text-black
-                  px-4
+                  px-3
                   py-2
-                  rounded-2xl
-                  font-semibold
-                  text-sm
+                  rounded-xl
+                  text-[10px]
+                  sm:text-xs
+                  font-bold
                   shadow-lg
                 "
               >
-                ⭐ Sponsored
+                Sponsored
               </div>
             )}
 
@@ -164,17 +178,24 @@ function PlaceCard({
               }
               className="
                 ml-auto
-                w-14
-                h-14
+
+                min-w-[46px]
+                w-[46px]
+                h-[46px]
+
                 rounded-2xl
+
                 bg-white/90
                 backdrop-blur-xl
+
                 flex
                 items-center
                 justify-center
-                text-2xl
+
+                text-xl
+
                 shadow-lg
-                hover:scale-110
+
                 transition
               "
             >
@@ -184,75 +205,101 @@ function PlaceCard({
             </button>
           </div>
 
-          {/* LOCATION */}
+          {/* TITLE */}
 
           <div
             className="
               absolute
-              bottom-6
-              left-6
-              right-6
-              flex
-              items-end
-              justify-between
-              gap-6
+              bottom-4
+              left-4
+              right-4
+
+              sm:bottom-5
+              sm:left-5
+              sm:right-5
             "
           >
-            <div>
-              <div
-                className="
-                  inline-flex
-                  items-center
-                  gap-2
-                  bg-white/20
-                  backdrop-blur-xl
-                  text-white
-                  px-4
-                  py-2
-                  rounded-2xl
-                  text-sm
-                  mb-4
-                "
-              >
-                📍 {region}
-              </div>
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-2
 
-              <h2
-                className="
-                  text-4xl
-                  font-black
-                  text-white
-                  leading-tight
-                "
-              >
-                {title}
-              </h2>
+                bg-white/20
+                backdrop-blur-xl
+
+                text-white
+
+                px-3
+                py-2
+
+                rounded-xl
+
+                text-[11px]
+                sm:text-xs
+
+                mb-3
+              "
+            >
+              📍 {region}
             </div>
+
+            <h2
+              className="
+                text-2xl
+                sm:text-3xl
+
+                font-black
+
+                text-white
+
+                leading-tight
+                break-words
+              "
+            >
+              {title}
+            </h2>
           </div>
         </div>
 
         {/* CONTENT */}
 
-        <div className="p-8">
-          {/* CATEGORY */}
+        <div
+          className="
+            p-4
+            sm:p-6
+
+            flex
+            flex-col
+            flex-1
+          "
+        >
+          {/* HEADER */}
 
           <div
             className="
               flex
               items-center
               justify-between
-              gap-4
+
+              gap-3
               flex-wrap
             "
           >
             <div
               className="
                 bg-[#f5f7f4]
-                px-5
-                py-3
-                rounded-2xl
-                text-sm
+
+                px-4
+                py-2
+
+                rounded-xl
+
+                text-xs
+                sm:text-sm
+
                 font-semibold
+
                 text-gray-700
               "
             >
@@ -261,11 +308,9 @@ function PlaceCard({
 
             <div
               className="
-                flex
-                items-center
-                gap-2
                 text-yellow-500
                 font-semibold
+                text-sm
               "
             >
               ⭐ 4.8
@@ -278,112 +323,64 @@ function PlaceCard({
             className="
               text-gray-500
               leading-relaxed
-              mt-6
-              text-lg
+
+              mt-4
+
+              text-sm
+
+              line-clamp-3
+
+              min-h-[72px]
             "
           >
             {description}
           </p>
 
-          {/* STATS */}
+          {/* RECOMMENDED */}
 
-          <div
-            className="
-              grid
-              grid-cols-3
-              gap-4
-              mt-8
-            "
-          >
+          {recommendedFor.length >
+            0 && (
             <div
               className="
-                bg-[#f5f7f4]
-                rounded-3xl
-                p-4
+                flex
+                flex-wrap
+                gap-2
+                mt-4
               "
             >
-              <p
-                className="
-                  text-gray-400
-                  text-sm
-                "
-              >
-                Drive
-              </p>
+              {recommendedFor.map(
+                (item) => (
+                  <div
+                    key={item}
+                    className="
+                      bg-emerald-50
+                      text-emerald-700
 
-              <h3
-                className="
-                  text-xl
-                  font-bold
-                  mt-2
-                "
-              >
-                35m
-              </h3>
+                      px-3
+                      py-2
+
+                      rounded-xl
+
+                      text-xs
+                      font-semibold
+                    "
+                  >
+                    {item}
+                  </div>
+                )
+              )}
             </div>
-
-            <div
-              className="
-                bg-[#f5f7f4]
-                rounded-3xl
-                p-4
-              "
-            >
-              <p
-                className="
-                  text-gray-400
-                  text-sm
-                "
-              >
-                Budget
-              </p>
-
-              <h3
-                className="
-                  text-xl
-                  font-bold
-                  mt-2
-                "
-              >
-                $25
-              </h3>
-            </div>
-
-            <div
-              className="
-                bg-[#f5f7f4]
-                rounded-3xl
-                p-4
-              "
-            >
-              <p
-                className="
-                  text-gray-400
-                  text-sm
-                "
-              >
-                Visit
-              </p>
-
-              <h3
-                className="
-                  text-xl
-                  font-bold
-                  mt-2
-                "
-              >
-                2h
-              </h3>
-            </div>
-          </div>
+          )}
 
           {/* ACTIONS */}
 
           <div
             className="
               flex
-              gap-4
-              mt-8
+              gap-3
+
+              mt-auto
+              pt-5
             "
           >
             <button
@@ -392,17 +389,24 @@ function PlaceCard({
               }
               className="
                 flex-1
+
                 bg-emerald-700
                 hover:bg-emerald-800
+
                 text-white
-                py-5
-                rounded-3xl
+
+                py-3
+                sm:py-4
+
+                rounded-2xl
+
                 transition
+
                 font-semibold
-                shadow-lg
+                text-sm
               "
             >
-              Explore Experience
+              Explore
             </button>
 
             <button
@@ -410,12 +414,19 @@ function PlaceCard({
                 handleSavePlace
               }
               className="
-                px-8
-                rounded-3xl
+                min-w-[54px]
+
+                px-4
+                sm:px-6
+
+                rounded-2xl
+
                 bg-[#f5f7f4]
                 hover:bg-gray-200
+
                 transition
-                text-2xl
+
+                text-xl
               "
             >
               🔖

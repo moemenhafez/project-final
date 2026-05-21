@@ -7,8 +7,8 @@ import {
 } from 'react-router-dom'
 
 import {
-  useAuth,
-} from '@/hooks/useAuth'
+  getCurrentUser,
+} from '@/utils/authStorage'
 
 interface ProtectedRouteProps {
   children: ReactNode
@@ -17,12 +17,15 @@ interface ProtectedRouteProps {
 function ProtectedRoute({
   children,
 }: ProtectedRouteProps) {
-  const { isAuthenticated } =
-    useAuth()
+  const currentUser =
+    getCurrentUser()
 
-  if (!isAuthenticated) {
+  if (!currentUser) {
     return (
-      <Navigate to="/login" />
+      <Navigate
+        to="/login"
+        replace
+      />
     )
   }
 

@@ -43,22 +43,15 @@ function Sidebar() {
     },
 
     {
-      label: 'Saved Places',
+      label: 'Saved',
       icon: '🔖',
       path: '/saved-places',
     },
 
     {
-      label: 'Trip Planner',
+      label: 'Planner',
       icon: '🧳',
       path: '/trip-planner',
-    },
-
-    {
-      label: 'Community',
-      icon: '👥',
-      path:
-        '/community-trips',
     },
   ]
 
@@ -70,7 +63,7 @@ function Sidebar() {
     },
 
     {
-      label: 'Manage Places',
+      label: 'Places',
       icon: '🏢',
       path: '/admin-places',
     },
@@ -78,7 +71,7 @@ function Sidebar() {
 
   const businessItems = [
     {
-      label: 'My Business',
+      label: 'Business',
       icon: '🏨',
       path: '/business',
     },
@@ -86,7 +79,7 @@ function Sidebar() {
 
   const organizerItems = [
     {
-      label: 'Create Trip',
+      label: 'Create',
       icon: '➕',
       path: '/create-trip',
     },
@@ -110,112 +103,458 @@ function Sidebar() {
   }
 
   return (
-    <motion.aside
-      animate={{
-        width: expanded
-          ? 290
-          : 100,
-      }}
-      transition={{
-        duration: 0.3,
-      }}
-      onMouseEnter={() =>
-        setExpanded(true)
-      }
-      onMouseLeave={() =>
-        setExpanded(false)
-      }
-      className="
-        fixed
-        left-5
-        top-5
-        bottom-5
-        z-50
-        bg-white/80
-        backdrop-blur-2xl
-        border
-        border-white/30
-        rounded-[36px]
-        shadow-[0_10px_50px_rgba(0,0,0,0.08)]
-        flex
-        flex-col
-        justify-between
-        overflow-hidden
-      "
-    >
-      {/* TOP */}
+    <>
+      {/* DESKTOP SIDEBAR */}
 
-      <div>
-        {/* LOGO */}
+      <motion.aside
+        animate={{
+          width: expanded
+            ? 290
+            : 100,
+        }}
+        transition={{
+          duration: 0.3,
+        }}
+        onMouseEnter={() =>
+          setExpanded(true)
+        }
+        onMouseLeave={() =>
+          setExpanded(false)
+        }
+        className="
+          hidden
+          md:flex
 
-        <div
-          className="
-            p-6
-            flex
-            items-center
-            gap-5
-          "
-        >
+          fixed
+          left-5
+          top-5
+          bottom-5
+          z-50
+
+          bg-white/80
+          backdrop-blur-2xl
+
+          border
+          border-white/30
+
+          rounded-[36px]
+
+          shadow-[0_10px_50px_rgba(0,0,0,0.08)]
+
+          flex-col
+          justify-between
+
+          overflow-hidden
+        "
+      >
+        {/* TOP */}
+
+        <div>
+          {/* LOGO */}
+
           <div
             className="
-              min-w-[60px]
-              h-[60px]
-              rounded-[24px]
-              bg-gradient-to-br
-              from-emerald-700
-              to-emerald-500
+              p-5
               flex
               items-center
-              justify-center
-              text-3xl
-              text-white
-              shadow-lg
+              gap-4
             "
           >
-            🇱🇧
+            <div
+              className="
+                min-w-[58px]
+                h-[58px]
+
+                rounded-[22px]
+
+                bg-gradient-to-br
+                from-emerald-700
+                to-emerald-500
+
+                flex
+                items-center
+                justify-center
+
+                text-3xl
+                text-white
+
+                shadow-lg
+              "
+            >
+              🇱🇧
+            </div>
+
+            {expanded && (
+              <motion.div
+                initial={{
+                  opacity: 0,
+                  x: -10,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+              >
+                <h1
+                  className="
+                    text-2xl
+                    font-black
+                    text-gray-900
+                  "
+                >
+                  LebGuide
+                </h1>
+
+                <p
+                  className="
+                    text-gray-400
+                    text-sm
+                    capitalize
+                  "
+                >
+                  {role} workspace
+                </p>
+              </motion.div>
+            )}
           </div>
 
-          {expanded && (
-            <motion.div
-              initial={{
-                opacity: 0,
-                x: -10,
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-              }}
-            >
-              <h1
-                className="
-                  text-2xl
-                  font-black
-                  text-gray-900
-                "
-              >
-                LebGuide
-              </h1>
+          {/* MENU */}
 
-              <p
-                className="
-                  text-gray-400
-                  text-sm
-                  capitalize
-                "
-              >
-                {role} workspace
-              </p>
-            </motion.div>
-          )}
+          <div
+            className="
+              px-4
+              mt-5
+              space-y-3
+            "
+          >
+            {menuItems.map(
+              (item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({
+                    isActive,
+                  }) =>
+                    `
+                      flex
+                      items-center
+                      gap-5
+
+                      px-5
+                      py-5
+
+                      rounded-[26px]
+
+                      transition-all
+                      duration-300
+
+                      ${
+                        isActive
+                          ? 'bg-emerald-700 text-white shadow-lg'
+                          : 'hover:bg-[#f5f7f4] text-gray-700'
+                      }
+                    `
+                  }
+                >
+                  <span className="text-2xl">
+                    {item.icon}
+                  </span>
+
+                  {expanded && (
+                    <motion.span
+                      initial={{
+                        opacity: 0,
+                        x: -10,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                      }}
+                      className="
+                        font-semibold
+                        whitespace-nowrap
+                      "
+                    >
+                      {item.label}
+                    </motion.span>
+                  )}
+                </NavLink>
+              )
+            )}
+
+            {/* ROLE MENU */}
+
+            {roleItems.length >
+              0 && (
+              <div className="pt-6">
+                {expanded && (
+                  <p
+                    className="
+                      px-4
+                      mb-4
+
+                      text-xs
+                      uppercase
+                      tracking-[0.25em]
+
+                      text-gray-400
+                      font-bold
+                    "
+                  >
+                    Workspace
+                  </p>
+                )}
+
+                <div className="space-y-3">
+                  {roleItems.map(
+                    (item) => (
+                      <NavLink
+                        key={
+                          item.path
+                        }
+                        to={item.path}
+                        className={({
+                          isActive,
+                        }) =>
+                          `
+                            flex
+                            items-center
+                            gap-5
+
+                            px-5
+                            py-5
+
+                            rounded-[26px]
+
+                            transition-all
+                            duration-300
+
+                            ${
+                              isActive
+                                ? 'bg-black text-white'
+                                : 'hover:bg-[#f5f7f4] text-gray-700'
+                            }
+                          `
+                        }
+                      >
+                        <span className="text-2xl">
+                          {
+                            item.icon
+                          }
+                        </span>
+
+                        {expanded && (
+                          <motion.span
+                            initial={{
+                              opacity: 0,
+                              x: -10,
+                            }}
+                            animate={{
+                              opacity: 1,
+                              x: 0,
+                            }}
+                            className="
+                              font-semibold
+                              whitespace-nowrap
+                            "
+                          >
+                            {
+                              item.label
+                            }
+                          </motion.span>
+                        )}
+                      </NavLink>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* MENU */}
+        {/* BOTTOM */}
 
+        <div className="p-4">
+          <div className="space-y-3">
+            {/* PROFILE */}
+
+            <NavLink
+              to="/profile"
+              className={({
+                isActive,
+              }) =>
+                `
+                  flex
+                  items-center
+                  gap-5
+
+                  px-5
+                  py-5
+
+                  rounded-[26px]
+
+                  transition-all
+
+                  ${
+                    isActive
+                      ? 'bg-[#111827] text-white'
+                      : 'hover:bg-[#f5f7f4] text-gray-700'
+                  }
+                `
+              }
+            >
+              <span className="text-2xl">
+                👤
+              </span>
+
+              {expanded && (
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                    x: -10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                  }}
+                  className="
+                    font-semibold
+                  "
+                >
+                  Profile
+                </motion.span>
+              )}
+            </NavLink>
+
+            {/* SETTINGS */}
+
+            <NavLink
+              to="/settings"
+              className={({
+                isActive,
+              }) =>
+                `
+                  flex
+                  items-center
+                  gap-5
+
+                  px-5
+                  py-5
+
+                  rounded-[26px]
+
+                  transition-all
+
+                  ${
+                    isActive
+                      ? 'bg-[#111827] text-white'
+                      : 'hover:bg-[#f5f7f4] text-gray-700'
+                  }
+                `
+              }
+            >
+              <span className="text-2xl">
+                ⚙️
+              </span>
+
+              {expanded && (
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                    x: -10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                  }}
+                  className="
+                    font-semibold
+                  "
+                >
+                  Settings
+                </motion.span>
+              )}
+            </NavLink>
+
+            {/* LOGOUT */}
+
+            <button
+              onClick={handleLogout}
+              className="
+                w-full
+
+                flex
+                items-center
+                gap-5
+
+                px-5
+                py-5
+
+                rounded-[26px]
+
+                hover:bg-red-50
+
+                text-red-500
+
+                transition-all
+              "
+            >
+              <span className="text-2xl">
+                🚪
+              </span>
+
+              {expanded && (
+                <motion.span
+                  initial={{
+                    opacity: 0,
+                    x: -10,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                  }}
+                  className="
+                    font-semibold
+                  "
+                >
+                  Logout
+                </motion.span>
+              )}
+            </button>
+          </div>
+        </div>
+      </motion.aside>
+
+      {/* MOBILE NAVIGATION */}
+
+      <div
+        className="
+          fixed
+          bottom-4
+          left-4
+          right-4
+
+          z-50
+
+          md:hidden
+
+          bg-white/90
+          backdrop-blur-2xl
+
+          rounded-[28px]
+
+          shadow-[0_10px_40px_rgba(0,0,0,0.08)]
+
+          px-2
+          py-2
+        "
+      >
         <div
           className="
-            px-4
-            mt-6
-            space-y-3
+            flex
+            items-center
+            justify-between
+            gap-2
           "
         >
           {menuItems.map(
@@ -228,267 +567,46 @@ function Sidebar() {
                 }) =>
                   `
                     flex
+                    flex-col
                     items-center
-                    gap-5
-                    px-5
-                    py-5
-                    rounded-[28px]
+                    justify-center
+
+                    gap-1
+
+                    flex-1
+
+                    py-3
+
+                    rounded-2xl
+
                     transition-all
-                    duration-300
-                    group
+
                     ${
                       isActive
-                        ? 'bg-emerald-700 text-white shadow-lg'
-                        : 'hover:bg-[#f5f7f4] text-gray-700'
+                        ? 'bg-emerald-700 text-white'
+                        : 'text-gray-500'
                     }
                   `
                 }
               >
-                <span className="text-2xl">
+                <span className="text-xl">
                   {item.icon}
                 </span>
 
-                {expanded && (
-                  <motion.span
-                    initial={{
-                      opacity: 0,
-                      x: -10,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      x: 0,
-                    }}
-                    className="
-                      font-semibold
-                      whitespace-nowrap
-                    "
-                  >
-                    {item.label}
-                  </motion.span>
-                )}
+                <span
+                  className="
+                    text-[10px]
+                    font-medium
+                  "
+                >
+                  {item.label}
+                </span>
               </NavLink>
             )
           )}
-
-          {roleItems.length >
-            0 && (
-            <div className="pt-6">
-              {expanded && (
-                <p
-                  className="
-                    px-4
-                    mb-4
-                    text-xs
-                    uppercase
-                    tracking-[0.25em]
-                    text-gray-400
-                    font-bold
-                  "
-                >
-                  Workspace
-                </p>
-              )}
-
-              <div className="space-y-3">
-                {roleItems.map(
-                  (item) => (
-                    <NavLink
-                      key={
-                        item.path
-                      }
-                      to={item.path}
-                      className={({
-                        isActive,
-                      }) =>
-                        `
-                          flex
-                          items-center
-                          gap-5
-                          px-5
-                          py-5
-                          rounded-[28px]
-                          transition-all
-                          duration-300
-                          ${
-                            isActive
-                              ? 'bg-black text-white'
-                              : 'hover:bg-[#f5f7f4] text-gray-700'
-                          }
-                        `
-                      }
-                    >
-                      <span className="text-2xl">
-                        {
-                          item.icon
-                        }
-                      </span>
-
-                      {expanded && (
-                        <motion.span
-                          initial={{
-                            opacity: 0,
-                            x: -10,
-                          }}
-                          animate={{
-                            opacity: 1,
-                            x: 0,
-                          }}
-                          className="
-                            font-semibold
-                            whitespace-nowrap
-                          "
-                        >
-                          {
-                            item.label
-                          }
-                        </motion.span>
-                      )}
-                    </NavLink>
-                  )
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
-
-      {/* BOTTOM */}
-
-      <div className="p-4">
-        <div className="space-y-3">
-          <NavLink
-            to="/profile"
-            className={({
-              isActive,
-            }) =>
-              `
-                flex
-                items-center
-                gap-5
-                px-5
-                py-5
-                rounded-[28px]
-                transition-all
-                duration-300
-                ${
-                  isActive
-                    ? 'bg-[#111827] text-white'
-                    : 'hover:bg-[#f5f7f4] text-gray-700'
-                }
-              `
-            }
-          >
-            <span className="text-2xl">
-              👤
-            </span>
-
-            {expanded && (
-              <motion.span
-                initial={{
-                  opacity: 0,
-                  x: -10,
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                className="
-                  font-semibold
-                  whitespace-nowrap
-                "
-              >
-                Profile
-              </motion.span>
-            )}
-          </NavLink>
-
-          <NavLink
-            to="/settings"
-            className={({
-              isActive,
-            }) =>
-              `
-                flex
-                items-center
-                gap-5
-                px-5
-                py-5
-                rounded-[28px]
-                transition-all
-                duration-300
-                ${
-                  isActive
-                    ? 'bg-[#111827] text-white'
-                    : 'hover:bg-[#f5f7f4] text-gray-700'
-                }
-              `
-            }
-          >
-            <span className="text-2xl">
-              ⚙️
-            </span>
-
-            {expanded && (
-              <motion.span
-                initial={{
-                  opacity: 0,
-                  x: -10,
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                className="
-                  font-semibold
-                  whitespace-nowrap
-                "
-              >
-                Settings
-              </motion.span>
-            )}
-          </NavLink>
-
-          <button
-            onClick={handleLogout}
-            className="
-              w-full
-              flex
-              items-center
-              gap-5
-              px-5
-              py-5
-              rounded-[28px]
-              hover:bg-red-50
-              text-red-500
-              transition-all
-              duration-300
-            "
-          >
-            <span className="text-2xl">
-              🚪
-            </span>
-
-            {expanded && (
-              <motion.span
-                initial={{
-                  opacity: 0,
-                  x: -10,
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                className="
-                  font-semibold
-                "
-              >
-                Logout
-              </motion.span>
-            )}
-          </button>
-        </div>
-      </div>
-    </motion.aside>
+    </>
   )
 }
 

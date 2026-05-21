@@ -4,235 +4,111 @@ import type {
 
 const STORAGE_KEY = 'places'
 
-const defaultPlaces: Place[] = [
-  {
-    id: 1,
+const defaultPlaces: Place[] =
+  [
+    {
+      id: 1,
 
-    title:
-      'Batroun Sunset Rooftop',
+      title:
+        'Batroun Beach',
 
-    category: 'Nightlife',
+      category: 'Beach',
 
-    region: 'Batroun',
+      region: 'Batroun',
 
-    image:
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
+      image:
+        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
 
-    description:
-      'A premium rooftop overlooking the Mediterranean sea with music, cocktails and unforgettable sunset views.',
+      description:
+        'Beautiful beach destination perfect for sunsets and relaxing vibes.',
 
-    promoted: true,
-  },
+      promoted: true,
 
-  {
-    id: 2,
+      recommendedFor: [
+        'Friends',
+        'Couple',
+      ],
+    },
 
-    title:
-      'Beirut Gourmet Hub',
+    {
+      id: 2,
 
-    category: 'Restaurant',
+      title: 'Byblos Port',
 
-    region: 'Beirut',
+      category:
+        'Historical',
 
-    image:
-      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
+      region: 'Byblos',
 
-    description:
-      'Modern Lebanese fine dining experience located in the heart of Beirut.',
+      image:
+        'https://images.unsplash.com/photo-1494526585095-c41746248156',
 
-    promoted: true,
-  },
+      description:
+        'Ancient Lebanese harbor filled with restaurants and culture.',
 
-  {
-    id: 3,
+      promoted: false,
 
-    title:
-      'Jbeil Old Souk Café',
+      recommendedFor: [
+        'Family',
+        'Couple',
+      ],
+    },
 
-    category: 'Café',
+    {
+      id: 3,
 
-    region: 'Jbeil',
+      title:
+        'Faraya Mountains',
 
-    image:
-      'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085',
+      category:
+        'Mountains',
 
-    description:
-      'A cozy café inside the historical streets of Byblos old souk.',
+      region: 'Faraya',
 
-    promoted: false,
-  },
+      image:
+        'https://images.unsplash.com/photo-1506744038136-46273834b3fb',
 
-  {
-    id: 4,
+      description:
+        'Snow activities and mountain adventures during winter season.',
 
-    title:
-      'Tripoli Castle Tour',
+      promoted: true,
 
-    category: 'Attraction',
+      recommendedFor: [
+        'Friends',
+        'Family',
+      ],
+    },
+  ]
 
-    region: 'Tripoli',
-
-    image:
-      'https://images.unsplash.com/photo-1521295121783-8a321d551ad2',
-
-    description:
-      'Discover the ancient Tripoli citadel and panoramic city views.',
-
-    promoted: false,
-  },
-
-  {
-    id: 5,
-
-    title:
-      'Cedars Mountain Escape',
-
-    category: 'Attraction',
-
-    region: 'Bsharri',
-
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee',
-
-    description:
-      'Explore Lebanon’s iconic cedar forests and snowy mountain scenery.',
-
-    promoted: true,
-  },
-
-  {
-    id: 6,
-
-    title:
-      'Tyre Beach Lounge',
-
-    category: 'Nightlife',
-
-    region: 'Tyre',
-
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e',
-
-    description:
-      'Luxury beach lounge with live DJs, seafood and sunset parties.',
-
-    promoted: true,
-  },
-
-  {
-    id: 7,
-
-    title:
-      'Saida Seafood Harbor',
-
-    category: 'Restaurant',
-
-    region: 'Saida',
-
-    image:
-      'https://images.unsplash.com/photo-1559339352-11d035aa65de',
-
-    description:
-      'Fresh seafood experience directly beside Saida’s historical harbor.',
-
-    promoted: false,
-  },
-
-  {
-    id: 8,
-
-    title:
-      'Faraya Ski Resort',
-
-    category: 'Attraction',
-
-    region: 'Faraya',
-
-    image:
-      'https://images.unsplash.com/photo-1516483638261-f4dbaf036963',
-
-    description:
-      'One of Lebanon’s top winter destinations for skiing and mountain adventures.',
-
-    promoted: true,
-  },
-
-  {
-    id: 9,
-
-    title:
-      'Hamra Art Café',
-
-    category: 'Café',
-
-    region: 'Beirut',
-
-    image:
-      'https://images.unsplash.com/photo-1521017432531-fbd92d768814',
-
-    description:
-      'Creative café space combining local art exhibitions with specialty coffee.',
-
-    promoted: false,
-  },
-
-  {
-    id: 10,
-
-    title:
-      'Anfeh Sea View',
-
-    category: 'Attraction',
-
-    region: 'Anfeh',
-
-    image:
-      'https://images.unsplash.com/photo-1493558103817-58b2924bce98',
-
-    description:
-      'Relaxing Mediterranean coastline famous for crystal-clear waters and salt fields.',
-
-    promoted: false,
-  },
-
-  {
-    id: 11,
-
-    title:
-      'Baalbek Roman Temples',
-
-    category: 'Attraction',
-
-    region: 'Baalbek',
-
-    image:
-      'https://images.unsplash.com/photo-1467269204594-9661b134dd2b',
-
-    description:
-      'Explore one of the largest and most impressive Roman temple complexes in the world.',
-
-    promoted: true,
-  },
-]
-
-export function getPlaces(): Place[] {
-  const storedPlaces =
+function initializePlaces() {
+  const existing =
     localStorage.getItem(
       STORAGE_KEY
     )
 
-  if (!storedPlaces) {
+  if (!existing) {
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify(defaultPlaces)
+      JSON.stringify(
+        defaultPlaces
+      )
+    )
+  }
+}
+
+initializePlaces()
+
+export function getPlaces(): Place[] {
+  const data =
+    localStorage.getItem(
+      STORAGE_KEY
     )
 
-    return defaultPlaces
+  if (!data) {
+    return []
   }
 
-  return JSON.parse(
-    storedPlaces
-  ) as Place[]
+  return JSON.parse(data)
 }
 
 export function savePlace(
@@ -247,6 +123,27 @@ export function savePlace(
 
   localStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify(updatedPlaces)
+    JSON.stringify(
+      updatedPlaces
+    )
+  )
+}
+
+export function deletePlace(
+  id: number
+) {
+  const places = getPlaces()
+
+  const updatedPlaces =
+    places.filter(
+      (place) =>
+        place.id !== id
+    )
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(
+      updatedPlaces
+    )
   )
 }

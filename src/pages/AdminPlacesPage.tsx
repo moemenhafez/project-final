@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-import toast from 'react-hot-toast'
-
 import MainLayout from '@/layouts/MainLayout'
 
 import {
+  getPlaces,
   savePlace,
+  deletePlace,
 } from '@/utils/placesStorage'
 
 import type {
@@ -13,123 +13,109 @@ import type {
 } from '@/types/place'
 
 function AdminPlacesPage() {
-  const [title, setTitle] =
-    useState('')
+  const [
+    places,
+    setPlaces,
+  ] = useState(getPlaces())
+
+  const [
+    title,
+    setTitle,
+  ] = useState('')
 
   const [
     category,
     setCategory,
-  ] = useState('Restaurant')
+  ] = useState('')
 
-  const [region, setRegion] =
-    useState('Tripoli')
+  const [
+    region,
+    setRegion,
+  ] = useState('')
 
-  const [image, setImage] =
-    useState('')
+  const [
+    image,
+    setImage,
+  ] = useState('')
 
   const [
     description,
     setDescription,
   ] = useState('')
 
-  const [
-    promoted,
-    setPromoted,
-  ] = useState(false)
-
-  function handleSubmit(
-    event: React.FormEvent
-  ) {
-    event.preventDefault()
-
+  function handleAddPlace() {
     if (
-      !title.trim() ||
-      !image.trim() ||
-      !description.trim()
+      !title ||
+      !category ||
+      !region ||
+      !image ||
+      !description
     ) {
-      toast.error(
-        'Please fill all fields.'
-      )
-
       return
     }
 
-    if (
-      description.length < 20
-    ) {
-      toast.error(
-        'Description must be at least 20 characters.'
-      )
+    const newPlace: Place =
+      {
+        id: Date.now(),
 
-      return
-    }
+        title,
 
-    if (
-      !image.startsWith('http')
-    ) {
-      toast.error(
-        'Please enter a valid image URL.'
-      )
+        category,
 
-      return
-    }
+        region,
 
-    const newPlace: Place = {
-      id: Date.now(),
+        image,
 
-      title,
+        description,
 
-      category,
+        promoted: false,
 
-      region,
-
-      image,
-
-      description,
-
-      promoted,
-    }
+        recommendedFor: [
+          'Friends',
+          'Family',
+        ],
+      }
 
     savePlace(newPlace)
 
-    toast.success(
-      'Place added successfully!'
-    )
+    setPlaces(getPlaces())
 
     setTitle('')
-
-    setCategory('Restaurant')
-
-    setRegion('Tripoli')
-
+    setCategory('')
+    setRegion('')
     setImage('')
-
     setDescription('')
+  }
 
-    setPromoted(false)
+  function handleDelete(
+    id: number
+  ) {
+    deletePlace(id)
+
+    setPlaces(getPlaces())
   }
 
   return (
     <MainLayout>
-      <div
-        className="
-          max-w-4xl
-          mx-auto
-          bg-white
-          p-8
-          rounded-3xl
-          shadow-sm
-        "
-      >
-        <div className="mb-8">
+      <div className="space-y-8 pb-28">
+        {/* HEADER */}
+
+        <div
+          className="
+            bg-white
+            rounded-[32px]
+            p-6
+            shadow-[0_10px_40px_rgba(0,0,0,0.04)]
+          "
+        >
           <h1
             className="
               text-4xl
-              font-bold
-              text-gray-800
+              font-black
+              text-gray-900
             "
           >
-            Admin Place Manager
+            Admin Places
           </h1>
 
           <p
@@ -138,181 +124,239 @@ function AdminPlacesPage() {
               mt-2
             "
           >
-            Add restaurants,
-            attractions and featured
-            Lebanese experiences.
+            Add and manage tourism
+            destinations.
           </p>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6"
+        {/* FORM */}
+
+        <div
+          className="
+            bg-white
+            rounded-[32px]
+            p-6
+            shadow-[0_10px_40px_rgba(0,0,0,0.04)]
+
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            gap-5
+          "
         >
           <input
-            type="text"
-            placeholder="Place Title"
             value={title}
-            onChange={(event) =>
+            onChange={(e) =>
               setTitle(
-                event.target.value
+                e.target.value
               )
             }
+            placeholder="Place title"
             className="
-              w-full
+              bg-[#f5f7f4]
               p-4
               rounded-2xl
-              bg-gray-100
               outline-none
             "
           />
 
-          <div
-            className="
-              grid
-              grid-cols-1
-              md:grid-cols-2
-              gap-6
-            "
-          >
-            <select
-              value={category}
-              onChange={(event) =>
-                setCategory(
-                  event.target.value
-                )
-              }
-              className="
-                w-full
-                p-4
-                rounded-2xl
-                bg-gray-100
-                outline-none
-              "
-            >
-              <option value="Restaurant">
-                Restaurant
-              </option>
-
-              <option value="Café">
-                Café
-              </option>
-
-              <option value="Attraction">
-                Attraction
-              </option>
-
-              <option value="Nightlife">
-                Nightlife
-              </option>
-            </select>
-
-            <select
-              value={region}
-              onChange={(event) =>
-                setRegion(
-                  event.target.value
-                )
-              }
-              className="
-                w-full
-                p-4
-                rounded-2xl
-                bg-gray-100
-                outline-none
-              "
-            >
-              <option value="Tripoli">
-                Tripoli
-              </option>
-
-              <option value="Beirut">
-                Beirut
-              </option>
-
-              <option value="Batroun">
-                Batroun
-              </option>
-
-              <option value="Jbeil">
-                Jbeil
-              </option>
-            </select>
-          </div>
-
           <input
-            type="text"
-            placeholder="Image URL"
-            value={image}
-            onChange={(event) =>
-              setImage(
-                event.target.value
+            value={category}
+            onChange={(e) =>
+              setCategory(
+                e.target.value
               )
             }
+            placeholder="Category"
             className="
-              w-full
+              bg-[#f5f7f4]
               p-4
               rounded-2xl
-              bg-gray-100
+              outline-none
+            "
+          />
+
+          <input
+            value={region}
+            onChange={(e) =>
+              setRegion(
+                e.target.value
+              )
+            }
+            placeholder="Region"
+            className="
+              bg-[#f5f7f4]
+              p-4
+              rounded-2xl
+              outline-none
+            "
+          />
+
+          <input
+            value={image}
+            onChange={(e) =>
+              setImage(
+                e.target.value
+              )
+            }
+            placeholder="Image URL"
+            className="
+              bg-[#f5f7f4]
+              p-4
+              rounded-2xl
               outline-none
             "
           />
 
           <textarea
-            placeholder="Description"
             value={description}
-            onChange={(event) =>
+            onChange={(e) =>
               setDescription(
-                event.target.value
+                e.target.value
               )
             }
+            placeholder="Description"
             rows={5}
             className="
-              w-full
+              bg-[#f5f7f4]
               p-4
               rounded-2xl
-              bg-gray-100
               outline-none
-              resize-none
+
+              md:col-span-2
             "
           />
 
-          <label
-            className="
-              flex
-              items-center
-              gap-3
-            "
-          >
-            <input
-              type="checkbox"
-              checked={promoted}
-              onChange={(event) =>
-                setPromoted(
-                  event.target.checked
-                )
-              }
-            />
-
-            <span>
-              Featured Promotion
-            </span>
-          </label>
-
           <button
-            type="submit"
+            onClick={
+              handleAddPlace
+            }
             className="
-              w-full
               bg-emerald-700
-              text-white
-              py-4
-              rounded-2xl
               hover:bg-emerald-800
+
+              text-white
+
+              px-6
+              py-4
+
+              rounded-2xl
+
+              font-semibold
+
               transition
+
+              md:col-span-2
             "
           >
             Add Place
           </button>
-        </form>
+        </div>
+
+        {/* PLACES */}
+
+        <div
+          className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            xl:grid-cols-3
+            gap-6
+          "
+        >
+          {places.map((place) => (
+            <div
+              key={place.id}
+              className="
+                bg-white
+                rounded-[28px]
+                overflow-hidden
+                shadow-[0_10px_35px_rgba(0,0,0,0.05)]
+              "
+            >
+              <img
+                src={place.image}
+                alt={place.title}
+                className="
+                  w-full
+                  h-[220px]
+                  object-cover
+                "
+              />
+
+              <div className="p-5">
+                <div
+                  className="
+                    flex
+                    items-center
+                    justify-between
+                    gap-3
+                  "
+                >
+                  <h2
+                    className="
+                      text-2xl
+                      font-black
+                    "
+                  >
+                    {place.title}
+                  </h2>
+
+                  <div
+                    className="
+                      bg-[#f5f7f4]
+                      px-3
+                      py-2
+                      rounded-xl
+                      text-sm
+                    "
+                  >
+                    {
+                      place.category
+                    }
+                  </div>
+                </div>
+
+                <p
+                  className="
+                    text-gray-500
+                    mt-4
+                    line-clamp-3
+                  "
+                >
+                  {
+                    place.description
+                  }
+                </p>
+
+                <button
+                  onClick={() =>
+                    handleDelete(
+                      place.id
+                    )
+                  }
+                  className="
+                    mt-6
+                    w-full
+
+                    bg-red-500
+                    hover:bg-red-600
+
+                    text-white
+
+                    py-4
+
+                    rounded-2xl
+
+                    transition
+                  "
+                >
+                  Delete Place
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </MainLayout>
   )
