@@ -1,3 +1,9 @@
+export interface MenuItem {
+  name: string
+
+  price: number
+}
+
 export interface Place {
   id: number
 
@@ -14,4 +20,14 @@ export interface Place {
   promoted?: boolean
 
   recommendedFor: string[]
+
+  minimumBudget: number
+
+  recommendedBudget: number
+
+  openTime: string
+
+  closeTime: string
+
+  menu?: MenuItem[]
 }

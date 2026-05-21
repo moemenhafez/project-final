@@ -1,695 +1,668 @@
-interface PlaceDetailsModalProps {
+import {
+  motion,
+  AnimatePresence,
+} from 'framer-motion'
+
+import {
+  useNavigate,
+} from 'react-router-dom'
+
+import toast from 'react-hot-toast'
+
+import {
+  addPlaceToPlanner,
+} from '@/utils/tripPlannerStorage'
+
+import {
+  savePlaceForLater,
+} from '@/utils/savedPlacesStorage'
+
+import type {
+  Place,
+} from '@/types/place'
+
+interface PlaceDetailsModalProps
+  extends Place {
   isOpen: boolean
 
   onClose: () => void
-
-  title: string
-
-  image: string
-
-  description: string
-
-  category: string
-
-  region: string
-
-  promoted?: boolean
 }
 
 function PlaceDetailsModal({
   isOpen,
   onClose,
+
+  id,
+
   title,
-  image,
-  description,
+
   category,
+
   region,
+
+  image,
+
+  description,
+
   promoted,
+
+  recommendedFor = [],
+
+  minimumBudget,
+
+  recommendedBudget,
+
+  openTime,
+
+  closeTime,
+
+  menu = [],
 }: PlaceDetailsModalProps) {
-  if (!isOpen) {
-    return null
+  const navigate =
+    useNavigate()
+
+  const place: Place = {
+    id,
+
+    title,
+
+    category,
+
+    region,
+
+    image,
+
+    description,
+
+    promoted,
+
+    recommendedFor,
+
+    minimumBudget,
+
+    recommendedBudget,
+
+    openTime,
+
+    closeTime,
+
+    menu,
+  }
+
+  function handleAddPlanner() {
+    addPlaceToPlanner(place)
+
+    toast.success(
+      'Added to planner.'
+    )
+  }
+
+  function handleSaveLater() {
+    savePlaceForLater(place)
+
+    toast.success(
+      'Saved for later.'
+    )
+  }
+
+  async function handleShare() {
+    try {
+      await navigator.share({
+        title,
+
+        text: description,
+
+        url:
+          window.location.href,
+      })
+    } catch {
+      toast.error(
+        'Sharing cancelled.'
+      )
+    }
   }
 
   return (
-    <div
-      className="
-        fixed
-        inset-0
-        z-[100]
-        bg-black/60
-        backdrop-blur-sm
-        flex
-        items-center
-        justify-center
-        p-6
-      "
-    >
-      <div
-        className="
-          bg-white
-          w-full
-          max-w-7xl
-          rounded-[40px]
-          overflow-hidden
-          shadow-[0_20px_80px_rgba(0,0,0,0.2)]
-          max-h-[95vh]
-          overflow-y-auto
-        "
-      >
-        {/* HERO */}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          exit={{
+            opacity: 0,
+          }}
+          className="
+            fixed
+            inset-0
+            z-[999]
 
-        <div className="relative">
-          <img
-            src={image}
-            alt={title}
+            bg-black/50
+            backdrop-blur-sm
+
+            flex
+            items-center
+            justify-center
+
+            p-4
+          "
+        >
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 30,
+              scale: 0.95,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              y: 20,
+            }}
+            transition={{
+              duration: 0.25,
+            }}
             className="
+              bg-white
+
               w-full
-              h-[520px]
-              object-cover
-            "
-          />
+              max-w-5xl
 
-          <div
-            className="
-              absolute
-              inset-0
-              bg-gradient-to-t
-              from-black/80
-              via-black/20
-              to-transparent
-            "
-          />
+              rounded-[32px]
 
-          {/* CLOSE */}
+              overflow-hidden
 
-          <button
-            onClick={onClose}
-            className="
-              absolute
-              top-8
-              right-8
-              w-16
-              h-16
-              rounded-3xl
-              bg-white/90
-              backdrop-blur-xl
-              flex
-              items-center
-              justify-center
-              text-3xl
-              shadow-lg
-              hover:scale-110
-              transition
+              shadow-[0_20px_80px_rgba(0,0,0,0.2)]
+
+              max-h-[95vh]
+
+              overflow-y-auto
             "
           >
-            ✕
-          </button>
+            {/* IMAGE */}
 
-          {/* CONTENT */}
+            <div className="relative">
+              <img
+                src={image}
+                alt={title}
+                className="
+                  w-full
+                  h-[280px]
+                  md:h-[420px]
+                  object-cover
+                "
+              />
 
-          <div
-            className="
-              absolute
-              bottom-10
-              left-10
-              right-10
-              flex
-              flex-col
-              xl:flex-row
-              xl:items-end
-              xl:justify-between
-              gap-10
-            "
-          >
-            <div>
               <div
                 className="
-                  flex
-                  items-center
-                  gap-3
-                  flex-wrap
-                  mb-6
+                  absolute
+                  inset-0
+
+                  bg-gradient-to-t
+                  from-black/70
+                  via-black/10
+                  to-transparent
+                "
+              />
+
+              {/* CLOSE */}
+
+              <button
+                onClick={onClose}
+                className="
+                  absolute
+                  top-5
+                  right-5
+
+                  w-[50px]
+                  h-[50px]
+
+                  rounded-2xl
+
+                  bg-white/90
+
+                  text-2xl
+
+                  shadow-lg
+                "
+              >
+                ✕
+              </button>
+
+              {/* INFO */}
+
+              <div
+                className="
+                  absolute
+                  bottom-6
+                  left-6
+                  right-6
                 "
               >
                 <div
                   className="
+                    inline-flex
+                    items-center
+                    gap-2
+
                     bg-white/20
                     backdrop-blur-xl
+
+                    px-4
+                    py-2
+
+                    rounded-xl
+
                     text-white
-                    px-5
-                    py-3
-                    rounded-2xl
+
                     text-sm
+
+                    mb-4
                   "
                 >
                   📍 {region}
                 </div>
 
-                <div
+                <h1
                   className="
-                    bg-white/20
-                    backdrop-blur-xl
+                    text-4xl
+                    md:text-6xl
+
+                    font-black
+
                     text-white
-                    px-5
-                    py-3
-                    rounded-2xl
-                    text-sm
+
+                    leading-tight
                   "
                 >
-                  {category}
-                </div>
+                  {title}
+                </h1>
+              </div>
+            </div>
 
-                {promoted && (
+            {/* CONTENT */}
+
+            <div
+              className="
+                p-6
+                md:p-10
+
+                grid
+                grid-cols-1
+                xl:grid-cols-[1.2fr_420px]
+
+                gap-10
+              "
+            >
+              {/* LEFT */}
+
+              <div>
+                {/* CATEGORY */}
+
+                <div
+                  className="
+                    flex
+                    flex-wrap
+                    gap-3
+                    mb-6
+                  "
+                >
                   <div
                     className="
-                      bg-yellow-400
-                      text-black
-                      px-5
-                      py-3
-                      rounded-2xl
+                      bg-[#f5f7f4]
+
+                      px-4
+                      py-2
+
+                      rounded-xl
+
                       text-sm
                       font-semibold
                     "
                   >
-                    ⭐ Sponsored
+                    {category}
+                  </div>
+
+                  {recommendedFor.map(
+                    (item) => (
+                      <div
+                        key={item}
+                        className="
+                          bg-emerald-50
+                          text-emerald-700
+
+                          px-4
+                          py-2
+
+                          rounded-xl
+
+                          text-sm
+                          font-semibold
+                        "
+                      >
+                        {item}
+                      </div>
+                    )
+                  )}
+                </div>
+
+                {/* DESCRIPTION */}
+
+                <p
+                  className="
+                    text-gray-600
+
+                    leading-relaxed
+
+                    text-lg
+                  "
+                >
+                  {description}
+                </p>
+
+                {/* INFO CARDS */}
+
+                <div
+                  className="
+                    mt-8
+
+                    grid
+                    grid-cols-2
+                    md:grid-cols-4
+
+                    gap-4
+                  "
+                >
+                  <div
+                    className="
+                      bg-[#f8faf8]
+                      p-5
+                      rounded-2xl
+                    "
+                  >
+                    <p
+                      className="
+                        text-sm
+                        text-gray-500
+                      "
+                    >
+                      Min Budget
+                    </p>
+
+                    <h3
+                      className="
+                        text-2xl
+                        font-black
+                        mt-2
+                      "
+                    >
+                      $
+                      {minimumBudget}
+                    </h3>
+                  </div>
+
+                  <div
+                    className="
+                      bg-[#f8faf8]
+                      p-5
+                      rounded-2xl
+                    "
+                  >
+                    <p
+                      className="
+                        text-sm
+                        text-gray-500
+                      "
+                    >
+                      Recommended
+                    </p>
+
+                    <h3
+                      className="
+                        text-2xl
+                        font-black
+                        mt-2
+                      "
+                    >
+                      $
+                      {
+                        recommendedBudget
+                      }
+                    </h3>
+                  </div>
+
+                  <div
+                    className="
+                      bg-[#f8faf8]
+                      p-5
+                      rounded-2xl
+                    "
+                  >
+                    <p
+                      className="
+                        text-sm
+                        text-gray-500
+                      "
+                    >
+                      Opens
+                    </p>
+
+                    <h3
+                      className="
+                        text-2xl
+                        font-black
+                        mt-2
+                      "
+                    >
+                      {openTime}
+                    </h3>
+                  </div>
+
+                  <div
+                    className="
+                      bg-[#f8faf8]
+                      p-5
+                      rounded-2xl
+                    "
+                  >
+                    <p
+                      className="
+                        text-sm
+                        text-gray-500
+                      "
+                    >
+                      Closes
+                    </p>
+
+                    <h3
+                      className="
+                        text-2xl
+                        font-black
+                        mt-2
+                      "
+                    >
+                      {closeTime}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* MENU */}
+
+                {menu.length > 0 && (
+                  <div className="mt-10">
+                    <h2
+                      className="
+                        text-2xl
+                        font-black
+                        mb-5
+                      "
+                    >
+                      Menu
+                    </h2>
+
+                    <div className="space-y-4">
+                      {menu.map(
+                        (
+                          item,
+                          index
+                        ) => (
+                          <div
+                            key={index}
+                            className="
+                              bg-[#f8faf8]
+
+                              p-5
+
+                              rounded-2xl
+
+                              flex
+                              justify-between
+                              items-center
+                            "
+                          >
+                            <span
+                              className="
+                                font-semibold
+                              "
+                            >
+                              {
+                                item.name
+                              }
+                            </span>
+
+                            <span
+                              className="
+                                text-emerald-700
+                                font-black
+                              "
+                            >
+                              $
+                              {
+                                item.price
+                              }
+                            </span>
+                          </div>
+                        )
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
 
-              <h1
-                className="
-                  text-6xl
-                  font-black
-                  text-white
-                  leading-tight
-                  max-w-4xl
-                "
-              >
-                {title}
-              </h1>
-            </div>
-
-            {/* QUICK INFO */}
-
-            <div
-              className="
-                bg-white/10
-                backdrop-blur-2xl
-                rounded-[32px]
-                p-8
-                min-w-[320px]
-                text-white
-              "
-            >
-              <div
-                className="
-                  grid
-                  grid-cols-2
-                  gap-5
-                "
-              >
-                <div>
-                  <p
-                    className="
-                      text-emerald-200
-                      text-sm
-                    "
-                  >
-                    Rating
-                  </p>
-
-                  <h2
-                    className="
-                      text-3xl
-                      font-bold
-                      mt-2
-                    "
-                  >
-                    ⭐ 4.8
-                  </h2>
-                </div>
-
-                <div>
-                  <p
-                    className="
-                      text-emerald-200
-                      text-sm
-                    "
-                  >
-                    Budget
-                  </p>
-
-                  <h2
-                    className="
-                      text-3xl
-                      font-bold
-                      mt-2
-                    "
-                  >
-                    $25
-                  </h2>
-                </div>
-
-                <div>
-                  <p
-                    className="
-                      text-emerald-200
-                      text-sm
-                    "
-                  >
-                    Duration
-                  </p>
-
-                  <h2
-                    className="
-                      text-3xl
-                      font-bold
-                      mt-2
-                    "
-                  >
-                    2h
-                  </h2>
-                </div>
-
-                <div>
-                  <p
-                    className="
-                      text-emerald-200
-                      text-sm
-                    "
-                  >
-                    Open
-                  </p>
-
-                  <h2
-                    className="
-                      text-3xl
-                      font-bold
-                      mt-2
-                    "
-                  >
-                    9AM
-                  </h2>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* BODY */}
-
-        <div
-          className="
-            p-10
-            grid
-            grid-cols-1
-            xl:grid-cols-[1fr_380px]
-            gap-10
-          "
-        >
-          {/* LEFT */}
-
-          <div className="space-y-10">
-            {/* ABOUT */}
-
-            <section>
-              <h2
-                className="
-                  text-4xl
-                  font-bold
-                  text-gray-900
-                "
-              >
-                About Experience
-              </h2>
-
-              <p
-                className="
-                  text-gray-500
-                  leading-relaxed
-                  mt-6
-                  text-lg
-                "
-              >
-                {description}
-              </p>
-            </section>
-
-            {/* EXPERIENCE */}
-
-            <section
-              className="
-                bg-[#f5f7f4]
-                rounded-[32px]
-                p-8
-              "
-            >
-              <div
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  mb-8
-                "
-              >
-                <h2
-                  className="
-                    text-3xl
-                    font-bold
-                  "
-                >
-                  Experience Details
-                </h2>
-
-                <span className="text-4xl">
-                  ✨
-                </span>
-              </div>
+              {/* RIGHT */}
 
               <div
                 className="
-                  grid
-                  grid-cols-1
-                  md:grid-cols-2
-                  gap-6
+                  bg-[#f8faf8]
+
+                  rounded-[28px]
+
+                  p-5
+
+                  space-y-4
+
+                  h-fit
                 "
               >
-                <div
-                  className="
-                    bg-white
-                    rounded-3xl
-                    p-6
-                  "
-                >
-                  <h3
-                    className="
-                      text-xl
-                      font-bold
-                    "
-                  >
-                    Best Season
-                  </h3>
-
-                  <p
-                    className="
-                      text-gray-500
-                      mt-3
-                    "
-                  >
-                    Spring & Summer
-                  </p>
-                </div>
-
-                <div
-                  className="
-                    bg-white
-                    rounded-3xl
-                    p-6
-                  "
-                >
-                  <h3
-                    className="
-                      text-xl
-                      font-bold
-                    "
-                  >
-                    Recommended For
-                  </h3>
-
-                  <p
-                    className="
-                      text-gray-500
-                      mt-3
-                    "
-                  >
-                    Couples, Families,
-                    Groups
-                  </p>
-                </div>
-
-                <div
-                  className="
-                    bg-white
-                    rounded-3xl
-                    p-6
-                  "
-                >
-                  <h3
-                    className="
-                      text-xl
-                      font-bold
-                    "
-                  >
-                    Opening Hours
-                  </h3>
-
-                  <p
-                    className="
-                      text-gray-500
-                      mt-3
-                    "
-                  >
-                    9:00 AM - 11:00 PM
-                  </p>
-                </div>
-
-                <div
-                  className="
-                    bg-white
-                    rounded-3xl
-                    p-6
-                  "
-                >
-                  <h3
-                    className="
-                      text-xl
-                      font-bold
-                    "
-                  >
-                    Estimated Visit
-                  </h3>
-
-                  <p
-                    className="
-                      text-gray-500
-                      mt-3
-                    "
-                  >
-                    2 - 4 Hours
-                  </p>
-                </div>
-              </div>
-            </section>
-
-            {/* GALLERY */}
-
-            <section>
-              <div
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  mb-8
-                "
-              >
-                <h2
-                  className="
-                    text-3xl
-                    font-bold
-                  "
-                >
-                  Gallery
-                </h2>
-
                 <button
+                  onClick={
+                    handleAddPlanner
+                  }
                   className="
-                    bg-[#f5f7f4]
-                    px-5
-                    py-3
+                    w-full
+
+                    bg-emerald-700
+                    hover:bg-emerald-800
+
+                    text-white
+
+                    py-4
+
                     rounded-2xl
-                    hover:bg-gray-200
+
+                    font-semibold
+
                     transition
                   "
                 >
-                  View All
+                  Add To Planner
                 </button>
-              </div>
 
-              <div
-                className="
-                  grid
-                  grid-cols-2
-                  gap-5
-                "
-              >
-                <img
-                  src={image}
-                  alt={title}
+                <button
+                  onClick={
+                    handleSaveLater
+                  }
                   className="
-                    h-56
                     w-full
-                    object-cover
-                    rounded-[28px]
-                  "
-                />
 
-                <img
-                  src={image}
-                  alt={title}
-                  className="
-                    h-56
-                    w-full
-                    object-cover
-                    rounded-[28px]
-                  "
-                />
+                    bg-white
+                    hover:bg-gray-100
 
-                <img
-                  src={image}
-                  alt={title}
-                  className="
-                    h-56
-                    w-full
-                    object-cover
-                    rounded-[28px]
-                  "
-                />
+                    py-4
 
-                <img
-                  src={image}
-                  alt={title}
-                  className="
-                    h-56
-                    w-full
-                    object-cover
-                    rounded-[28px]
-                  "
-                />
-              </div>
-            </section>
-          </div>
+                    rounded-2xl
 
-          {/* RIGHT PANEL */}
-
-          <aside className="space-y-8">
-            {/* MAP */}
-
-            <div
-              className="
-                bg-[#f5f7f4]
-                rounded-[32px]
-                p-6
-              "
-            >
-              <div
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  mb-6
-                "
-              >
-                <h2
-                  className="
-                    text-2xl
-                    font-bold
+                    transition
                   "
                 >
-                  Location
-                </h2>
+                  Save For Later
+                </button>
 
-                <span className="text-3xl">
-                  🗺️
-                </span>
-              </div>
-
-              <div
-                className="
-                  h-[260px]
-                  rounded-[28px]
-                  bg-gradient-to-br
-                  from-[#dbe8d8]
-                  to-[#c4d7bf]
-                  relative
-                  overflow-hidden
-                "
-              >
-                <div
+                <button
+                  onClick={
+                    handleShare
+                  }
                   className="
-                    absolute
-                    top-1/2
-                    left-1/2
-                    -translate-x-1/2
-                    -translate-y-1/2
-                    w-12
-                    h-12
-                    rounded-full
-                    bg-emerald-700
-                    border-4
-                    border-white
+                    w-full
+
+                    bg-white
+                    hover:bg-gray-100
+
+                    py-4
+
+                    rounded-2xl
+
+                    transition
                   "
-                />
+                >
+                  Share Experience
+                </button>
+
+                <button
+                  onClick={() =>
+                    navigate(
+                      '/trip-planner'
+                    )
+                  }
+                  className="
+                    w-full
+
+                    bg-black
+                    hover:bg-gray-900
+
+                    text-white
+
+                    py-4
+
+                    rounded-2xl
+
+                    transition
+                  "
+                >
+                  Open Trip Planner
+                </button>
               </div>
             </div>
-
-            {/* ACTIONS */}
-
-            <div
-              className="
-                bg-[#f5f7f4]
-                rounded-[32px]
-                p-8
-                space-y-5
-              "
-            >
-              <button
-                className="
-                  w-full
-                  bg-emerald-700
-                  hover:bg-emerald-800
-                  text-white
-                  py-5
-                  rounded-3xl
-                  transition
-                  font-semibold
-                  shadow-lg
-                "
-              >
-                Add To Planner
-              </button>
-
-              <button
-                className="
-                  w-full
-                  bg-white
-                  hover:bg-gray-100
-                  py-5
-                  rounded-3xl
-                  transition
-                  font-semibold
-                "
-              >
-                Save For Later
-              </button>
-
-              <button
-                className="
-                  w-full
-                  bg-white
-                  hover:bg-gray-100
-                  py-5
-                  rounded-3xl
-                  transition
-                  font-semibold
-                "
-              >
-                Share Experience
-              </button>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 

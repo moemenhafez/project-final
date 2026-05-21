@@ -5,18 +5,16 @@ import MainLayout from '@/layouts/MainLayout'
 import {
   getPlaces,
   savePlace,
-  deletePlace,
 } from '@/utils/placesStorage'
 
 import type {
+  MenuItem,
   Place,
 } from '@/types/place'
 
 function AdminPlacesPage() {
-  const [
-    places,
-    setPlaces,
-  ] = useState(getPlaces())
+  const [, setPlaces] =
+    useState(getPlaces())
 
   const [
     title,
@@ -26,12 +24,12 @@ function AdminPlacesPage() {
   const [
     category,
     setCategory,
-  ] = useState('')
+  ] = useState('Restaurant')
 
   const [
     region,
     setRegion,
-  ] = useState('')
+  ] = useState('Beirut')
 
   const [
     image,
@@ -43,11 +41,98 @@ function AdminPlacesPage() {
     setDescription,
   ] = useState('')
 
+  const [
+    minimumBudget,
+    setMinimumBudget,
+  ] = useState(10)
+
+  const [
+    recommendedBudget,
+    setRecommendedBudget,
+  ] = useState(25)
+
+  const [
+    openTime,
+    setOpenTime,
+  ] = useState('09:00')
+
+  const [
+    closeTime,
+    setCloseTime,
+  ] = useState('22:00')
+
+  const [
+    recommendedFor,
+    setRecommendedFor,
+  ] = useState<string[]>([
+    'Friends',
+  ])
+
+  const [
+    menu,
+    setMenu,
+  ] = useState<MenuItem[]>(
+    []
+  )
+
+  const [
+    menuName,
+    setMenuName,
+  ] = useState('')
+
+  const [
+    menuPrice,
+    setMenuPrice,
+  ] = useState(0)
+
+  function handleAddMenu() {
+    if (!menuName) {
+      return
+    }
+
+    const newItem: MenuItem =
+      {
+        name: menuName,
+
+        price: menuPrice,
+      }
+
+    setMenu([
+      ...menu,
+      newItem,
+    ])
+
+    setMenuName('')
+    setMenuPrice(0)
+  }
+
+  function toggleRecommended(
+    value: string
+  ) {
+    if (
+      recommendedFor.includes(
+        value
+      )
+    ) {
+      setRecommendedFor(
+        recommendedFor.filter(
+          (item) =>
+            item !== value
+        )
+      )
+
+      return
+    }
+
+    setRecommendedFor([
+      ...recommendedFor,
+      value,
+    ])
+  }
+
   function handleAddPlace() {
     if (
       !title ||
-      !category ||
-      !region ||
       !image ||
       !description
     ) {
@@ -70,10 +155,17 @@ function AdminPlacesPage() {
 
         promoted: false,
 
-        recommendedFor: [
-          'Friends',
-          'Family',
-        ],
+        recommendedFor,
+
+        minimumBudget,
+
+        recommendedBudget,
+
+        openTime,
+
+        closeTime,
+
+        menu,
       }
 
     savePlace(newPlace)
@@ -81,18 +173,9 @@ function AdminPlacesPage() {
     setPlaces(getPlaces())
 
     setTitle('')
-    setCategory('')
-    setRegion('')
-    setImage('')
     setDescription('')
-  }
-
-  function handleDelete(
-    id: number
-  ) {
-    deletePlace(id)
-
-    setPlaces(getPlaces())
+    setImage('')
+    setMenu([])
   }
 
   return (
@@ -105,27 +188,20 @@ function AdminPlacesPage() {
             bg-white
             rounded-[32px]
             p-6
-            shadow-[0_10px_40px_rgba(0,0,0,0.04)]
           "
         >
           <h1
             className="
               text-4xl
               font-black
-              text-gray-900
             "
           >
             Admin Places
           </h1>
 
-          <p
-            className="
-              text-gray-500
-              mt-2
-            "
-          >
-            Add and manage tourism
-            destinations.
+          <p className="text-gray-500 mt-2">
+            Create tourism places
+            with full travel data.
           </p>
         </div>
 
@@ -136,14 +212,16 @@ function AdminPlacesPage() {
             bg-white
             rounded-[32px]
             p-6
-            shadow-[0_10px_40px_rgba(0,0,0,0.04)]
 
             grid
             grid-cols-1
             md:grid-cols-2
+
             gap-5
           "
         >
+          {/* TITLE */}
+
           <input
             value={title}
             onChange={(e) =>
@@ -160,37 +238,89 @@ function AdminPlacesPage() {
             "
           />
 
-          <input
+          {/* CATEGORY */}
+
+          <select
             value={category}
             onChange={(e) =>
               setCategory(
                 e.target.value
               )
             }
-            placeholder="Category"
             className="
               bg-[#f5f7f4]
               p-4
               rounded-2xl
               outline-none
             "
-          />
+          >
+            <option>
+              Restaurant
+            </option>
 
-          <input
+            <option>
+              Nature
+            </option>
+
+            <option>
+              Historical
+            </option>
+
+            <option>
+              Beach
+            </option>
+
+            <option>
+              Café
+            </option>
+
+            <option>
+              Resort
+            </option>
+          </select>
+
+          {/* REGION */}
+
+          <select
             value={region}
             onChange={(e) =>
               setRegion(
                 e.target.value
               )
             }
-            placeholder="Region"
             className="
               bg-[#f5f7f4]
               p-4
               rounded-2xl
               outline-none
             "
-          />
+          >
+            <option>
+              Beirut
+            </option>
+
+            <option>
+              Batroun
+            </option>
+
+            <option>
+              Byblos
+            </option>
+
+            <option>
+              Tripoli
+            </option>
+
+            <option>
+              Tyre
+            </option>
+
+            <option>
+              Chouf
+            </option>
+          </select>
+
+          {/* IMAGE */}
 
           <input
             value={image}
@@ -208,6 +338,88 @@ function AdminPlacesPage() {
             "
           />
 
+          {/* MIN BUDGET */}
+
+          <input
+            type="number"
+            value={minimumBudget}
+            onChange={(e) =>
+              setMinimumBudget(
+                Number(
+                  e.target.value
+                )
+              )
+            }
+            placeholder="Minimum Budget"
+            className="
+              bg-[#f5f7f4]
+              p-4
+              rounded-2xl
+              outline-none
+            "
+          />
+
+          {/* RECOMMENDED BUDGET */}
+
+          <input
+            type="number"
+            value={
+              recommendedBudget
+            }
+            onChange={(e) =>
+              setRecommendedBudget(
+                Number(
+                  e.target.value
+                )
+              )
+            }
+            placeholder="Recommended Budget"
+            className="
+              bg-[#f5f7f4]
+              p-4
+              rounded-2xl
+              outline-none
+            "
+          />
+
+          {/* OPEN */}
+
+          <input
+            type="time"
+            value={openTime}
+            onChange={(e) =>
+              setOpenTime(
+                e.target.value
+              )
+            }
+            className="
+              bg-[#f5f7f4]
+              p-4
+              rounded-2xl
+              outline-none
+            "
+          />
+
+          {/* CLOSE */}
+
+          <input
+            type="time"
+            value={closeTime}
+            onChange={(e) =>
+              setCloseTime(
+                e.target.value
+              )
+            }
+            className="
+              bg-[#f5f7f4]
+              p-4
+              rounded-2xl
+              outline-none
+            "
+          />
+
+          {/* DESCRIPTION */}
+
           <textarea
             value={description}
             onChange={(e) =>
@@ -215,8 +427,8 @@ function AdminPlacesPage() {
                 e.target.value
               )
             }
-            placeholder="Description"
             rows={5}
+            placeholder="Description"
             className="
               bg-[#f5f7f4]
               p-4
@@ -227,135 +439,167 @@ function AdminPlacesPage() {
             "
           />
 
+          {/* BEST WITH WHO */}
+
+          <div className="md:col-span-2">
+            <p className="font-bold mb-3">
+              Best With Who
+            </p>
+
+            <div className="flex flex-wrap gap-3">
+              {[
+                'Friends',
+                'Family',
+                'Couple',
+                'Solo',
+              ].map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() =>
+                    toggleRecommended(
+                      item
+                    )
+                  }
+                  className={`
+                    px-5
+                    py-3
+                    rounded-2xl
+                    transition
+
+                    ${
+                      recommendedFor.includes(
+                        item
+                      )
+                        ? 'bg-emerald-700 text-white'
+                        : 'bg-[#f5f7f4]'
+                    }
+                  `}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* MENU */}
+
+          <div className="md:col-span-2">
+            <p className="font-bold mb-3">
+              Menu
+            </p>
+
+            <div className="flex gap-3">
+              <input
+                value={menuName}
+                onChange={(e) =>
+                  setMenuName(
+                    e.target.value
+                  )
+                }
+                placeholder="Menu item"
+                className="
+                  flex-1
+                  bg-[#f5f7f4]
+                  p-4
+                  rounded-2xl
+                  outline-none
+                "
+              />
+
+              <input
+                type="number"
+                value={menuPrice}
+                onChange={(e) =>
+                  setMenuPrice(
+                    Number(
+                      e.target.value
+                    )
+                  )
+                }
+                placeholder="Price"
+                className="
+                  w-[140px]
+                  bg-[#f5f7f4]
+                  p-4
+                  rounded-2xl
+                  outline-none
+                "
+              />
+
+              <button
+                type="button"
+                onClick={
+                  handleAddMenu
+                }
+                className="
+                  bg-black
+                  text-white
+
+                  px-6
+
+                  rounded-2xl
+                "
+              >
+                Add
+              </button>
+            </div>
+
+            {/* MENU LIST */}
+
+            <div className="mt-4 space-y-3">
+              {menu.map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="
+                      bg-[#f5f7f4]
+                      p-4
+                      rounded-2xl
+
+                      flex
+                      justify-between
+                    "
+                  >
+                    <span>
+                      {item.name}
+                    </span>
+
+                    <span>
+                      $
+                      {item.price}
+                    </span>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* BUTTON */}
+
           <button
             onClick={
               handleAddPlace
             }
             className="
+              md:col-span-2
+
               bg-emerald-700
               hover:bg-emerald-800
 
               text-white
 
-              px-6
-              py-4
+              py-5
 
               rounded-2xl
 
-              font-semibold
+              font-bold
 
               transition
-
-              md:col-span-2
             "
           >
             Add Place
           </button>
-        </div>
-
-        {/* PLACES */}
-
-        <div
-          className="
-            grid
-            grid-cols-1
-            md:grid-cols-2
-            xl:grid-cols-3
-            gap-6
-          "
-        >
-          {places.map((place) => (
-            <div
-              key={place.id}
-              className="
-                bg-white
-                rounded-[28px]
-                overflow-hidden
-                shadow-[0_10px_35px_rgba(0,0,0,0.05)]
-              "
-            >
-              <img
-                src={place.image}
-                alt={place.title}
-                className="
-                  w-full
-                  h-[220px]
-                  object-cover
-                "
-              />
-
-              <div className="p-5">
-                <div
-                  className="
-                    flex
-                    items-center
-                    justify-between
-                    gap-3
-                  "
-                >
-                  <h2
-                    className="
-                      text-2xl
-                      font-black
-                    "
-                  >
-                    {place.title}
-                  </h2>
-
-                  <div
-                    className="
-                      bg-[#f5f7f4]
-                      px-3
-                      py-2
-                      rounded-xl
-                      text-sm
-                    "
-                  >
-                    {
-                      place.category
-                    }
-                  </div>
-                </div>
-
-                <p
-                  className="
-                    text-gray-500
-                    mt-4
-                    line-clamp-3
-                  "
-                >
-                  {
-                    place.description
-                  }
-                </p>
-
-                <button
-                  onClick={() =>
-                    handleDelete(
-                      place.id
-                    )
-                  }
-                  className="
-                    mt-6
-                    w-full
-
-                    bg-red-500
-                    hover:bg-red-600
-
-                    text-white
-
-                    py-4
-
-                    rounded-2xl
-
-                    transition
-                  "
-                >
-                  Delete Place
-                </button>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </MainLayout>

@@ -32,7 +32,18 @@ function PlaceCard({
   image,
   description,
   promoted,
+
   recommendedFor = [],
+
+  minimumBudget,
+
+  recommendedBudget,
+
+  openTime,
+
+  closeTime,
+
+  menu = [],
 }: PlaceCardProps) {
   const [isOpen, setIsOpen] =
     useState(false)
@@ -46,13 +57,30 @@ function PlaceCard({
 
   const currentPlace: Place = {
     id,
+
     title,
+
     category,
+
     region,
+
     image,
+
     description,
+
     promoted,
+
     recommendedFor,
+
+    minimumBudget,
+
+    recommendedBudget,
+
+    openTime,
+
+    closeTime,
+
+    menu,
   }
 
   function handleFavorite() {
@@ -144,6 +172,7 @@ function PlaceCard({
               top-3
               left-3
               right-3
+
               sm:top-4
               sm:left-4
               sm:right-4
@@ -159,12 +188,17 @@ function PlaceCard({
                 className="
                   bg-yellow-400
                   text-black
+
                   px-3
                   py-2
+
                   rounded-xl
+
                   text-[10px]
                   sm:text-xs
+
                   font-bold
+
                   shadow-lg
                 "
               >
@@ -274,7 +308,7 @@ function PlaceCard({
             flex-1
           "
         >
-          {/* HEADER */}
+          {/* CATEGORY */}
 
           <div
             className="
@@ -329,12 +363,111 @@ function PlaceCard({
               text-sm
 
               line-clamp-3
-
-              min-h-[72px]
             "
           >
             {description}
           </p>
+
+          {/* INFO */}
+
+          <div
+            className="
+              mt-5
+
+              grid
+              grid-cols-2
+
+              gap-3
+            "
+          >
+            <div
+              className="
+                bg-[#f5f7f4]
+                p-3
+                rounded-2xl
+              "
+            >
+              <p
+                className="
+                  text-xs
+                  text-gray-500
+                "
+              >
+                Min Budget
+              </p>
+
+              <h3 className="font-bold">
+                $
+                {minimumBudget}
+              </h3>
+            </div>
+
+            <div
+              className="
+                bg-[#f5f7f4]
+                p-3
+                rounded-2xl
+              "
+            >
+              <p
+                className="
+                  text-xs
+                  text-gray-500
+                "
+              >
+                Recommended
+              </p>
+
+              <h3 className="font-bold">
+                $
+                {
+                  recommendedBudget
+                }
+              </h3>
+            </div>
+
+            <div
+              className="
+                bg-[#f5f7f4]
+                p-3
+                rounded-2xl
+              "
+            >
+              <p
+                className="
+                  text-xs
+                  text-gray-500
+                "
+              >
+                Opens
+              </p>
+
+              <h3 className="font-bold">
+                {openTime}
+              </h3>
+            </div>
+
+            <div
+              className="
+                bg-[#f5f7f4]
+                p-3
+                rounded-2xl
+              "
+            >
+              <p
+                className="
+                  text-xs
+                  text-gray-500
+                "
+              >
+                Closes
+              </p>
+
+              <h3 className="font-bold">
+                {closeTime}
+              </h3>
+            </div>
+          </div>
 
           {/* RECOMMENDED */}
 
@@ -345,7 +478,7 @@ function PlaceCard({
                 flex
                 flex-wrap
                 gap-2
-                mt-4
+                mt-5
               "
             >
               {recommendedFor.map(
@@ -440,12 +573,25 @@ function PlaceCard({
         onClose={() =>
           setIsOpen(false)
         }
+        id={id}
         title={title}
-        image={image}
-        description={description}
         category={category}
         region={region}
+        image={image}
+        description={description}
         promoted={promoted}
+        recommendedFor={
+          recommendedFor
+        }
+        minimumBudget={
+          minimumBudget
+        }
+        recommendedBudget={
+          recommendedBudget
+        }
+        openTime={openTime}
+        closeTime={closeTime}
+        menu={menu}
       />
     </>
   )

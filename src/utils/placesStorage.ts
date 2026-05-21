@@ -28,6 +28,16 @@ const defaultPlaces: Place[] =
         'Friends',
         'Couple',
       ],
+
+      minimumBudget: 10,
+
+      recommendedBudget: 35,
+
+      openTime: '08:00',
+
+      closeTime: '23:00',
+
+      menu: [],
     },
 
     {
@@ -52,6 +62,16 @@ const defaultPlaces: Place[] =
         'Family',
         'Couple',
       ],
+
+      minimumBudget: 5,
+
+      recommendedBudget: 20,
+
+      openTime: '09:00',
+
+      closeTime: '22:00',
+
+      menu: [],
     },
 
     {
@@ -77,6 +97,16 @@ const defaultPlaces: Place[] =
         'Friends',
         'Family',
       ],
+
+      minimumBudget: 25,
+
+      recommendedBudget: 70,
+
+      openTime: '07:00',
+
+      closeTime: '20:00',
+
+      menu: [],
     },
   ]
 
@@ -93,7 +123,46 @@ function initializePlaces() {
         defaultPlaces
       )
     )
+
+    return
   }
+
+  const parsed: Place[] =
+    JSON.parse(existing)
+
+  const normalized =
+    parsed.map((place) => ({
+      ...place,
+
+      recommendedFor:
+        place.recommendedFor ||
+        [],
+
+      minimumBudget:
+        place.minimumBudget ||
+        0,
+
+      recommendedBudget:
+        place.recommendedBudget ||
+        0,
+
+      openTime:
+        place.openTime ||
+        '09:00',
+
+      closeTime:
+        place.closeTime ||
+        '22:00',
+
+      menu: place.menu || [],
+    }))
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(
+      normalized
+    )
+  )
 }
 
 initializePlaces()
