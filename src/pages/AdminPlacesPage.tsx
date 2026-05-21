@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import toast from 'react-hot-toast'
+
 import MainLayout from '@/layouts/MainLayout'
 
 import {
@@ -87,6 +89,10 @@ function AdminPlacesPage() {
 
   function handleAddMenu() {
     if (!menuName) {
+      toast.error(
+        'Please enter menu item name.'
+      )
+
       return
     }
 
@@ -101,6 +107,10 @@ function AdminPlacesPage() {
       ...menu,
       newItem,
     ])
+
+    toast.success(
+      `${menuName} added to menu.`
+    )
 
     setMenuName('')
     setMenuPrice(0)
@@ -136,46 +146,79 @@ function AdminPlacesPage() {
       !image ||
       !description
     ) {
+      toast.error(
+        'Please fill all required fields.'
+      )
+
       return
     }
 
-    const newPlace: Place =
-      {
-        id: Date.now(),
+    const newPlace: Place = {
+      id: Date.now(),
 
-        title,
+      title,
 
-        category,
+      category,
 
-        region,
+      region,
 
-        image,
+      image,
 
-        description,
+      description,
 
-        promoted: false,
+      promoted: false,
 
-        recommendedFor,
+      recommendedFor,
 
-        minimumBudget,
+      minimumBudget,
 
-        recommendedBudget,
+      recommendedBudget,
 
-        openTime,
+      openTime,
 
-        closeTime,
+      closeTime,
 
-        menu,
-      }
+      menu,
+    }
+
+    /* SAVE PLACE */
 
     savePlace(newPlace)
 
-    setPlaces(getPlaces())
+    /* REFRESH DASHBOARD */
+
+    window.dispatchEvent(
+      new Event(
+        'placesUpdated'
+      )
+    )
+
+    /* SUCCESS POPUP */
+
+    toast.success(
+      `${title} added successfully!`
+    )
+
+    /* RESET FORM */
 
     setTitle('')
     setDescription('')
     setImage('')
     setMenu([])
+
+    setMinimumBudget(10)
+
+    setRecommendedBudget(25)
+
+    setOpenTime('09:00')
+
+    setCloseTime('22:00')
+
+    setRecommendedFor([
+      'Friends',
+    ])
+
+    setPlaces(getPlaces())
   }
 
   return (
@@ -188,6 +231,8 @@ function AdminPlacesPage() {
             bg-white
             rounded-[32px]
             p-6
+
+            shadow-[0_10px_40px_rgba(0,0,0,0.04)]
           "
         >
           <h1
@@ -218,6 +263,8 @@ function AdminPlacesPage() {
             md:grid-cols-2
 
             gap-5
+
+            shadow-[0_10px_40px_rgba(0,0,0,0.04)]
           "
         >
           {/* TITLE */}
@@ -232,8 +279,11 @@ function AdminPlacesPage() {
             placeholder="Place title"
             className="
               bg-[#f5f7f4]
+
               p-4
+
               rounded-2xl
+
               outline-none
             "
           />
@@ -249,8 +299,11 @@ function AdminPlacesPage() {
             }
             className="
               bg-[#f5f7f4]
+
               p-4
+
               rounded-2xl
+
               outline-none
             "
           >
@@ -277,6 +330,10 @@ function AdminPlacesPage() {
             <option>
               Resort
             </option>
+
+            <option>
+              Mountains
+            </option>
           </select>
 
           {/* REGION */}
@@ -290,8 +347,11 @@ function AdminPlacesPage() {
             }
             className="
               bg-[#f5f7f4]
+
               p-4
+
               rounded-2xl
+
               outline-none
             "
           >
@@ -318,27 +378,107 @@ function AdminPlacesPage() {
             <option>
               Chouf
             </option>
+
+            <option>
+              Faraya
+            </option>
           </select>
 
           {/* IMAGE */}
 
-          <input
-            value={image}
-            onChange={(e) =>
-              setImage(
-                e.target.value
-              )
-            }
-            placeholder="Image URL"
-            className="
-              bg-[#f5f7f4]
-              p-4
-              rounded-2xl
-              outline-none
-            "
-          />
+          <div className="md:col-span-2">
+            <p className="font-bold mb-3">
+              Place Image
+            </p>
 
-          {/* MIN BUDGET */}
+            <label
+              className="
+                bg-[#f5f7f4]
+
+                border-2
+                border-dashed
+                border-gray-300
+
+                rounded-[28px]
+
+                h-[260px]
+
+                flex
+                flex-col
+                items-center
+                justify-center
+
+                cursor-pointer
+
+                overflow-hidden
+
+                transition
+
+                hover:border-emerald-500
+              "
+            >
+              {image ? (
+                <img
+                  src={image}
+                  alt="Preview"
+                  className="
+                    w-full
+                    h-full
+                    object-cover
+                  "
+                />
+              ) : (
+                <>
+                  <div className="text-5xl">
+                    📸
+                  </div>
+
+                  <p
+                    className="
+                      mt-4
+                      text-gray-500
+                      font-medium
+                    "
+                  >
+                    Click to upload image
+                  </p>
+                </>
+              )}
+
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(
+                  event
+                ) => {
+                  const file =
+                    event.target
+                      .files?.[0]
+
+                  if (!file) {
+                    return
+                  }
+
+                  const reader =
+                    new FileReader()
+
+                  reader.onloadend =
+                    () => {
+                      setImage(
+                        reader.result as string
+                      )
+                    }
+
+                  reader.readAsDataURL(
+                    file
+                  )
+                }}
+              />
+            </label>
+          </div>
+
+          {/* MINIMUM */}
 
           <input
             type="number"
@@ -353,13 +493,16 @@ function AdminPlacesPage() {
             placeholder="Minimum Budget"
             className="
               bg-[#f5f7f4]
+
               p-4
+
               rounded-2xl
+
               outline-none
             "
           />
 
-          {/* RECOMMENDED BUDGET */}
+          {/* RECOMMENDED */}
 
           <input
             type="number"
@@ -376,8 +519,11 @@ function AdminPlacesPage() {
             placeholder="Recommended Budget"
             className="
               bg-[#f5f7f4]
+
               p-4
+
               rounded-2xl
+
               outline-none
             "
           />
@@ -394,8 +540,11 @@ function AdminPlacesPage() {
             }
             className="
               bg-[#f5f7f4]
+
               p-4
+
               rounded-2xl
+
               outline-none
             "
           />
@@ -412,8 +561,11 @@ function AdminPlacesPage() {
             }
             className="
               bg-[#f5f7f4]
+
               p-4
+
               rounded-2xl
+
               outline-none
             "
           />
@@ -431,15 +583,18 @@ function AdminPlacesPage() {
             placeholder="Description"
             className="
               bg-[#f5f7f4]
+
               p-4
+
               rounded-2xl
+
               outline-none
 
               md:col-span-2
             "
           />
 
-          {/* BEST WITH WHO */}
+          {/* BEST WITH */}
 
           <div className="md:col-span-2">
             <p className="font-bold mb-3">
@@ -464,7 +619,9 @@ function AdminPlacesPage() {
                   className={`
                     px-5
                     py-3
+
                     rounded-2xl
+
                     transition
 
                     ${
@@ -500,9 +657,13 @@ function AdminPlacesPage() {
                 placeholder="Menu item"
                 className="
                   flex-1
+
                   bg-[#f5f7f4]
+
                   p-4
+
                   rounded-2xl
+
                   outline-none
                 "
               />
@@ -520,9 +681,13 @@ function AdminPlacesPage() {
                 placeholder="Price"
                 className="
                   w-[140px]
+
                   bg-[#f5f7f4]
+
                   p-4
+
                   rounded-2xl
+
                   outline-none
                 "
               />
@@ -554,7 +719,9 @@ function AdminPlacesPage() {
                     key={index}
                     className="
                       bg-[#f5f7f4]
+
                       p-4
+
                       rounded-2xl
 
                       flex

@@ -1,4 +1,8 @@
-import { useMemo, useState } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import MainLayout from '@/layouts/MainLayout'
 
@@ -14,8 +18,17 @@ import {
   getPlaces,
 } from '@/utils/placesStorage'
 
+import type {
+  Place,
+} from '@/types/place'
+
 function DashboardPage() {
-  const places = getPlaces()
+  const [
+    places,
+    setPlaces,
+  ] = useState<Place[]>(
+    []
+  )
 
   const [
     selectedRegion,
@@ -32,10 +45,54 @@ function DashboardPage() {
     setSelectedGroup,
   ] = useState('Everyone')
 
+  const [
+    search,
+    setSearch,
+  ] = useState('')
+
+  /* LOAD PLACES */
+
+  useEffect(() => {
+    function loadPlaces() {
+      const data =
+        getPlaces()
+
+      setPlaces(data)
+    }
+
+    loadPlaces()
+
+    window.addEventListener(
+      'placesUpdated',
+      loadPlaces
+    )
+
+    return () => {
+      window.removeEventListener(
+        'placesUpdated',
+        loadPlaces
+      )
+    }
+  }, [])
+
+  /* FILTERS */
+
   const filteredPlaces =
     useMemo(() => {
       return places.filter(
         (place) => {
+          const matchesSearch =
+            place.title
+              .toLowerCase()
+              .includes(
+                search.toLowerCase()
+              ) ||
+            place.description
+              .toLowerCase()
+              .includes(
+                search.toLowerCase()
+              )
+
           const matchesRegion =
             selectedRegion ===
               'All Regions' ||
@@ -56,6 +113,7 @@ function DashboardPage() {
             )
 
           return (
+            matchesSearch &&
             matchesRegion &&
             matchesType &&
             matchesGroup
@@ -67,20 +125,24 @@ function DashboardPage() {
       selectedRegion,
       selectedType,
       selectedGroup,
+      search,
     ])
 
   return (
     <PageWrapper>
       <MainLayout>
         <div className="space-y-8 pb-28 md:pb-10">
-          {/* TOPBAR */}
+          {/* HERO */}
 
-          <div
+          <section
             className="
               bg-white
+
               rounded-[32px]
+
               p-5
-              md:p-6
+              md:p-7
+
               shadow-[0_10px_40px_rgba(0,0,0,0.04)]
             "
           >
@@ -89,61 +151,119 @@ function DashboardPage() {
                 flex
                 flex-col
                 lg:flex-row
+
                 lg:items-center
                 lg:justify-between
-                gap-5
+
+                gap-6
               "
             >
-              <div>
+              {/* TEXT */}
+
+              <div className="max-w-2xl">
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+
+                    bg-emerald-50
+
+                    text-emerald-700
+
+                    px-4
+                    py-2
+
+                    rounded-full
+
+                    text-sm
+                    font-semibold
+
+                    mb-5
+                  "
+                >
+                  ✨ Smart Tourism
+                </div>
+
                 <h1
                   className="
-                    text-3xl
-                    md:text-4xl
+                    text-4xl
+                    md:text-5xl
+                    xl:text-6xl
+
                     font-black
+
+                    leading-tight
+
                     text-gray-900
                   "
                 >
-                  Explore smarter.
+                  Discover Lebanon
+                  smarter than ever.
                 </h1>
 
                 <p
                   className="
                     text-gray-500
-                    mt-2
+
+                    text-lg
+
+                    mt-5
+
+                    leading-relaxed
                   "
                 >
-                  Build personalized
-                  travel experiences
-                  across Lebanon.
+                  Explore hidden gems,
+                  restaurants, beaches,
+                  mountains and create
+                  personalized trips
+                  with real budgets and
+                  schedules.
                 </p>
               </div>
 
+              {/* SEARCH */}
+
               <div
                 className="
-                  flex
-                  flex-col
-                  sm:flex-row
-                  gap-4
+                  bg-[#f5f7f4]
+
+                  rounded-[28px]
+
+                  p-4
+
+                  w-full
+                  lg:w-[380px]
                 "
               >
                 <div
                   className="
-                    bg-[#f5f7f4]
-                    rounded-2xl
-                    px-5
-                    py-4
                     flex
                     items-center
+
                     gap-3
-                    w-full
-                    sm:min-w-[260px]
+
+                    bg-white
+
+                    rounded-2xl
+
+                    px-5
+                    py-4
                   "
                 >
-                  <span>🔍</span>
+                  <span className="text-xl">
+                    🔍
+                  </span>
 
                   <input
+                    value={search}
+                    onChange={(e) =>
+                      setSearch(
+                        e.target.value
+                      )
+                    }
                     type="text"
-                    placeholder="Search destinations..."
+                    placeholder="Search places..."
                     className="
                       bg-transparent
                       outline-none
@@ -152,31 +272,96 @@ function DashboardPage() {
                   />
                 </div>
 
-                <button
+                <div
                   className="
-                    bg-emerald-700
-                    hover:bg-emerald-800
-                    text-white
-                    px-6
-                    py-4
-                    rounded-2xl
-                    font-semibold
-                    transition
+                    mt-4
+
+                    grid
+                    grid-cols-2
+
+                    gap-3
                   "
                 >
-                  + New Plan
-                </button>
+                  <div
+                    className="
+                      bg-white
+
+                      rounded-2xl
+
+                      p-4
+
+                      text-center
+                    "
+                  >
+                    <h3
+                      className="
+                        text-2xl
+                        font-black
+                      "
+                    >
+                      {
+                        places.length
+                      }
+                    </h3>
+
+                    <p
+                      className="
+                        text-sm
+                        text-gray-500
+                        mt-1
+                      "
+                    >
+                      Destinations
+                    </p>
+                  </div>
+
+                  <div
+                    className="
+                      bg-white
+
+                      rounded-2xl
+
+                      p-4
+
+                      text-center
+                    "
+                  >
+                    <h3
+                      className="
+                        text-2xl
+                        font-black
+                      "
+                    >
+                      {
+                        filteredPlaces.length
+                      }
+                    </h3>
+
+                    <p
+                      className="
+                        text-sm
+                        text-gray-500
+                        mt-1
+                      "
+                    >
+                      Results
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </section>
 
           {/* FILTERS */}
 
           <section
             className="
               bg-white
+
               rounded-[32px]
+
               p-5
+
               shadow-[0_10px_40px_rgba(0,0,0,0.04)]
             "
           >
@@ -185,10 +370,13 @@ function DashboardPage() {
                 grid
                 grid-cols-1
                 md:grid-cols-2
-                xl:grid-cols-4
+                xl:grid-cols-3
+
                 gap-4
               "
             >
+              {/* REGION */}
+
               <select
                 value={
                   selectedRegion
@@ -200,9 +388,12 @@ function DashboardPage() {
                 }
                 className="
                   bg-[#f5f7f4]
+
                   px-5
                   py-4
+
                   rounded-2xl
+
                   outline-none
                 "
               >
@@ -235,13 +426,11 @@ function DashboardPage() {
                 </option>
 
                 <option>
-                  Saida
-                </option>
-
-                <option>
-                  Zahle
+                  Faraya
                 </option>
               </select>
+
+              {/* TYPE */}
 
               <select
                 value={
@@ -254,9 +443,12 @@ function DashboardPage() {
                 }
                 className="
                   bg-[#f5f7f4]
+
                   px-5
                   py-4
+
                   rounded-2xl
+
                   outline-none
                 "
               >
@@ -285,9 +477,15 @@ function DashboardPage() {
                 </option>
 
                 <option>
-                  Shopping
+                  Café
+                </option>
+
+                <option>
+                  Resort
                 </option>
               </select>
+
+              {/* GROUP */}
 
               <select
                 value={
@@ -300,9 +498,12 @@ function DashboardPage() {
                 }
                 className="
                   bg-[#f5f7f4]
+
                   px-5
                   py-4
+
                   rounded-2xl
+
                   outline-none
                 "
               >
@@ -326,47 +527,76 @@ function DashboardPage() {
                   Solo
                 </option>
               </select>
-
-              <button
-                className="
-                  bg-emerald-700
-                  hover:bg-emerald-800
-                  text-white
-                  px-6
-                  py-4
-                  rounded-2xl
-                  font-semibold
-                  transition
-                "
-              >
-                Apply Filters
-              </button>
             </div>
           </section>
 
-          {/* PLACES */}
+          {/* CARDS */}
 
-          <StaggerContainer
-            className="
-              grid
-              grid-cols-1
-              md:grid-cols-2
-              xl:grid-cols-3
-              gap-6
-            "
-          >
-            {filteredPlaces.map(
-              (place) => (
-                <StaggerItem
-                  key={place.id}
-                >
-                  <PlaceCard
-                    {...place}
-                  />
-                </StaggerItem>
-              )
-            )}
-          </StaggerContainer>
+          {filteredPlaces.length >
+          0 ? (
+            <StaggerContainer
+              className="
+                grid
+                grid-cols-1
+                md:grid-cols-2
+                xl:grid-cols-3
+
+                gap-6
+              "
+            >
+              {filteredPlaces.map(
+                (place) => (
+                  <StaggerItem
+                    key={place.id}
+                  >
+                    <PlaceCard
+                      {...place}
+                    />
+                  </StaggerItem>
+                )
+              )}
+            </StaggerContainer>
+          ) : (
+            <div
+              className="
+                bg-white
+
+                rounded-[32px]
+
+                p-16
+
+                text-center
+
+                shadow-[0_10px_40px_rgba(0,0,0,0.04)]
+              "
+            >
+              <div className="text-6xl">
+                🧭
+              </div>
+
+              <h2
+                className="
+                  text-3xl
+                  font-black
+
+                  mt-6
+                "
+              >
+                No places found
+              </h2>
+
+              <p
+                className="
+                  text-gray-500
+
+                  mt-3
+                "
+              >
+                Try changing filters
+                or search keywords.
+              </p>
+            </div>
+          )}
         </div>
       </MainLayout>
     </PageWrapper>
