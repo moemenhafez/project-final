@@ -6,6 +6,10 @@ import {
 } from 'react-router-dom'
 
 import {
+  motion,
+} from 'framer-motion'
+
+import {
   getCurrentRole,
   logoutUser,
 } from '@/utils/authStorage'
@@ -13,11 +17,11 @@ import {
 function Sidebar() {
   const navigate = useNavigate()
 
-  const [collapsed, setCollapsed] =
-    useState(false)
-
   const role =
     getCurrentRole()
+
+  const [expanded, setExpanded] =
+    useState(false)
 
   function handleLogout() {
     logoutUser()
@@ -25,221 +29,196 @@ function Sidebar() {
     navigate('/login')
   }
 
-  const travelerItems = [
+  const menuItems = [
     {
       label: 'Explore',
-      path: '/dashboard',
       icon: '🌍',
+      path: '/dashboard',
     },
 
     {
       label: 'Favorites',
-      path: '/favorites',
       icon: '❤️',
+      path: '/favorites',
     },
 
     {
       label: 'Saved Places',
-      path: '/saved-places',
       icon: '🔖',
+      path: '/saved-places',
     },
 
     {
-      label: 'Community Trips',
+      label: 'Trip Planner',
+      icon: '🧳',
+      path: '/trip-planner',
+    },
+
+    {
+      label: 'Community',
+      icon: '👥',
       path:
         '/community-trips',
-      icon: '🧳',
+    },
+  ]
+
+  const adminItems = [
+    {
+      label: 'Analytics',
+      icon: '📊',
+      path: '/analytics',
     },
 
     {
-      label: 'Trip Budget',
-      path: '/trip-budget',
-      icon: '💰',
-    },
-
-    {
-      label: 'Travel Time',
-      path: '/travel-time',
-      icon: '🛣️',
+      label: 'Manage Places',
+      icon: '🏢',
+      path: '/admin-places',
     },
   ]
 
   const businessItems = [
     {
       label: 'My Business',
-      path: '/admin-places',
-      icon: '🏢',
-    },
-
-    {
-      label: 'Advertise',
-      path:
-        '/sponsored-management',
-      icon: '⭐',
-    },
-
-    {
-      label: 'Business Analytics',
-      path: '/analytics',
-      icon: '📊',
+      icon: '🏨',
+      path: '/business',
     },
   ]
 
   const organizerItems = [
     {
       label: 'Create Trip',
-      path: '/create-trip',
       icon: '➕',
-    },
-
-    {
-      label: 'Manage Trips',
-      path:
-        '/community-trips',
-      icon: '👥',
-    },
-
-    {
-      label: 'Trip Revenue',
-      path: '/analytics',
-      icon: '💵',
+      path: '/create-trip',
     },
   ]
 
-  const adminItems = [
-    {
-      label:
-        'Platform Analytics',
-      path: '/analytics',
-      icon: '📊',
-    },
+  let roleItems: typeof menuItems =
+    []
 
-    {
-      label: 'Approve Places',
-      path: '/admin-places',
-      icon: '✅',
-    },
-
-    {
-      label: 'Sponsors',
-      path:
-        '/sponsored-management',
-      icon: '⭐',
-    },
-
-    {
-      label: 'Users',
-      path: '/profile',
-      icon: '👤',
-    },
-  ]
-
-  const roleMenus = {
-    traveler:
-      travelerItems,
-
-    business:
-      businessItems,
-
-    organizer:
-      organizerItems,
-
-    admin: adminItems,
+  if (role === 'admin') {
+    roleItems = adminItems
   }
 
-  const currentMenu =
-    roleMenus[role]
+  if (role === 'business') {
+    roleItems =
+      businessItems
+  }
+
+  if (role === 'organizer') {
+    roleItems =
+      organizerItems
+  }
 
   return (
-    <aside
+    <motion.aside
+      animate={{
+        width: expanded
+          ? 290
+          : 100,
+      }}
+      transition={{
+        duration: 0.3,
+      }}
       onMouseEnter={() =>
-        setCollapsed(false)
+        setExpanded(true)
       }
       onMouseLeave={() =>
-        setCollapsed(true)
+        setExpanded(false)
       }
-      className={`
+      className="
         fixed
-        left-0
-        top-0
-        h-screen
+        left-5
+        top-5
+        bottom-5
         z-50
-        bg-white
-        border-r
-        border-gray-200
+        bg-white/80
+        backdrop-blur-2xl
+        border
+        border-white/30
+        rounded-[36px]
+        shadow-[0_10px_50px_rgba(0,0,0,0.08)]
         flex
         flex-col
         justify-between
-        transition-all
-        duration-300
-        shadow-xl
-        ${
-          collapsed
-            ? 'w-24'
-            : 'w-72'
-        }
-      `}
+        overflow-hidden
+      "
     >
+      {/* TOP */}
+
       <div>
+        {/* LOGO */}
+
         <div
           className="
             p-6
-            border-b
-            border-gray-200
+            flex
+            items-center
+            gap-5
           "
         >
           <div
             className="
+              min-w-[60px]
+              h-[60px]
+              rounded-[24px]
+              bg-gradient-to-br
+              from-emerald-700
+              to-emerald-500
               flex
               items-center
-              gap-4
+              justify-center
+              text-3xl
+              text-white
+              shadow-lg
             "
           >
-            <div
-              className="
-                w-14
-                h-14
-                rounded-2xl
-                bg-emerald-700
-                text-white
-                flex
-                items-center
-                justify-center
-                text-2xl
-                shadow-lg
-              "
-            >
-              🇱🇧
-            </div>
-
-            {!collapsed && (
-              <div>
-                <h1
-                  className="
-                    text-3xl
-                    font-bold
-                    text-emerald-700
-                  "
-                >
-                  LebGuide
-                </h1>
-
-                <p
-                  className="
-                    text-sm
-                    text-gray-500
-                    capitalize
-                  "
-                >
-                  {role} dashboard
-                </p>
-              </div>
-            )}
+            🇱🇧
           </div>
+
+          {expanded && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                x: -10,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+            >
+              <h1
+                className="
+                  text-2xl
+                  font-black
+                  text-gray-900
+                "
+              >
+                LebGuide
+              </h1>
+
+              <p
+                className="
+                  text-gray-400
+                  text-sm
+                  capitalize
+                "
+              >
+                {role} workspace
+              </p>
+            </motion.div>
+          )}
         </div>
 
-        <div className="p-4 space-y-3">
-          {currentMenu.map(
+        {/* MENU */}
+
+        <div
+          className="
+            px-4
+            mt-6
+            space-y-3
+          "
+        >
+          {menuItems.map(
             (item) => (
               <NavLink
                 key={item.path}
@@ -248,131 +227,268 @@ function Sidebar() {
                   isActive,
                 }) =>
                   `
-                  flex
-                  items-center
-                  gap-4
-                  px-4
-                  py-4
-                  rounded-2xl
-                  transition-all
-                  duration-300
-                  font-medium
-                  ${
-                    isActive
-                      ? 'bg-emerald-700 text-white shadow-lg'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }
-                `
+                    flex
+                    items-center
+                    gap-5
+                    px-5
+                    py-5
+                    rounded-[28px]
+                    transition-all
+                    duration-300
+                    group
+                    ${
+                      isActive
+                        ? 'bg-emerald-700 text-white shadow-lg'
+                        : 'hover:bg-[#f5f7f4] text-gray-700'
+                    }
+                  `
                 }
               >
                 <span className="text-2xl">
                   {item.icon}
                 </span>
 
-                {!collapsed && (
-                  <span>
+                {expanded && (
+                  <motion.span
+                    initial={{
+                      opacity: 0,
+                      x: -10,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                    }}
+                    className="
+                      font-semibold
+                      whitespace-nowrap
+                    "
+                  >
                     {item.label}
-                  </span>
+                  </motion.span>
                 )}
               </NavLink>
             )
           )}
+
+          {roleItems.length >
+            0 && (
+            <div className="pt-6">
+              {expanded && (
+                <p
+                  className="
+                    px-4
+                    mb-4
+                    text-xs
+                    uppercase
+                    tracking-[0.25em]
+                    text-gray-400
+                    font-bold
+                  "
+                >
+                  Workspace
+                </p>
+              )}
+
+              <div className="space-y-3">
+                {roleItems.map(
+                  (item) => (
+                    <NavLink
+                      key={
+                        item.path
+                      }
+                      to={item.path}
+                      className={({
+                        isActive,
+                      }) =>
+                        `
+                          flex
+                          items-center
+                          gap-5
+                          px-5
+                          py-5
+                          rounded-[28px]
+                          transition-all
+                          duration-300
+                          ${
+                            isActive
+                              ? 'bg-black text-white'
+                              : 'hover:bg-[#f5f7f4] text-gray-700'
+                          }
+                        `
+                      }
+                    >
+                      <span className="text-2xl">
+                        {
+                          item.icon
+                        }
+                      </span>
+
+                      {expanded && (
+                        <motion.span
+                          initial={{
+                            opacity: 0,
+                            x: -10,
+                          }}
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                          }}
+                          className="
+                            font-semibold
+                            whitespace-nowrap
+                          "
+                        >
+                          {
+                            item.label
+                          }
+                        </motion.span>
+                      )}
+                    </NavLink>
+                  )
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      <div
-        className="
-          p-4
-          border-t
-          border-gray-200
-          space-y-3
-        "
-      >
-        <NavLink
-          to="/profile"
-          className={({
-            isActive,
-          }) =>
-            `
-            flex
-            items-center
-            gap-4
-            px-4
-            py-4
-            rounded-2xl
-            transition
-            ${
-              isActive
-                ? 'bg-gray-900 text-white'
-                : 'hover:bg-gray-100'
+      {/* BOTTOM */}
+
+      <div className="p-4">
+        <div className="space-y-3">
+          <NavLink
+            to="/profile"
+            className={({
+              isActive,
+            }) =>
+              `
+                flex
+                items-center
+                gap-5
+                px-5
+                py-5
+                rounded-[28px]
+                transition-all
+                duration-300
+                ${
+                  isActive
+                    ? 'bg-[#111827] text-white'
+                    : 'hover:bg-[#f5f7f4] text-gray-700'
+                }
+              `
             }
-          `
-          }
-        >
-          <span className="text-2xl">
-            👤
-          </span>
+          >
+            <span className="text-2xl">
+              👤
+            </span>
 
-          {!collapsed && (
-            <span>Profile</span>
-          )}
-        </NavLink>
+            {expanded && (
+              <motion.span
+                initial={{
+                  opacity: 0,
+                  x: -10,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                className="
+                  font-semibold
+                  whitespace-nowrap
+                "
+              >
+                Profile
+              </motion.span>
+            )}
+          </NavLink>
 
-        <NavLink
-          to="/settings"
-          className={({
-            isActive,
-          }) =>
-            `
-            flex
-            items-center
-            gap-4
-            px-4
-            py-4
-            rounded-2xl
-            transition
-            ${
-              isActive
-                ? 'bg-gray-900 text-white'
-                : 'hover:bg-gray-100'
+          <NavLink
+            to="/settings"
+            className={({
+              isActive,
+            }) =>
+              `
+                flex
+                items-center
+                gap-5
+                px-5
+                py-5
+                rounded-[28px]
+                transition-all
+                duration-300
+                ${
+                  isActive
+                    ? 'bg-[#111827] text-white'
+                    : 'hover:bg-[#f5f7f4] text-gray-700'
+                }
+              `
             }
-          `
-          }
-        >
-          <span className="text-2xl">
-            ⚙️
-          </span>
+          >
+            <span className="text-2xl">
+              ⚙️
+            </span>
 
-          {!collapsed && (
-            <span>Settings</span>
-          )}
-        </NavLink>
+            {expanded && (
+              <motion.span
+                initial={{
+                  opacity: 0,
+                  x: -10,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                className="
+                  font-semibold
+                  whitespace-nowrap
+                "
+              >
+                Settings
+              </motion.span>
+            )}
+          </NavLink>
 
-        <button
-          onClick={handleLogout}
-          className="
-            w-full
-            flex
-            items-center
-            gap-4
-            px-4
-            py-4
-            rounded-2xl
-            transition
-            hover:bg-red-100
-            text-red-500
-          "
-        >
-          <span className="text-2xl">
-            🚪
-          </span>
+          <button
+            onClick={handleLogout}
+            className="
+              w-full
+              flex
+              items-center
+              gap-5
+              px-5
+              py-5
+              rounded-[28px]
+              hover:bg-red-50
+              text-red-500
+              transition-all
+              duration-300
+            "
+          >
+            <span className="text-2xl">
+              🚪
+            </span>
 
-          {!collapsed && (
-            <span>Logout</span>
-          )}
-        </button>
+            {expanded && (
+              <motion.span
+                initial={{
+                  opacity: 0,
+                  x: -10,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                className="
+                  font-semibold
+                "
+              >
+                Logout
+              </motion.span>
+            )}
+          </button>
+        </div>
       </div>
-    </aside>
+    </motion.aside>
   )
 }
 
