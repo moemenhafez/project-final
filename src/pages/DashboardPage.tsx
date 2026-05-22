@@ -14,6 +14,7 @@ import StaggerItem from '@/components/animations/StaggerItem'
 
 import PlaceCard from '@/components/places/PlaceCard'
 
+
 import {
   getPlaces,
 } from '@/utils/placesStorage'

@@ -15,13 +15,16 @@ import {
 } from '@/utils/authStorage'
 
 function Sidebar() {
-  const navigate = useNavigate()
+  const navigate =
+    useNavigate()
 
   const role =
     getCurrentRole()
 
-  const [expanded, setExpanded] =
-    useState(false)
+  const [
+    expanded,
+    setExpanded,
+  ] = useState(false)
 
   function handleLogout() {
     logoutUser()
@@ -63,55 +66,29 @@ function Sidebar() {
     },
 
     {
-      label: 'Places',
+      label: 'Admin Places',
       icon: '🏢',
       path: '/admin-places',
     },
   ]
 
-  const businessItems = [
-    {
-      label: 'Business',
-      icon: '🏨',
-      path: '/business',
-    },
-  ]
-
-  const organizerItems = [
-    {
-      label: 'Create',
-      icon: '➕',
-      path: '/create-trip',
-    },
-  ]
-
-  let roleItems: typeof menuItems =
-    []
+  let roleItems:
+    typeof menuItems = []
 
   if (role === 'admin') {
     roleItems = adminItems
   }
 
-  if (role === 'business') {
-    roleItems =
-      businessItems
-  }
-
-  if (role === 'organizer') {
-    roleItems =
-      organizerItems
-  }
-
   return (
     <>
-      {/* DESKTOP SIDEBAR */}
+      {/* SIDEBAR */}
 
       <motion.aside
-        animate={{
-          width: expanded
-            ? 290
-            : 100,
-        }}
+       animate={{
+  width: expanded
+    ? 290
+    : 180,
+}}
         transition={{
           duration: 0.3,
         }}
@@ -122,13 +99,12 @@ function Sidebar() {
           setExpanded(false)
         }
         className="
-          hidden
-          md:flex
+          flex
 
           fixed
           left-5
-          top-5
-          bottom-5
+          top-3
+          bottom-3
           z-50
 
           bg-white/80
@@ -137,7 +113,7 @@ function Sidebar() {
           border
           border-white/30
 
-          rounded-[36px]
+          rounded-[28px]
 
           shadow-[0_10px_50px_rgba(0,0,0,0.08)]
 
@@ -155,6 +131,7 @@ function Sidebar() {
           <div
             className="
               p-5
+
               flex
               items-center
               gap-4
@@ -212,13 +189,14 @@ function Sidebar() {
                     capitalize
                   "
                 >
-                  {role} workspace
+                  {role}{' '}
+                  workspace
                 </p>
               </motion.div>
             )}
           </div>
 
-          {/* MENU */}
+          {/* NAVIGATION */}
 
           <div
             className="
@@ -227,6 +205,8 @@ function Sidebar() {
               space-y-3
             "
           >
+            {/* MAIN ITEMS */}
+
             {menuItems.map(
               (item) => (
                 <NavLink
@@ -236,24 +216,24 @@ function Sidebar() {
                     isActive,
                   }) =>
                     `
-                      flex
-                      items-center
-                      gap-5
+                    flex
+                    items-center
+                    gap-5
 
-                      px-5
-                      py-5
+                    px-5
+                    py-5
 
-                      rounded-[26px]
+                    rounded-[26px]
 
-                      transition-all
-                      duration-300
+                    transition-all
+                    duration-300
 
-                      ${
-                        isActive
-                          ? 'bg-emerald-700 text-white shadow-lg'
-                          : 'hover:bg-[#f5f7f4] text-gray-700'
-                      }
-                    `
+                    ${
+                      isActive
+                        ? 'bg-emerald-700 text-white shadow-lg'
+                        : 'hover:bg-[#f5f7f4] text-gray-700'
+                    }
+                  `
                   }
                 >
                   <span className="text-2xl">
@@ -275,14 +255,16 @@ function Sidebar() {
                         whitespace-nowrap
                       "
                     >
-                      {item.label}
+                      {
+                        item.label
+                      }
                     </motion.span>
                   )}
                 </NavLink>
               )
             )}
 
-            {/* ROLE MENU */}
+            {/* ROLE ITEMS */}
 
             {roleItems.length >
               0 && (
@@ -317,24 +299,24 @@ function Sidebar() {
                           isActive,
                         }) =>
                           `
-                            flex
-                            items-center
-                            gap-5
+                          flex
+                          items-center
+                          gap-5
 
-                            px-5
-                            py-5
+                          px-5
+                          py-5
 
-                            rounded-[26px]
+                          rounded-[26px]
 
-                            transition-all
-                            duration-300
+                          transition-all
+                          duration-300
 
-                            ${
-                              isActive
-                                ? 'bg-black text-white'
-                                : 'hover:bg-[#f5f7f4] text-gray-700'
-                            }
-                          `
+                          ${
+                            isActive
+                              ? 'bg-black text-white'
+                              : 'hover:bg-[#f5f7f4] text-gray-700'
+                          }
+                        `
                         }
                       >
                         <span className="text-2xl">
@@ -384,23 +366,23 @@ function Sidebar() {
                 isActive,
               }) =>
                 `
-                  flex
-                  items-center
-                  gap-5
+                flex
+                items-center
+                gap-5
 
-                  px-5
-                  py-5
+                px-5
+                py-5
 
-                  rounded-[26px]
+                rounded-[26px]
 
-                  transition-all
+                transition-all
 
-                  ${
-                    isActive
-                      ? 'bg-[#111827] text-white'
-                      : 'hover:bg-[#f5f7f4] text-gray-700'
-                  }
-                `
+                ${
+                  isActive
+                    ? 'bg-[#111827] text-white'
+                    : 'hover:bg-[#f5f7f4] text-gray-700'
+                }
+              `
               }
             >
               <span className="text-2xl">
@@ -434,23 +416,23 @@ function Sidebar() {
                 isActive,
               }) =>
                 `
-                  flex
-                  items-center
-                  gap-5
+                flex
+                items-center
+                gap-5
 
-                  px-5
-                  py-5
+                px-5
+                py-5
 
-                  rounded-[26px]
+                rounded-[26px]
 
-                  transition-all
+                transition-all
 
-                  ${
-                    isActive
-                      ? 'bg-[#111827] text-white'
-                      : 'hover:bg-[#f5f7f4] text-gray-700'
-                  }
-                `
+                ${
+                  isActive
+                    ? 'bg-[#111827] text-white'
+                    : 'hover:bg-[#f5f7f4] text-gray-700'
+                }
+              `
               }
             >
               <span className="text-2xl">
@@ -479,7 +461,9 @@ function Sidebar() {
             {/* LOGOUT */}
 
             <button
-              onClick={handleLogout}
+              onClick={
+                handleLogout
+              }
               className="
                 w-full
 
@@ -492,120 +476,39 @@ function Sidebar() {
 
                 rounded-[26px]
 
-                hover:bg-red-50
+                bg-red-500
+                hover:bg-red-600
 
-                text-red-500
+                text-white
 
                 transition-all
+                duration-300
               "
             >
               <span className="text-2xl">
                 🚪
               </span>
 
-              {expanded && (
-                <motion.span
-                  initial={{
-                    opacity: 0,
-                    x: -10,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    x: 0,
-                  }}
-                  className="
-                    font-semibold
-                  "
-                >
-                  Logout
-                </motion.span>
-              )}
+              <motion.span
+                initial={{
+                  opacity: 0,
+                  x: -10,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                className="
+                  font-semibold
+                  whitespace-nowrap
+                "
+              >
+                Logout
+              </motion.span>
             </button>
           </div>
         </div>
       </motion.aside>
-
-      {/* MOBILE NAVIGATION */}
-
-      <div
-        className="
-          fixed
-          bottom-4
-          left-4
-          right-4
-
-          z-50
-
-          md:hidden
-
-          bg-white/90
-          backdrop-blur-2xl
-
-          rounded-[28px]
-
-          shadow-[0_10px_40px_rgba(0,0,0,0.08)]
-
-          px-2
-          py-2
-        "
-      >
-        <div
-          className="
-            flex
-            items-center
-            justify-between
-            gap-2
-          "
-        >
-          {menuItems.map(
-            (item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({
-                  isActive,
-                }) =>
-                  `
-                    flex
-                    flex-col
-                    items-center
-                    justify-center
-
-                    gap-1
-
-                    flex-1
-
-                    py-3
-
-                    rounded-2xl
-
-                    transition-all
-
-                    ${
-                      isActive
-                        ? 'bg-emerald-700 text-white'
-                        : 'text-gray-500'
-                    }
-                  `
-                }
-              >
-                <span className="text-xl">
-                  {item.icon}
-                </span>
-
-                <span
-                  className="
-                    text-[10px]
-                    font-medium
-                  "
-                >
-                  {item.label}
-                </span>
-              </NavLink>
-            )
-          )}
-        </div>
-      </div>
     </>
   )
 }

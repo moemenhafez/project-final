@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import toast from 'react-hot-toast'
 
@@ -16,6 +17,8 @@ import {
 import {
   getSavedPlaces,
 } from '@/utils/savedPlacesStorage'
+
+import { logoutUser } from '@/utils/authStorage'
 
 function ProfilePage() {
   const profile =
@@ -47,6 +50,9 @@ function ProfilePage() {
     profile.favoriteRegion
   )
 
+  const navigate = useNavigate()
+
+
   function handleSaveProfile() {
     saveProfile({
       name,
@@ -59,7 +65,22 @@ function ProfilePage() {
       'Profile updated successfully.'
     )
   }
+function logout() {
+  localStorage.removeItem(
+    'isAuthenticated'
+  )
 
+  localStorage.removeItem(
+    'role'
+  )
+
+  localStorage.removeItem(
+    'currentUser'
+  )
+
+  window.location.href =
+    '/'
+}
   return (
     <MainLayout>
       <div className="space-y-8">
@@ -311,6 +332,29 @@ function ProfilePage() {
             "
           >
             Save Profile
+          </button>
+
+          <button
+            onClick={() => {
+              logoutUser()
+
+              logout()
+
+              toast.success('Logged out successfully.')
+
+              navigate('/login')
+            }}
+            className="
+              w-full
+              bg-red-500
+              text-white
+              py-4
+              rounded-2xl
+              hover:bg-red-600
+              transition
+            "
+          >
+            Logout
           </button>
         </div>
       </div>
