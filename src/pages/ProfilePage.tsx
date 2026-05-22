@@ -1,364 +1,437 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
-import toast from 'react-hot-toast'
-
-import MainLayout from '@/layouts/MainLayout'
-
-import {
-  getProfile,
-  saveProfile,
-} from '@/utils/profileStorage'
-
-import {
-  getFavoritePlaces,
-} from '@/utils/favoritesStorage'
-
-import {
-  getSavedPlaces,
-} from '@/utils/savedPlacesStorage'
-
-import { logoutUser } from '@/utils/authStorage'
+import Sidebar from '@/components/layout/Sidebar'
 
 function ProfilePage() {
-  const profile =
-    getProfile()
-
-  const favorites =
-    getFavoritePlaces()
-
-  const savedPlaces =
-    getSavedPlaces()
-
-  const [name, setName] =
-    useState(profile.name)
-
-  const [bio, setBio] =
-    useState(profile.bio)
-
-  const [
-    avatar,
-    setAvatar,
-  ] = useState(
-    profile.avatar
-  )
-
-  const [
-    favoriteRegion,
-    setFavoriteRegion,
-  ] = useState(
-    profile.favoriteRegion
-  )
-
-  const navigate = useNavigate()
-
-
-  function handleSaveProfile() {
-    saveProfile({
-      name,
-      bio,
-      avatar,
-      favoriteRegion,
-    })
-
-    toast.success(
-      'Profile updated successfully.'
+  const currentUser =
+    localStorage.getItem(
+      'currentUser'
     )
+
+  const user =
+    currentUser
+      ? JSON.parse(
+          currentUser
+        )
+      : null
+
+  const role =
+    localStorage.getItem(
+      'role'
+    )
+
+  function logout() {
+    localStorage.removeItem(
+      'isAuthenticated'
+    )
+
+    localStorage.removeItem(
+      'role'
+    )
+
+    localStorage.removeItem(
+      'currentUser'
+    )
+
+    window.location.href =
+      '/'
   }
-function logout() {
-  localStorage.removeItem(
-    'isAuthenticated'
-  )
 
-  localStorage.removeItem(
-    'role'
-  )
-
-  localStorage.removeItem(
-    'currentUser'
-  )
-
-  window.location.href =
-    '/'
-}
   return (
-    <MainLayout>
-      <div className="space-y-8">
-        <div
+    <div
+      className="
+        min-h-screen
+        bg-[#f5f7f4]
+        flex
+      "
+    >
+      {/* SIDEBAR */}
+
+      <Sidebar />
+
+      {/* MAIN */}
+
+      <main
+        className="
+          flex-1
+          ml-[190px]
+          xl:ml-[300px]
+          p-6
+          md:p-8
+        "
+      >
+        {/* HERO */}
+
+        <section
           className="
             bg-white
-            rounded-3xl
-            p-10
-            shadow-sm
+            rounded-[32px]
+            p-6
+            md:p-8
+            shadow-[0_10px_40px_rgba(0,0,0,0.04)]
           "
         >
           <div
             className="
               flex
               flex-col
-              xl:flex-row
-              gap-10
-              items-center
+              lg:flex-row
+              lg:items-center
+              lg:justify-between
+              gap-8
             "
           >
-            <img
-              src={avatar}
-              alt={name}
-              className="
-                w-40
-                h-40
-                rounded-full
-                object-cover
-                shadow-lg
-              "
-            />
+            {/* LEFT */}
 
-            <div className="flex-1 space-y-5">
+            <div
+              className="
+                flex
+                items-center
+                gap-6
+              "
+            >
+              {/* AVATAR */}
+
+              <div
+                className="
+                  w-28
+                  h-28
+                  rounded-full
+                  bg-gradient-to-br
+                  from-emerald-700
+                  to-emerald-500
+                  flex
+                  items-center
+                  justify-center
+                  text-5xl
+                  text-white
+                  shadow-lg
+                "
+              >
+                👤
+              </div>
+
+              {/* INFO */}
+
               <div>
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    bg-emerald-50
+                    text-emerald-700
+                    px-4
+                    py-2
+                    rounded-full
+                    text-sm
+                    font-semibold
+                    mb-4
+                  "
+                >
+                  ✨ Active Account
+                </div>
+
                 <h1
                   className="
                     text-4xl
-                    font-bold
-                    text-gray-800
+                    md:text-5xl
+                    font-black
+                    text-gray-900
                   "
                 >
-                  {name}
+                  {user?.name ||
+                    'Guest'}
                 </h1>
 
                 <p
                   className="
+                    text-lg
                     text-gray-500
                     mt-3
+                    capitalize
                   "
                 >
-                  {bio}
+                  {role} account
                 </p>
               </div>
+            </div>
 
-              <div
-                className="
-                  flex
-                  gap-4
-                  flex-wrap
-                "
-              >
+            {/* LOGOUT */}
+
+            <button
+              onClick={logout}
+              className="
+                bg-red-500
+                hover:bg-red-600
+                text-white
+                px-8
+                py-4
+                rounded-2xl
+                font-bold
+                transition-all
+                duration-300
+                shadow-lg
+              "
+            >
+              Logout
+            </button>
+          </div>
+        </section>
+
+        {/* PROFILE GRID */}
+
+        <section
+          className="
+            grid
+            grid-cols-1
+            xl:grid-cols-3
+            gap-6
+            mt-8
+          "
+        >
+          {/* MAIN CARD */}
+
+          <div
+            className="
+              xl:col-span-2
+              bg-white
+              rounded-[32px]
+              p-6
+              md:p-8
+              shadow-[0_10px_40px_rgba(0,0,0,0.04)]
+            "
+          >
+            <h2
+              className="
+                text-3xl
+                font-black
+                text-gray-900
+              "
+            >
+              Personal Information
+            </h2>
+
+            <div
+              className="
+                grid
+                grid-cols-1
+                md:grid-cols-2
+                gap-6
+                mt-8
+              "
+            >
+              <div>
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                    mb-3
+                  "
+                >
+                  Full Name
+                </p>
+
                 <div
                   className="
-                    bg-emerald-100
+                    bg-[#f5f7f4]
+                    rounded-2xl
+                    px-5
+                    py-4
+                    font-semibold
+                  "
+                >
+                  {user?.name ||
+                    'Unknown User'}
+                </div>
+              </div>
+
+              <div>
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                    mb-3
+                  "
+                >
+                  Role
+                </p>
+
+                <div
+                  className="
+                    bg-[#f5f7f4]
+                    rounded-2xl
+                    px-5
+                    py-4
+                    font-semibold
+                    capitalize
+                  "
+                >
+                  {role}
+                </div>
+              </div>
+
+              <div>
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                    mb-3
+                  "
+                >
+                  Email
+                </p>
+
+                <div
+                  className="
+                    bg-[#f5f7f4]
+                    rounded-2xl
+                    px-5
+                    py-4
+                    font-semibold
+                  "
+                >
+                  {user?.email ||
+                    'No email'}
+                </div>
+              </div>
+
+              <div>
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                    mb-3
+                  "
+                >
+                  Status
+                </p>
+
+                <div
+                  className="
+                    bg-[#f5f7f4]
+                    rounded-2xl
+                    px-5
+                    py-4
+                    font-semibold
                     text-emerald-700
-                    px-5
-                    py-3
-                    rounded-2xl
-                    font-semibold
                   "
                 >
-                  ❤️ Favorites:
-                  {
-                    favorites.length
-                  }
-                </div>
-
-                <div
-                  className="
-                    bg-yellow-100
-                    text-yellow-700
-                    px-5
-                    py-3
-                    rounded-2xl
-                    font-semibold
-                  "
-                >
-                  🔖 Saved:
-                  {
-                    savedPlaces.length
-                  }
-                </div>
-
-                <div
-                  className="
-                    bg-blue-100
-                    text-blue-700
-                    px-5
-                    py-3
-                    rounded-2xl
-                    font-semibold
-                  "
-                >
-                  📍 Favorite Region:
-                  {' '}
-                  {
-                    favoriteRegion
-                  }
+                  Active
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div
-          className="
-            bg-white
-            rounded-3xl
-            p-10
-            shadow-sm
-            space-y-6
-          "
-        >
-          <div>
+          {/* SIDE CARD */}
+
+          <div
+            className="
+              bg-white
+              rounded-[32px]
+              p-6
+              shadow-[0_10px_40px_rgba(0,0,0,0.04)]
+            "
+          >
             <h2
               className="
-                text-3xl
-                font-bold
-                text-gray-800
+                text-2xl
+                font-black
               "
             >
-              Edit Profile
+              Account Stats
             </h2>
 
-            <p
+            <div
               className="
-                text-gray-500
-                mt-2
+                space-y-5
+                mt-8
               "
             >
-              Personalize your tourism
-              experience.
-            </p>
+              <div
+                className="
+                  bg-[#f5f7f4]
+                  rounded-[24px]
+                  p-5
+                "
+              >
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                  "
+                >
+                  Saved Places
+                </p>
+
+                <h3
+                  className="
+                    text-4xl
+                    font-black
+                    mt-3
+                  "
+                >
+                  12
+                </h3>
+              </div>
+
+              <div
+                className="
+                  bg-[#f5f7f4]
+                  rounded-[24px]
+                  p-5
+                "
+              >
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                  "
+                >
+                  Trips Planned
+                </p>
+
+                <h3
+                  className="
+                    text-4xl
+                    font-black
+                    mt-3
+                  "
+                >
+                  4
+                </h3>
+              </div>
+
+              <div
+                className="
+                  bg-[#f5f7f4]
+                  rounded-[24px]
+                  p-5
+                "
+              >
+                <p
+                  className="
+                    text-sm
+                    text-gray-500
+                  "
+                >
+                  Account Type
+                </p>
+
+                <h3
+                  className="
+                    text-3xl
+                    font-black
+                    mt-3
+                    capitalize
+                  "
+                >
+                  {role}
+                </h3>
+              </div>
+            </div>
           </div>
-
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(event) =>
-              setName(
-                event.target.value
-              )
-            }
-            className="
-              w-full
-              p-4
-              rounded-2xl
-              bg-gray-100
-              outline-none
-            "
-          />
-
-          <input
-            type="text"
-            placeholder="Avatar URL"
-            value={avatar}
-            onChange={(event) =>
-              setAvatar(
-                event.target.value
-              )
-            }
-            className="
-              w-full
-              p-4
-              rounded-2xl
-              bg-gray-100
-              outline-none
-            "
-          />
-
-          <textarea
-            placeholder="Bio"
-            value={bio}
-            onChange={(event) =>
-              setBio(
-                event.target.value
-              )
-            }
-            rows={5}
-            className="
-              w-full
-              p-4
-              rounded-2xl
-              bg-gray-100
-              outline-none
-              resize-none
-            "
-          />
-
-          <select
-            value={favoriteRegion}
-            onChange={(event) =>
-              setFavoriteRegion(
-                event.target.value
-              )
-            }
-            className="
-              w-full
-              p-4
-              rounded-2xl
-              bg-gray-100
-              outline-none
-            "
-          >
-            <option>
-              Beirut
-            </option>
-
-            <option>
-              Batroun
-            </option>
-
-            <option>
-              Tripoli
-            </option>
-
-            <option>
-              Jbeil
-            </option>
-
-            <option>
-              Tyre
-            </option>
-          </select>
-
-          <button
-            onClick={
-              handleSaveProfile
-            }
-            className="
-              w-full
-              bg-emerald-700
-              text-white
-              py-4
-              rounded-2xl
-              hover:bg-emerald-800
-              transition
-            "
-          >
-            Save Profile
-          </button>
-
-          <button
-            onClick={() => {
-              logoutUser()
-
-              logout()
-
-              toast.success('Logged out successfully.')
-
-              navigate('/login')
-            }}
-            className="
-              w-full
-              bg-red-500
-              text-white
-              py-4
-              rounded-2xl
-              hover:bg-red-600
-              transition
-            "
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-    </MainLayout>
+        </section>
+      </main>
+    </div>
   )
 }
 
